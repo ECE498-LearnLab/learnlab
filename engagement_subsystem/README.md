@@ -1,10 +1,6 @@
 # FOR THE PURPOSES OF LEARNLAB:
 
 ## GraphQL:
-<br>
-Instructions for setting up local database for graphql: https://www.saltycrane.com/blog/2019/02/creating-graphql-api-python-graphene-and-postgres/#create-database <br>
-(^Don't need to do this, just for FYI. It's connected to SQLite right now until we get DB set up on server side)
-
 ### To Run:
 In `engagement_subsystem/src` folder: <br>
 Run `python3 manage.py migrate` and `python3 manage.py runserver`  
