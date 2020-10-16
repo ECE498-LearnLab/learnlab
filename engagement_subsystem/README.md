@@ -1,8 +1,17 @@
 # FOR THE PURPOSES OF LEARNLAB:
 
-## Setup:
+## GraphQL:
+### Setup:
 `pip install graphene`
 
+Instructions for setting up local database for graphql: https://www.saltycrane.com/blog/2019/02/creating-graphql-api-python-graphene-and-postgres/#create-database
+
+### To Run:
+In `engagement_subsystem/src` folder: <br>
+Run `python3 manage.py migrate` and `python3 manage.py runserver`  
+
+## Engagement Evaluation Script
+### To Run:
 Run `demo.pyx` and observe changes in Jimmy Kimmel's drowsiness with each photo. 
 
 
