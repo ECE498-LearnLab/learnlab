@@ -1,0 +1,16 @@
+[
+  {
+    "model": "analysis.result",
+    "pk": 1,
+    "fields": {
+      "name": "20% Drowsy"
+    }
+  },
+  {
+    "model": "analysis.result",
+    "pk": 2,
+    "fields": {
+      "name": "30% Drowsy"
+    }
+  }
+]

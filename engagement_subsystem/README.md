@@ -1,5 +1,12 @@
 # FOR THE PURPOSES OF LEARNLAB:
+
+## Setup:
+`pip install graphene`
+
 Run `demo.pyx` and observe changes in Jimmy Kimmel's drowsiness with each photo. 
+
+
+
 
 ----
 # Driver Drowsiness and Distraction Estimator (DD&D Estimator) with OpenCV 
