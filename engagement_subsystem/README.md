@@ -1,5 +1,16 @@
 # FOR THE PURPOSES OF LEARNLAB:
+
+## GraphQL:
+### To Run:
+In `engagement_subsystem/src` folder: <br>
+Run `python3 manage.py migrate` and `python3 manage.py runserver`  
+
+## Engagement Evaluation Script
+### To Run:
 Run `demo.pyx` and observe changes in Jimmy Kimmel's drowsiness with each photo. 
+
+
+
 
 ----
 # Driver Drowsiness and Distraction Estimator (DD&D Estimator) with OpenCV 

@@ -68,9 +68,8 @@ class demo1:
 		#Detect faces in frame
 		faces_loc = self.ddestimator.detect_faces(frame, None, True)
 
-		#If there's more than one face...
 		if len(faces_loc) > 0:
-
+			#If there's more than one face...
 			#Only interested in first face found (for his demo)
 			face_loc = faces_loc[0]
 
