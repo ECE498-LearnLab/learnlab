@@ -14,25 +14,11 @@ psql -V
 
 ## Setup
 ### Database
-To setup the local database:
+To setup the local database run the following command:
 ```
- node server/src/create-db.js superuser_username superuser_password
+psql -U <username> -c "create database learnlab_local"
 ```
-It should output the following:
-```
-Result {
-  command: 'CREATE',
-  rowCount: NaN,
-  oid: null,
-  rows: [],
-  fields: [],
-  _parsers: [],
-  RowCtor: null,
-  rowAsArray: false,
-  _getTypeParser: [Function: bound ]
-}
-```
-The database is called `learnlab_local`
+Note: replace `<username>` with the superuser username. The command will prompt you for the superuser password.
 
 ## Running tests
 
