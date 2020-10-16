@@ -3,14 +3,14 @@
     "model": "analysis.result",
     "pk": 1,
     "fields": {
-      "name": "20% Drowsy"
+      "alert_rating": "20"
     }
   },
   {
     "model": "analysis.result",
     "pk": 2,
     "fields": {
-      "name": "30% Drowsy"
+      "alert_rating": "30"
     }
   }
 ]

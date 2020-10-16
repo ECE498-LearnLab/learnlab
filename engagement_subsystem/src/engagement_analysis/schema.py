@@ -7,7 +7,7 @@ from engagement_analysis.analysis.models import Result
 class ResultType(DjangoObjectType):
     class Meta:
         model = Result
-        fields = ("id", "name", "notes")
+        fields = ("id", "alert_rating", "notes")
 
 
 class Query(graphene.ObjectType):
