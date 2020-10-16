@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server');
 
 /**
  * A collection of the query "shapes" that we'll execute against our data.
