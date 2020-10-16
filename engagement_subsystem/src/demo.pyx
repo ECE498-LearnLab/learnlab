@@ -70,7 +70,6 @@ class demo1:
 
 		if len(faces_loc) > 0:
 			#If there's more than one face...
-			print ("HIIII")
 			#Only interested in first face found (for his demo)
 			face_loc = faces_loc[0]
 
