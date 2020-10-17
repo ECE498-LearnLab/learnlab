@@ -1,4 +1,4 @@
-import React, { useState, useEffect,} from 'react';
+import React, { useState, useEffect } from 'react';
 import Video from 'twilio-video';
 import Participant from './Participant';
 import {
@@ -8,11 +8,12 @@ import {
 
 interface Props {
   roomName: string,
-  token: string | null
+  token: string | null,
+  setImageCapture: React.Dispatch<any>,
 };
 
 const Room = (props : Props) => {
-  const {roomName, token} = props;
+  const {roomName, token, setImageCapture} = props;
   const [room, setRoom] = useState(null);
   const [participants, setParticipants] = useState<any[]>([]);
 
@@ -27,8 +28,15 @@ const Room = (props : Props) => {
       );
     };
 
-    Video.connect(token, {
-      name: roomName
+    navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true
+    }).then((mediaStream) => {
+      setImageCapture(new ImageCapture(mediaStream.getVideoTracks()[0]));
+      return Video.connect(token, {
+        name: roomName,
+        tracks: mediaStream.getTracks()
+      });
     // tslint:disable-next-line: no-shadowed-variable
     }).then((room) => {
       setRoom(room);
@@ -50,7 +58,7 @@ const Room = (props : Props) => {
         }
       });
     };
-  }, [roomName, token]);
+  }, [roomName, setImageCapture, token]);
 
   const remoteParticipants = participants.map(participant => (
     <Participant key={participant.sid} style={participantListStyle} participant={participant} />

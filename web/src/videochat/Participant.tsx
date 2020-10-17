@@ -67,7 +67,7 @@ const Participant = ({participant, style}) => {
     }
   }, [audioTracks]);
 
-  return (  
+  return (
     <EuiFlexItem style={{position: 'relative', boxShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`}}>
       <video style={style} ref={videoRef} autoPlay={true} />
       <audio ref={audioRef} autoPlay={true} muted={true} />
