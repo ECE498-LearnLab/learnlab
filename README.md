@@ -31,6 +31,7 @@ docker-compose up
 This will start the following services:
 * Web http://localhost:3000
 * Server http://localhost:4000
+* RabbitMQ Management Portal http://localhost:15672/
 
 ### Server
 1. `cd server`
