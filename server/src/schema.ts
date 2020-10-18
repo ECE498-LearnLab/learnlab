@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+import { gql } from 'apollo-server';
 
 /**
  * A collection of the query "shapes" that we'll execute against our data.
@@ -44,4 +44,4 @@ const typeDefs = gql`
     }
 `;
 
-module.exports = typeDefs;
+export = typeDefs;

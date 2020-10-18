@@ -1,9 +1,15 @@
-const { SQLDataSource } = require('datasource-sql');
+import { SQLDataSource } from 'datasource-sql';
 
 const MINUTE = 60;
 
 class LearnlabDB extends SQLDataSource {
-    async getClassroom (id) {
+    db;
+
+    constructor(dbConfig: any) {
+        super(dbConfig);
+    }
+
+    async getClassroom (id: string) {
         const res = await this.db
             .select('*')
             .from('classroom')
@@ -13,4 +19,4 @@ class LearnlabDB extends SQLDataSource {
     }
 }
 
-module.exports = LearnlabDB;
+export default LearnlabDB;

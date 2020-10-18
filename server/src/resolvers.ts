@@ -1,4 +1,4 @@
-const { GraphQLScalarType, Kind } = require('graphql');
+import { GraphQLScalarType, Kind } from 'graphql';
 
 // some hardcoded data for now
 const fakeClassroomData = [
@@ -21,7 +21,7 @@ const fakeQuestionData = [
         id: '0',
         session_id: '1',
         student_id: '1',
-        text: 'Mrs.Dees, where are your nuts?',
+        text: 'Mrs.Dees, where are your nuts? I am a hungry little squirrel child.',
         created_at: new Date(1602632500122)
     },
     {
@@ -33,21 +33,12 @@ const fakeQuestionData = [
     }
 ];
 
-module.exports = {
+export default {
     // the 4 positional arguments for a resolver are: (parent, args, context, info)
-    // where "args" is the argument coming in from the graphql query
     Query: {
-        /**
-         * Example: query for the first classroom w/ this query:
-         *   classroom(id: 1) {
-                id
-                name
-                subject
-            }
-         */
-        classroom: (_, { id }) => fakeClassroomData.find(c => c.id === id),
-        classroomByDB: async (_, { id }, { dataSources }) => dataSources.db.getClassroom(id),
-        question: (_, { student_id, session_id }) => fakeQuestionData.find(q => q.student_id === student_id)
+        classroom: (_: any, { id }) => fakeClassroomData.find(c => c.id === id),
+        classroomByDB: async (_: any, { id }, { dataSources }) => dataSources.db.getClassroom(id),
+        question: (_: any, { student_id, session_id }) => fakeQuestionData.find(q => q.student_id === student_id)
     },
     Date: new GraphQLScalarType({
         name: 'Date',
