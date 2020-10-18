@@ -5,6 +5,7 @@ import {
   EuiButton, EuiPageContent, EuiPageContentBody, EuiFlexGroup, EuiFlexItem, EuiPanel,
 } from "@elastic/eui";
 import { generateAccessToken } from './utils/accessToken';
+import {publishToQueue} from '../engagement/publishFramesToQueue';
 
 const config: Config = {
   dictionaries: [adjectives, colors, animals]
@@ -22,7 +23,8 @@ const VideoChat = () => {
     if (imageCapture != null){
     imageCapture.grabFrame()
     .then(imageBitmap => {
-      drawCanvas(canvasRef.current, imageBitmap);
+      const base64String = drawCanvas(canvasRef.current, imageBitmap);
+      publishToQueue(base64String);
     },[])
     .catch(error => console.log(error));
   }
@@ -73,12 +75,13 @@ const VideoChat = () => {
 function drawCanvas(canvas, img) {
   canvas.width = getComputedStyle(canvas).width.split('px')[0];
   canvas.height = getComputedStyle(canvas).height.split('px')[0];
-  let ratio  = Math.min(canvas.width / img.width, canvas.height / img.height);
-  let x = (canvas.width - img.width * ratio) / 2;
-  let y = (canvas.height - img.height * ratio) / 2;
+  const ratio  = Math.min(canvas.width / img.width, canvas.height / img.height);
+  const x = (canvas.width - img.width * ratio) / 2;
+  const y = (canvas.height - img.height * ratio) / 2;
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height,
       x, y, img.width * ratio, img.height * ratio);
+  return canvas.toDataURL();
 }
 
 export default VideoChat;

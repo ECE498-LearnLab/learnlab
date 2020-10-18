@@ -9,3 +9,10 @@ services:
     build: ./server
     ports:
       - "4000:4000"
+  rabbitmq:
+    build: ./rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15674:15674
+      - 15670:15670 
