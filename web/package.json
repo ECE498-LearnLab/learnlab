@@ -8,6 +8,7 @@
     "@babel/preset-env": "^7.12.1",
     "@elastic/datemath": "^5.0.3",
     "@elastic/eui": "^29.5.0",
+    "@stomp/stompjs": "^5.4.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -29,7 +30,7 @@
     "unique-names-generator": "^4.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
