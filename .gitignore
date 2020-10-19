@@ -1,4 +1,5 @@
 server/node_modules
+*/build
 
 .notes
 .DS_Store

@@ -33,15 +33,6 @@ This will start the following services:
 * Server http://localhost:4000
 * RabbitMQ Management Portal http://localhost:15672/
 
-### Server
-1. `cd server`
-2. `npm install`
-3. `npm run dev` to run the server (watches for changes)
-
-#### Linting
-Run `npm run format` to lint .js files.
-Linting will also be done as a pre-commit hook.
-
 ## Running tests
 
 ## Deployment
