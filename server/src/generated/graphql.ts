@@ -45,7 +45,7 @@ export type Session = {
   class_id: Scalars['ID'];
   start_time?: Maybe<Scalars['Date']>;
   end_time?: Maybe<Scalars['Date']>;
-  session_link?: Maybe<Scalars['String']>;
+  room_id?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -214,7 +214,7 @@ export type SessionResolvers<ContextType = any, ParentType extends ResolversPare
   class_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   start_time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   end_time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  session_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  room_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

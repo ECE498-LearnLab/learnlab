@@ -323,7 +323,7 @@
             "deprecationReason": null
           },
           {
-            "name": "session_link",
+            "name": "room_id",
             "description": null,
             "args": [],
             "type": {
