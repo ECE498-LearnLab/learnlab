@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server';
+import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 import typeDefs from './schema';
 import resolvers from './resolvers';
 import LearnlabDB from './datasources/learnlab';
@@ -13,12 +14,20 @@ const dbConfig = {
     }
 };
 
-const db = new LearnlabDB(dbConfig);
+interface IDataSource {
+    db: LearnlabDB
+};
+
+const buildDataSource = () => {
+    return {
+        db: new LearnlabDB(dbConfig)
+    } as DataSources<IDataSource>
+};
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    dataSources: () => ({ db })
+    dataSources: () => buildDataSource()
 });
 
 server.listen().then(({ url }) => {
