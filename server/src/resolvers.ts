@@ -1,4 +1,5 @@
 import { GraphQLScalarType, Kind } from 'graphql';
+import { Resolvers } from "./generated/graphql";
 
 // some hardcoded data for now
 const fakeClassroomData = [
@@ -33,9 +34,20 @@ const fakeQuestionData = [
     }
 ];
 
-export default {
+const fakeUsers = [
+    {
+        id: "1",
+        name_first: "Horace",
+        name_last: "Beemer",
+        role: "student",
+        email: "user@learnlab.com"
+    }
+];
+
+export const resolvers: Resolvers = {
     // the 4 positional arguments for a resolver are: (parent, args, context, info)
     Query: {
+        user: (_, args) => fakeUsers.find(u => u.id === args.id),
         classroom: (_: any, { id }) => fakeClassroomData.find(c => c.id === id),
         classroomByDB: async (_: any, { id }, { dataSources }) => dataSources.db.getClassroom(id),
         question: (_: any, { student_id, session_id }) => fakeQuestionData.find(q => q.student_id === student_id)
