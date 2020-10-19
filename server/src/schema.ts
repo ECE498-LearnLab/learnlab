@@ -34,7 +34,7 @@ const typeDefs = gql`
         class_id: ID!
         start_time: Date
         end_time: Date
-        session_link: String
+        room_id: String
     }
 
     # Query type is special; it lists all the available queries that the client can execute
