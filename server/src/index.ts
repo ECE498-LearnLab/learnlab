@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 import typeDefs from './schema';
-import resolvers from './resolvers';
+import { resolvers } from './resolvers';
 import LearnlabDB from './datasources/learnlab';
 
 const dbConfig = {

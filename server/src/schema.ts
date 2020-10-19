@@ -7,6 +7,7 @@ const typeDefs = gql`
     scalar Date
 
     type User {
+        id: ID!
         name_first: String
         name_last: String
         role: String
@@ -33,11 +34,12 @@ const typeDefs = gql`
         class_id: ID!
         start_time: Date
         end_time: Date
-        session_link: String
+        room_id: String
     }
 
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
+        user(id: ID!): User!
         classroom(id: ID!): Classroom
         classroomByDB(id: ID!): Classroom
         question(student_id: ID!, session_id: ID!): Question
