@@ -3,7 +3,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-ddestimator = Extension("ddestimator", ["ddestimator.pyx"],
+ddestimator = Extension("ddestimator", ["ddestimator.py"],
                             include_dirs=[np.get_include()],
                             libraries=["numpy","imutils","dlib","cv2","time","math","re","pandas","scipy","lmfit"]
                         )
