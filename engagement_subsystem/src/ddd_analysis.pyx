@@ -1,16 +1,15 @@
 import imutils
-import cv2
-import sys
-import time
 import pyximport; pyximport.install()
 import ddestimator
 import tkinter as tk
-from tkinter import messagebox
+import base64
+import cv2
+import numpy as np
 
-class demo1:
+class DddAnalysis:
 
 	FRAME_WIDTH = 750
-	WINDOW_TITLE = "Demo #1: live distraction and drowsiness estimation"
+	# WINDOW_TITLE = "Frame Distraction Estimation"
 
 	PROCESS_INTERVAL = 50
 
@@ -31,10 +30,12 @@ class demo1:
 
 	CALIBRATE_CAMERA_ANGLES = True
 
-	def __init__(self):
+	def __init__(self, b64_string):
 		self.rootwin = tk.Tk()
 		self.rootwin.withdraw()
-		cv2.namedWindow(demo1.WINDOW_TITLE)
+		self.images = []
+		self.images.append(b64_string)
+		# cv2.namedWindow(DddAnalysis.WINDOW_TITLE)
 		self.show_points = True
 		self.show_bounding = True
 		self.show_gaze = True
@@ -45,31 +46,30 @@ class demo1:
 		self.has_calibrated = True
 
 	def run(self):
-		self.images = ["alert1.png", "alert2.png", "alert3.png", "1.png", "2.png", "3.png","4.png","5.png", "drowsy1.png", "drowsy1.png", "drowsy2.png", "drowsy2.png", "drowsy2.png"]
+		print("Running...")
 		if not self.images:
 			print("No images to process.")
 			return
 
+		# TODO: make this consume batches instead of the same image once set up on web
 		for i in range(10):
-			for image in self.images:
-				self.key_strokes_handler()
-				# ret, frame = self.cap.read()
-				frame = cv2.imread(image)
-				print(image)
-				print(frame)
-				# if ret:
-				frame = imutils.resize(frame, width=demo1.FRAME_WIDTH)
-				frame = self.process_frame(frame)
-				cv2.imshow(demo1.WINDOW_TITLE, frame)
+		# for image in self.images:
+			img = base64.b64decode(self.images[0])
+			npimg = np.fromstring(img, dtype=np.uint8)
+
+			frame = cv2.imdecode(npimg, 1)
+			frame = imutils.resize(frame, width=DddAnalysis.FRAME_WIDTH)
+			frame = self.process_frame(frame)
+			self.script_teardown()
 
 	def process_frame(self, frame=None):
+		print("processing frame")
 
 		#Detect faces in frame
 		faces_loc = self.ddestimator.detect_faces(frame, None, True)
 
-		#If there's more than one face...
 		if len(faces_loc) > 0:
-
+			#If there's more than one face...
 			#Only interested in first face found (for his demo)
 			face_loc = faces_loc[0]
 
@@ -79,7 +79,7 @@ class demo1:
 			#All immediate estimations based on points locations
 			euler, rotation, translation = self.ddestimator.est_head_dir(points)
 			#- Calibrate for camera angles based on euler angles
-			if demo1.CALIBRATE_CAMERA_ANGLES and not self.ddestimator.has_calibrated:
+			if DddAnalysis.CALIBRATE_CAMERA_ANGLES and not self.ddestimator.has_calibrated:
 				has_calibration, _, meds = self.ddestimator.get_med_eulers()
 				if has_calibration:
 					self.ddestimator.calibrate_camera_angles(meds)
@@ -121,22 +121,27 @@ class demo1:
 
 			if self.show_dd:
 				h = frame.shape[0]
+
 				if head_distraction:
 					cv2.putText(frame, "DISTRACTED [h]", (20, h - 100),
 								cv2.FONT_HERSHEY_PLAIN, 0.9, (0, 0, 0), thickness=1)
+					print("DISTRACTED (head)")
 				elif self.show_gaze and gaze_distraction:
 					cv2.putText(frame, "distracted [g]", (20, h - 100),
 								cv2.FONT_HERSHEY_PLAIN, 0.9, (0, 0, 0), thickness=1)
+					print("distracted (gaze)")
 				if did_yawn:
 					cv2.putText(frame, "DROWSY [y]", (20, h - 80),
 								cv2.FONT_HERSHEY_PLAIN, 0.9, (0, 0, 255), thickness=1)
-
+					print("DROWSY (yawn)")
 				if eye_closedness:
 					cv2.putText(frame, "DROWSY [ec]", (20, h - 60),
 								cv2.FONT_HERSHEY_PLAIN, 0.9, (0, 0, 255), thickness=1)
+					print("DROWSY (eye closedness)")
 				elif self.show_ear and eye_drowsiness:
 					cv2.putText(frame, "drowsy [ed]", (20, h - 60),
 								cv2.FONT_HERSHEY_PLAIN, 0.9, (0, 0, 0), thickness=1)
+					print("drowsy (eye drowsiness)")
 
 				if kss is not None:
 					kss_int = int(round(kss*10))
@@ -144,82 +149,5 @@ class demo1:
 
 		return frame
 
-	def key_strokes_handler(self):
-		pressed_key = cv2.waitKey(1) & 0xFF
-
-		if pressed_key == demo1.K_ESC or pressed_key == demo1.K_QUIT:
-			print('-> QUIT')
-			self.cap.release()
-			cv2.destroyAllWindows()
-			sys.exit(0)
-
-		elif pressed_key == demo1.K_POINTS:
-			print('-> SHOW FACIAL LANDMARKS')
-			self.show_points = True
-			return None
-
-		elif pressed_key == demo1.K_BOUNDING:
-			print('-> SHOW BOUNDING CUBE FOR HEAD DIRECTION ESTIMATION')
-			self.show_bounding = True
-			return None
-
-		elif pressed_key == demo1.K_GAZE:
-			print('-> SHOW LINES FOR GAZE DIRECTION ESTIMATION')
-			self.show_gaze = True
-			return None
-
-		elif pressed_key == demo1.K_EYES:
-			print('-> SHOW EYE OPENNESS ESTIMATION')
-			self.show_ear = True
-			return None
-
-		elif pressed_key == demo1.K_MOUTH:
-			print('-> SHOW MOUTH OPENNESS ESTIMATION')
-			self.show_mar = True
-			return None
-
-		elif pressed_key == demo1.K_DD:
-			print('-> SHOW DROWSINESS & DISTRACTION ESTIMATIONS')
-			self.show_dd = True
-			return None
-
-		elif pressed_key == demo1.K_NONE:
-			print('-> SHOW NO ESTIMATIONS')
-			self.show_bounding = False
-			self.show_gaze = False
-			self.show_ear = False
-			self.show_mar = False
-			self.show_dd = False
-			self.show_points = False
-			return None
-
-		elif pressed_key == demo1.K_REFRESH:
-			print('-> RESET SHOW TO DEFAULT')
-			self.show_bounding = False
-			self.show_gaze = False
-			self.show_ear = False
-			self.show_mar = False
-			self.show_dd = True
-			self.show_points = False
-			return None
-
-		elif pressed_key == demo1.K_SAVE_LOG:
-			print('-> SAVE LOG FILE WITH KSS ESTIMATIONS')
-			kss_log = self.ddestimator.fetch_log('kss')
-			ts = int(round(time.time() * 1000))
-			path = (demo1.LOG_PATH).replace('%ts', str(ts))
-			print("\t"+path)
-			kss_log.to_csv(path)
-			return None
-
-		elif pressed_key == demo1.K_HELP:
-			tk.messagebox.showinfo("Help",
-			                       "'p': Show facial landmarks\r\n'b': Show bounding cube\r\n'g': Show gaze line\r\n'e': Show eye info\r\n'm': Show mouth info\r\n'd': Show drowsiness & distraction info\r\n'n': Show nothing\r\n'r': Refresh/clear the frame of all info\r\n'l': Save log file\r\n'q': Quit the program")
-			return None
-
-		else:
-			return None
-
-if __name__ == '__main__':
-	demo1 = demo1()
-	demo1.run()
+	def script_teardown(self):
+		print('-> QUIT')
