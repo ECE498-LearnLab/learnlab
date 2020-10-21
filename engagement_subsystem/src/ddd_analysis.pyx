@@ -1,11 +1,10 @@
 import imutils
-import cv2
-import sys
-import time
 import pyximport; pyximport.install()
 import ddestimator
 import tkinter as tk
-from tkinter import messagebox
+import base64
+import cv2
+import numpy as np
 
 class DddAnalysis:
 
@@ -31,11 +30,11 @@ class DddAnalysis:
 
 	CALIBRATE_CAMERA_ANGLES = True
 
-	def __init__(self, frames):
+	def __init__(self, b64_string):
 		self.rootwin = tk.Tk()
 		self.rootwin.withdraw()
 		self.images = []
-		self.images.append(frames)
+		self.images.append(b64_string)
 		# cv2.namedWindow(DddAnalysis.WINDOW_TITLE)
 		self.show_points = True
 		self.show_bounding = True
@@ -48,20 +47,19 @@ class DddAnalysis:
 
 	def run(self):
 		print("Running...")
-		# self.images = ["alert1.png", "alert2.png", "alert3.png", "1.png", "2.png", "3.png","4.png","5.png", "drowsy1.png", "drowsy1.png", "drowsy2.png", "drowsy2.png", "drowsy2.png"]
 		if not self.images:
 			print("No images to process.")
 			return
 
-		# TODO: make this consume batches instead of the same image
+		# TODO: make this consume batches instead of the same image once set up on web
 		for i in range(10):
 		# for image in self.images:
-			# ret, frame = self.cap.read()
-			frame = cv2.imread("frame.jpg")
-			# if ret:
+			img = base64.b64decode(self.images[0])
+			npimg = np.fromstring(img, dtype=np.uint8)
+
+			frame = cv2.imdecode(npimg, 1)
 			frame = imutils.resize(frame, width=DddAnalysis.FRAME_WIDTH)
 			frame = self.process_frame(frame)
-			# cv2.imshow(DddAnalysis.WINDOW_TITLE, frame)
 			self.script_teardown()
 
 	def process_frame(self, frame=None):
@@ -153,6 +151,3 @@ class DddAnalysis:
 
 	def script_teardown(self):
 		print('-> QUIT')
-		# self.cap.release()
-		# cv2.destroyAllWindows()
-		# sys.exit(0)

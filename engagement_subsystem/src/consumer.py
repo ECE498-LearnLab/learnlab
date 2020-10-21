@@ -24,14 +24,14 @@ def main():
         pad = len(base64EncodedString)%4
         base64EncodedString += b"="*pad
 
-        # decode base64 string to image
-        frame = codecs.decode(base64EncodedString.strip(),'base64')
+        # # decode base64 string to image
+        # frame = codecs.decode(base64EncodedString.strip(),'base64')
+        #
+        # with open('./frame.jpg','wb') as f:
+        #     # save image to frame.jpg in current directory
+        #     f.write(frame)
 
-        with open('./frame.jpg','wb') as f:
-            # save image to frame.jpg in current directory
-            f.write(frame)
-
-        analyze = ddd_analysis.DddAnalysis(frame)
+        analyze = ddd_analysis.DddAnalysis(base64EncodedString)
         analyze.run()
 
     channel.basic_consume(queue='frames', on_message_callback=callback, auto_ack=True)
