@@ -5,10 +5,14 @@ services:
     ports:
       - "3000:3000"
     stdin_open: true
+    volumes:
+      - "/usr/src/learnlab/web"
   server:
     build: ./server
     ports:
       - "4000:4000"
+    volumes:
+      - "/usr/src/learnlab/server"
   rabbitmq:
     build: ./rabbitmq
     ports:
