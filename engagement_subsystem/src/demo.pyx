@@ -6,8 +6,12 @@ import pyximport; pyximport.install()
 import ddestimator
 import tkinter as tk
 from tkinter import messagebox
+from python_graphql_client import GraphqlClient
+
 
 class demo1:
+	ENDPOINT = "http://localhost:4000/"
+
 
 	FRAME_WIDTH = 750
 	WINDOW_TITLE = "Demo #1: live distraction and drowsiness estimation"
@@ -61,6 +65,22 @@ class demo1:
 				frame = imutils.resize(frame, width=demo1.FRAME_WIDTH)
 				frame = self.process_frame(frame)
 				cv2.imshow(demo1.WINDOW_TITLE, frame)
+				self.send_to_graphql()
+
+	def send_to_graphql(self):
+		client = GraphqlClient(endpoint=demo1.ENDPOINT)
+		query = """
+			query getClassroom($id: ID!) {
+			  classroom(id: $id) {
+				id
+				name
+				subject
+			  }
+			}
+		"""
+		variables = {"id": 1}
+		data = client.execute(query=query, variables=variables)
+		print(data)
 
 	def process_frame(self, frame=None):
 

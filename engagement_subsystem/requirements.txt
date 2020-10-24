@@ -5,24 +5,13 @@ numpy==1.15.2
 scipy==1.1.0
 imutils==0.5.1
 Cython==0.29
-graphene~=2.1.8
 
-opencv-python~=3.4.3.18
-Django~=1.11.29
-Rx~=1.6.1
+# opencv-python~=3.4.10.37
 pip~=20.2.3
 configparser~=4.0.2
 wheel~=0.33.6
 typing~=3.7.4.3
-pytz~=2019.3
-psycopg2~=2.8.4
-enum34~=1.1.6
-wsgiref~=0.1.2
-docutils~=0.15.2
-six~=1.15.0
-promise~=2.3
-requests~=2.22.0
-aniso8601~=7.0.0
 setuptools~=44.1.1
-singledispatch~=3.4.0.3
 pika~=1.1.0
+opencv-python~=3.4.3.18
+python_graphql_client~=0.3.1
