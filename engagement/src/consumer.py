@@ -7,7 +7,8 @@ import json
 import base64
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    # change host to localhost if running locally
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
     channel = connection.channel()
     global x
     x = 0

@@ -1,9 +1,6 @@
 # FOR THE PURPOSES OF LEARNLAB:
 
-## GraphQL:
-### To Run:
-In `engagement_subsystem/src` folder: <br>
-Run `python3 manage.py migrate` and `python3 manage.py runserver`  
+Make sure you are using Python3.8
 
 ## Engagement Evaluation Script
 ### To Run:

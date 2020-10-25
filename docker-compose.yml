@@ -5,14 +5,33 @@ services:
     ports:
       - "3000:3000"
     stdin_open: true
+    volumes:
+      - "/usr/src/learnlab/web"
   server:
     build: ./server
     ports:
       - "4000:4000"
+    volumes:
+      - "/usr/src/learnlab/server"
   rabbitmq:
     build: ./rabbitmq
     ports:
       - 5672:5672
       - 15674:15674
       - 15672:15672
+    healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 30s
+        timeout: 30s
+        retries: 3
+  engagement:
+    build: ./engagement
+    depends_on:
+        rabbitmq:
+            condition: service_healthy
+    links:
+        - rabbitmq
+    env_file:
+        - .env.dev
+         
 
