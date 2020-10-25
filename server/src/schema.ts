@@ -6,6 +6,12 @@ import { gql } from 'apollo-server';
 const typeDefs = gql`
     scalar Date
 
+    enum Role {
+        STUDENT
+        INSTRUCTOR
+        ADMIN
+    }
+
     type User {
         id: ID!
         name_first: String
@@ -21,28 +27,51 @@ const typeDefs = gql`
         description: String
     }
 
+    type ClassroomDetails {
+        classroom: Classroom!
+        instructor: User
+        students: [User]
+    }
+
     type Question {
-        id: ID!
-        session_id: ID!
+        id: ID
+        room_id: ID!
         student_id: ID!
         text: String
         created_at: Date
     }
 
     type Session {
-        id: ID!
+        room_id: ID!
         class_id: ID!
         start_time: Date
         end_time: Date
-        room_id: String
+    }
+
+    type Response {
+        success: Boolean!
+        message: String!
+    }
+
+    type CreateRoomResponse {
+        room_id: ID!
+        success: Boolean!
+        message: String
     }
 
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): User!
         classroom(id: ID!): Classroom
-        classroomByDB(id: ID!): Classroom
-        question(student_id: ID!, session_id: ID!): Question
+        classroomDetails(id: ID!, role: Role): ClassroomDetails
+        questions(room_id: ID!): [Question]!
+        room(room_id: ID!): Session
+    }
+
+    type Mutation {
+        createRoom(class_id: ID!, start_time: Date, end_time: Date): CreateRoomResponse
+        submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
+        answerQuestion(id: ID!): Response
     }
 `;
 
