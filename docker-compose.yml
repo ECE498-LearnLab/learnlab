@@ -15,4 +15,23 @@ services:
       - 5672:5672
       - 15674:15674
       - 15672:15672
+    healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 30s
+        timeout: 30s
+        retries: 3
+  engagement:
+    build: ./engagement
+    depends_on:
+        rabbitmq:
+            condition: service_healthy
+    volumes:
+        - type: bind
+          source: /tmp/.X11-unix
+          target: /tmp/.X11-unix
+    links:
+        - rabbitmq
+    env_file:
+        - .env.dev
+         
 

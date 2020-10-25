@@ -5,7 +5,8 @@ import pyximport; pyximport.install()
 import ddd_analysis
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    # change host to localhost if running locally
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
     channel = connection.channel()
 
     # we need to make sure the queue exists, if it doesn't exist create it

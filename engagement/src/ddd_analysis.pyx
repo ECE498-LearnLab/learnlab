@@ -31,8 +31,8 @@ class DddAnalysis:
 	CALIBRATE_CAMERA_ANGLES = True
 
 	def __init__(self, b64_string):
-		self.rootwin = tk.Tk()
-		self.rootwin.withdraw()
+		# self.rootwin = tk.Tk()
+		# self.rootwin.withdraw()
 		self.images = []
 		self.images.append(b64_string)
 		# cv2.namedWindow(DddAnalysis.WINDOW_TITLE)
