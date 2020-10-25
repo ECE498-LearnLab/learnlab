@@ -1,16 +1,9 @@
 import {Client} from '@stomp/stompjs';
 
-interface BATCH {
-   frames: string[],
-   studentID: number,
-   roomID: string,
-}
-
 const CONNECTION_URL = 'ws://localhost:15674/ws';
 const QUEUE_NAME = 'frames';
 
 const client = new Client();
-const batchedData: BATCH = {frames: [], studentID: 123456, roomID: 'test'};
 
 client.configure({
    brokerURL: CONNECTION_URL,
@@ -36,15 +29,7 @@ client.configure({
 
 client.activate();
 
-function publishAllToQueue (data) {
+export function publishToQueue (data) {
    console.log("Sending frame to RabbitMQ");
    client.publish({destination: `/queue/${QUEUE_NAME}`, headers: {}, body: data});
-}
-
-export function addToBatch (frameBase64String: string) {
-   batchedData.frames.push(frameBase64String);
-   if(batchedData.frames.length === 10){
-      publishAllToQueue(JSON.stringify(batchedData));
-      batchedData.frames = [];
-   }
 }
