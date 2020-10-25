@@ -5,16 +5,17 @@ import {
   EuiButton, EuiPageContent, EuiPageContentBody, EuiFlexGroup, EuiFlexItem, EuiPanel,
 } from "@elastic/eui";
 import { generateAccessToken } from './utils/accessToken';
-import {publishToQueue} from '../engagement/publishFramesToQueue';
+import {addToBatch} from '../engagement/PublishFramesToQueue';
 
 const config: Config = {
   dictionaries: [adjectives, colors, animals]
 }
- 
+
 const VideoChat = () => {
   const [username] = useState(uniqueNamesGenerator(config));
   const [roomName] = useState('Test-Room');
   const [token, setToken] = useState(null);
+  const [timer, setTimer] = useState(null);
 
   const [imageCapture, setImageCapture] = useState(null);
   const canvasRef = useRef(null);
@@ -24,11 +25,21 @@ const VideoChat = () => {
     imageCapture.grabFrame()
     .then(imageBitmap => {
       const base64String = drawCanvas(canvasRef.current, imageBitmap);
-      publishToQueue(base64String);
+      addToBatch(base64String);
     },[])
     .catch(error => console.log(error));
   }
-  }, [imageCapture])
+  }, [imageCapture]);
+
+  const onClickAnalyze = useCallback(() => {
+    if(timer !== null){
+      clearInterval(timer);
+      setTimer(null);
+    }
+    else {
+      setTimer(setInterval(() => {onGrabFrame()}, 1000));
+    }
+  }, [timer, onGrabFrame]);
 
   const handleSubmit = useCallback(
       async event => {
@@ -51,7 +62,7 @@ const VideoChat = () => {
           <EuiPanel paddingSize="l" hasShadow>
             <EuiFlexGroup direction="column">
               <canvas ref={canvasRef} width={200} height={300}/>
-              <EuiButton onClick={onGrabFrame}>Grab Frame</EuiButton>
+            <EuiButton onClick={() => {onClickAnalyze()}}>{timer == null ? 'Start Analyzing': 'Stop Analyzing'}</EuiButton>
            </EuiFlexGroup>
           </EuiPanel>
         </EuiFlexItem>
