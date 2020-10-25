@@ -50,7 +50,7 @@ This repo was committed after project was finished so there's no plans of mainta
 git clone https://github.com/smasis001/ddd-estimator-opencv
 ```
 
-### 2. Install the [requirements](src/requirements.txt)
+### 2. Install the [requirements](requirements.txt)
 
 ### 3. Run one of the demos
 
