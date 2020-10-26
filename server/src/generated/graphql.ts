@@ -19,6 +19,12 @@ export enum Role {
   Admin = 'ADMIN'
 }
 
+export enum RoomState {
+  Pending = 'PENDING',
+  Ongoing = 'ONGOING',
+  Ended = 'ENDED'
+}
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -45,10 +51,10 @@ export type ClassroomDetails = {
 
 export type Question = {
   __typename?: 'Question';
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
-  text?: Maybe<Scalars['String']>;
+  text: Scalars['String'];
   created_at?: Maybe<Scalars['Date']>;
 };
 
@@ -80,6 +86,7 @@ export type Query = {
   classroomDetails?: Maybe<ClassroomDetails>;
   questions: Array<Maybe<Question>>;
   room?: Maybe<Session>;
+  roomsForClassroom: Array<Maybe<Session>>;
 };
 
 
@@ -106,6 +113,12 @@ export type QueryQuestionsArgs = {
 
 export type QueryRoomArgs = {
   room_id: Scalars['ID'];
+};
+
+
+export type QueryRoomsForClassroomArgs = {
+  class_id: Scalars['ID'];
+  room_states?: Maybe<Array<Maybe<RoomState>>>;
 };
 
 export type Mutation = {
@@ -215,6 +228,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Role: Role;
+  RoomState: RoomState;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -275,10 +289,10 @@ export type ClassroomDetailsResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type QuestionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Question'] = ResolversParentTypes['Question']> = {
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   student_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -310,6 +324,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   classroomDetails?: Resolver<Maybe<ResolversTypes['ClassroomDetails']>, ParentType, ContextType, RequireFields<QueryClassroomDetailsArgs, 'id'>>;
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
   room?: Resolver<Maybe<ResolversTypes['Session']>, ParentType, ContextType, RequireFields<QueryRoomArgs, 'room_id'>>;
+  roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Session']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {

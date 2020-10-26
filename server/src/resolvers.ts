@@ -55,7 +55,10 @@ export const resolvers: Resolvers = {
            return await dataSources.db.getClassDetails(id, role);
         },
         questions: (_, { room_id }) => fakeQuestionData.filter(q => q.room_id === room_id),
-        room: async (_, { room_id }, { dataSources }: { dataSources: IDataSource }): Promise<Session> => dataSources.db.getRoom(room_id),
+        room: async (_, { room_id }, { dataSources }: { dataSources: IDataSource }): Promise<Session> => await dataSources.db.getRoom(room_id),
+        roomsForClassroom: async (_, { class_id, room_states }, { dataSources }: { dataSources: IDataSource }): Promise<Session[]> => await dataSources.db.getRoomsByClassroom(
+            class_id, room_states
+        )
     },
     Mutation: {
         createRoom: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<CreateRoomResponse> => {
@@ -68,8 +71,8 @@ export const resolvers: Resolvers = {
                 room_id: room_id
             }
         },
-        submitQuestion: async (_, questionInfo: Question, { dataSources }: { dataSources: IDataSource }): Promise<Response> => {
-            const result = await dataSources.db.submitQuestion(questionInfo);
+        submitQuestion: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<Response> => {
+            const result = await dataSources.db.submitQuestion(args.room_id, args.student_id, args.text, args.created_at);
             return {
                 success: result === [],
                 message: result === [] ? `Question ${result} submitted successfully` : 'Unable to submit question'

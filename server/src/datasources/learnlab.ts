@@ -1,6 +1,6 @@
 import { SQLDataSource } from 'datasource-sql';
 import Knex from 'knex';
-import { Classroom, ClassroomDetails, Question, Role, Session, User } from '../generated/graphql';
+import { Classroom, ClassroomDetails, Role, RoomState } from '../generated/graphql';
 
 const MINUTE = 60;
 
@@ -34,6 +34,10 @@ class LearnlabDB extends SQLDataSource {
         return this.db.select('*').from('session').where({ room_id });
     }
 
+    getRoomsByClassroom = (class_id: string, room_states: RoomState[]): Promise<any> => {
+        return this.db.select('*').from('session').where({ class_id }).andWhere('state', 'in', room_states);
+    }
+
     createRoom = (room_id: string, class_id: string, start_time: Date, end_time: Date): Promise<string[]> => {
         return Promise.resolve([room_id]);
 
@@ -47,12 +51,12 @@ class LearnlabDB extends SQLDataSource {
         // }).returning('room_id');
     }
 
-    submitQuestion = (questionInfo: Question): Promise<string[]> => {
+    submitQuestion = (room_id: string, student_id: string, text: string, created_at: Date): Promise<string[]> => {
         return this.db('question').insert({
-            room_id: questionInfo.room_id,
-            student_id: questionInfo.student_id,
-            text: questionInfo.text,
-            created_at: questionInfo.created_at
+            room_id: room_id,
+            student_id: student_id,
+            text: text,
+            created_at: created_at
         });
     }
 

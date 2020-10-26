@@ -12,6 +12,12 @@ const typeDefs = gql`
         ADMIN
     }
 
+    enum RoomState {
+        PENDING
+        ONGOING
+        ENDED
+    }
+
     type User {
         id: ID!
         name_first: String
@@ -34,10 +40,10 @@ const typeDefs = gql`
     }
 
     type Question {
-        id: ID
+        id: ID!
         room_id: ID!
         student_id: ID!
-        text: String
+        text: String!
         created_at: Date
     }
 
@@ -66,6 +72,7 @@ const typeDefs = gql`
         classroomDetails(id: ID!, role: Role): ClassroomDetails
         questions(room_id: ID!): [Question]!
         room(room_id: ID!): Session
+        roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Session]!
     }
 
     type Mutation {
