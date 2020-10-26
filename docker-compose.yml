@@ -6,13 +6,17 @@ services:
       - "3000:3000"
     stdin_open: true
     volumes:
-      - "/usr/src/learnlab/web"
+      - ./web:/usr/src/learnlab/web
+      - /usr/src/learnlab/web/node_modules/
   server:
     build: ./server
     ports:
       - "4000:4000"
+    depends_on:
+      - db
     volumes:
-      - "/usr/src/learnlab/server"
+      - ./server:/usr/src/learnlab/server
+      - /usr/src/learnlab/server/node_modules/
   rabbitmq:
     build: ./rabbitmq
     ports:
@@ -38,7 +42,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - "/var/lib/postgresql/data"
+      - /var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

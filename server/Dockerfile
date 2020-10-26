@@ -4,11 +4,9 @@ FROM node:12-alpine
 WORKDIR /usr/src/learnlab/server/src
 
 # Install app dependencies
-COPY package*.json ../
+COPY ./ ../
 RUN cd ../ && npm install
-
-# Copy app files
-COPY ./src .
+RUN chmod +x ../server_entrypoint.sh
 
 EXPOSE 4000
-CMD ["node", "index.js"]
+ENTRYPOINT ["/bin/sh", "../server_entrypoint.sh"]
