@@ -14,9 +14,9 @@ const dbConfig = {
     }
 };
 
-interface IDataSource {
+export interface IDataSource {
     db: LearnlabDB
-};
+}
 
 const buildDataSource = () => {
     return {
