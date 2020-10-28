@@ -19,7 +19,6 @@ def main():
     # this callback function will be called
     def callback(ch, method, properties, body):
         print(" [x] Received Frame")
-        print(body)
         global x
 
         batchedData = json.loads(body)

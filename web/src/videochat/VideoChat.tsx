@@ -5,7 +5,7 @@ import {
   EuiButton, EuiPageContent, EuiPageContentBody, EuiFlexGroup, EuiFlexItem, EuiPanel,
 } from "@elastic/eui";
 import { generateAccessToken } from './utils/accessToken';
-import {addToBatch} from '../engagement/PublishFramesToQueue';
+import {addToBatch} from '../engagement/publishFramesToQueue';
 
 const config: Config = {
   dictionaries: [adjectives, colors, animals]
@@ -37,7 +37,7 @@ const VideoChat = () => {
       setTimer(null);
     }
     else {
-      setTimer(setInterval(() => {onGrabFrame()}, 1000));
+      setTimer(setInterval(() => {onGrabFrame()}, 400));
     }
   }, [timer, onGrabFrame]);
 
