@@ -43,7 +43,7 @@ function publishAllToQueue (data) {
 
 export function addToBatch (frameBase64String: string) {
    batchedData.frames.push(frameBase64String);
-   if(batchedData.frames.length === 10){
+   if(batchedData.frames.length === 25){
       publishAllToQueue(JSON.stringify(batchedData));
       batchedData.frames = [];
    }
