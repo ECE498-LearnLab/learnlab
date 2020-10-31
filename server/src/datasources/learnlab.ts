@@ -1,5 +1,6 @@
 import { SQLDataSource } from 'datasource-sql';
 import Knex from 'knex';
+import Upsert from 'knex-upsert';
 import { Classroom, ClassroomDetails, Role, RoomState } from '../generated/graphql';
 
 const MINUTE = 60;
@@ -63,6 +64,23 @@ class LearnlabDB extends SQLDataSource {
     answerQuestion = (question_id: string): boolean => {
         //STUB: Figure out what we're doing with questions. Delete? Remove?
         return true;
+    }
+
+    updateEngagementCurrent = (room_id: string, student_id: string, score: number, classification: string, created_at: Date): Promise<string[]> => {
+        // im going to assume this upsert function works for now, until we are able to test it with real db
+        return Upsert({
+            Knex,
+            table: 'fakeEngagementCurrent',
+            object: {
+                room_id: room_id,
+                student_id: student_id,
+                score: score,
+                classification: classification,
+                created_at: created_at
+            },
+            key:
+                room_id, student_id
+        });
     }
 }
 

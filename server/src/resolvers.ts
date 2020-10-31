@@ -43,6 +43,43 @@ const fakeUsers = [
         name_last: "Beemer",
         role: "student",
         email: "user@learnlab.com"
+    },
+    {
+        id: "2",
+        name_first: "Wojciech",
+        name_last: "Golab",
+        role: "teacher",
+        email: "teacher@learnlab.com"
+    }
+];
+
+const fakeSession = [
+    {
+        room_id: "1",
+        class_id: "1",
+    },
+    {
+        room_id: "2",
+        class_id: "1",
+    }
+];
+
+const fakeEngagementHistory = [
+    {
+        id: "1",
+        room_id: "1",
+        student_id: "1",
+        score: 80,
+        classification: "engaged",
+        created_at: new Date(1600868700000)
+    },
+    {
+        id: "2",
+        room_id: "2",
+        student_id: "2",
+        score: 20,
+        classification: "not engaged",
+        created_at: new Date(1600868700000)
     }
 ];
 
@@ -58,7 +95,10 @@ export const resolvers: Resolvers = {
         room: async (_, { room_id }, { dataSources }: { dataSources: IDataSource }): Promise<Session> => await dataSources.db.getRoom(room_id),
         roomsForClassroom: async (_, { class_id, room_states }, { dataSources }: { dataSources: IDataSource }): Promise<Session[]> => await dataSources.db.getRoomsByClassroom(
             class_id, room_states
-        )
+        ),
+        singleEngagementStat: (_, { room_id, student_id }) => fakeEngagementHistory.find(r => r.room_id === room_id && r.student_id === student_id)
+        // need a query for gets average engagement stat of student for a classroom
+
     },
     Mutation: {
         createRoom: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<CreateRoomResponse> => {
@@ -85,7 +125,14 @@ export const resolvers: Resolvers = {
                 message: result ? `Successfully marked question ${id} as answered` 
                 : `Failed to mark question ${id} as answered`
             }
-        }
+        },
+        updateEngagementCurrent: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<Response> => {
+            const result = await dataSources.db.updateEngagementCurrent(args.room_id, args.student_id, args.score, args.classification, args.created_at);
+            return {
+                success: result === [],
+                message: result === [] ? `Engagement stat ${result} updated successfully` : 'Unable to update engagement stat'
+            }
+        },
     },
     Date: new GraphQLScalarType({
         name: 'Date',

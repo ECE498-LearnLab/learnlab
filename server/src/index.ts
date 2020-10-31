@@ -7,10 +7,11 @@ import LearnlabDB from './datasources/learnlab';
 const dbConfig = {
     client: 'pg',
     connection: {
-        host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
-        user: 'root',
-        password: '<PWD HERE>',
-        database: 'learnlab_1'
+        // host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
+        host: 'localhost',
+        user: 'postgres',
+        password: 'postgres',
+        database: 'learnlab_local'
     }
 };
 
