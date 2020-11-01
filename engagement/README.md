@@ -5,7 +5,7 @@ Make sure you are using Python3.8
 ## Engagement Evaluation Script
 ### To Run:
 Run `demo.pyx` and observe changes in Jimmy Kimmel's drowsiness with each photo. 
-
+Run `consumer.py` to start consuming from front end**
 
 
 

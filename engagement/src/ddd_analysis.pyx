@@ -31,11 +31,8 @@ class DddAnalysis:
 	CALIBRATE_CAMERA_ANGLES = True
 
 	def __init__(self, b64_string):
-		# self.rootwin = tk.Tk()
-		# self.rootwin.withdraw()
 		self.images = []
 		self.images.extend(b64_string)
-		# cv2.namedWindow(DddAnalysis.WINDOW_TITLE)
 		self.show_points = True
 		self.show_bounding = True
 		self.show_gaze = True
@@ -95,7 +92,7 @@ class DddAnalysis:
 			did_yawn, _, _, _ = self.ddestimator.get_mouth_openess_over_time()
 
 			#Calc KSS with previous measurements
-			kss = self.ddestimator.calc_kss(300)
+			kss = self.ddestimator.calc_kss(200)
 			if kss is not None:
 				print("\t%.2f" % (kss*10))
 
@@ -125,7 +122,7 @@ class DddAnalysis:
 
 				if kss is not None:
 					kss_int = int(round(kss*10))
-					print("---------Distraction bar: {}/10---------".format(kss_int))
+					print("---------Distraction bar: {}%---------".format(kss_int))
 					# frame = self.ddestimator.draw_progress_bar(frame, 140, 35, kss, str(kss_int))
 
 		return frame
