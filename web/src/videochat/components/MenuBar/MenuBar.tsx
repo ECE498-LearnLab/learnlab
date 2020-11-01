@@ -3,7 +3,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import EndCallButton from '../Buttons/EndCallButton/EndCallButton';
-import FlipCameraButton from './FlipCameraButton/FlipCameraButton';
 import Menu from './Menu/Menu';
 
 import useRoomState from '../../hooks/useRoomState/useRoomState';
@@ -89,13 +88,15 @@ export default function MenuBar() {
               <ToggleAudioButton disabled={isReconnecting} />
               <ToggleVideoButton disabled={isReconnecting} />
               <Hidden smDown>{!isSharingScreen && <ToggleScreenShareButton disabled={isReconnecting} />}</Hidden>
-              <FlipCameraButton />
             </Grid>
           </Grid>
           <Hidden smDown>
             <Grid style={{ flex: 1 }}>
               <Grid container justify="flex-end">
                 <Menu />
+                <ToggleScreenShareButton disabled={isReconnecting} />
+                <ToggleAudioButton disabled={isReconnecting} />
+                <ToggleVideoButton disabled={isReconnecting} />
                 <EndCallButton />
               </Grid>
             </Grid>

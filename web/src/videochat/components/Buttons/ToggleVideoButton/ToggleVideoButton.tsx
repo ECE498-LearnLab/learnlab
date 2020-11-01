@@ -1,11 +1,16 @@
 import React, { useCallback, useRef } from 'react';
 
-import Button from '@material-ui/core/Button';
-import VideoOffIcon from '../../../icons/VideoOffIcon';
-import VideoOnIcon from '../../../icons/VideoOnIcon';
+import { IconButton } from '@material-ui/core';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 
 import { useHasVideoInputDevices } from '../../../hooks/deviceHooks/deviceHooks';
 import useLocalVideoToggle from '../../../hooks/useLocalVideoToggle/useLocalVideoToggle';
+
+const buttonStyle = {
+  backgroundColor: '#BD271E',
+  color: 'white',
+};
 
 export default function ToggleVideoButton(props: { disabled?: boolean; className?: string }) {
   const [isVideoEnabled, toggleVideoEnabled] = useLocalVideoToggle();
@@ -20,13 +25,12 @@ export default function ToggleVideoButton(props: { disabled?: boolean; className
   }, [toggleVideoEnabled]);
 
   return (
-    <Button
-      className={props.className}
+    <IconButton
+      style={buttonStyle}
       onClick={toggleVideo}
       disabled={!hasVideoDevices || props.disabled}
-      startIcon={isVideoEnabled ? <VideoOnIcon /> : <VideoOffIcon />}
     >
-      {!hasVideoDevices ? 'No Video' : isVideoEnabled ? 'Stop Video' : 'Start Video'}
-    </Button>
+      {isVideoEnabled ? <VideocamIcon /> : <VideocamOffIcon />}
+    </IconButton>
   );
 }

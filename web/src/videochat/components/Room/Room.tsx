@@ -2,6 +2,7 @@ import React from 'react';
 import ParticipantList from '../ParticipantList/ParticipantList';
 import { styled } from '@material-ui/core/styles';
 import MainParticipant from '../MainParticipant/MainParticipant';
+import { EuiPanel } from '@elastic/eui';
 
 const Container = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -17,9 +18,9 @@ const Container = styled('div')(({ theme }) => ({
 
 export default function Room() {
   return (
-    <Container>
+    <EuiPanel>
       <MainParticipant />
       <ParticipantList />
-    </Container>
+    </EuiPanel>
   );
 }
