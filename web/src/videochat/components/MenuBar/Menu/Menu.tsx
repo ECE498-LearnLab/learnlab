@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import AboutDialog from '../../AboutDialog/AboutDialog';
 import Button from '@material-ui/core/Button';
 import DeviceSelectionDialog from '../../DeviceSelectionDialog/DeviceSelectionDialog';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -49,13 +48,6 @@ export default function Menu(props: { buttonClassName?: string }) {
           <Typography variant="body1">Audio and Video Settings</Typography>
         </MenuItem>
       </MenuContainer>
-      <AboutDialog
-        open={aboutOpen}
-        onClose={() => {
-          setAboutOpen(false);
-          setMenuOpen(false);
-        }}
-      />
       <DeviceSelectionDialog
         open={settingsOpen}
         onClose={() => {

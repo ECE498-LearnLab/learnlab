@@ -29,7 +29,10 @@
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+<<<<<<< HEAD
     "react-icons": "^3.11.0",
+=======
+>>>>>>> b997de5cbfbdd7a6a7f9ddca1c9a04d1c72541e9
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "ts-node": "^9.0.0",

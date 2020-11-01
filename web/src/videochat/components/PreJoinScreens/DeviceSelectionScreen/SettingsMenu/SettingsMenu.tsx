@@ -6,7 +6,6 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme, useMediaQuery } from '@material-ui/core';
 
-import AboutDialog from '../../../AboutDialog/AboutDialog';
 import ConnectionOptionsDialog from '../../../ConnectionOptionsDialog/ConnectionOptionsDialog';
 import DeviceSelectionDialog from '../../../DeviceSelectionDialog/DeviceSelectionDialog';
 import SettingsIcon from '../../../../icons/SettingsIcon';
@@ -76,13 +75,6 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
           </MenuItem>
         )}
       </MenuContainer>
-      <AboutDialog
-        open={aboutOpen}
-        onClose={() => {
-          setAboutOpen(false);
-          setMenuOpen(false);
-        }}
-      />
       <DeviceSelectionDialog
         open={deviceSettingsOpen}
         onClose={() => {
