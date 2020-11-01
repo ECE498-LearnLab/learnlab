@@ -95,27 +95,9 @@ class DddAnalysis:
 			did_yawn, _, _, _ = self.ddestimator.get_mouth_openess_over_time()
 
 			#Calc KSS with previous measurements
-			kss = self.ddestimator.calc_kss()
+			kss = self.ddestimator.calc_kss(300)
 			if kss is not None:
 				print("\t%.2f" % (kss*10))
-
-			# #Show results on frame
-			# if self.show_points:
-			# 	frame = self.ddestimator.draw_points_on_face(frame, points, (0, 0, 255))
-			#
-			# if self.show_bounding:
-			# 	bc_2d_coords = self.ddestimator.proj_head_bounding_cube_coords(rotation, translation)
-			# 	frame = self.ddestimator.draw_bounding_cube(frame, bc_2d_coords, (0, 0, 255), euler)
-			#
-			# if self.show_gaze:
-			# 	gl_2d_coords = self.ddestimator.proj_gaze_line_coords(rotation, translation, gaze_D)
-			# 	self.ddestimator.draw_gaze_line(frame, gl_2d_coords, (0, 255, 0), gaze_D)
-			#
-			# if self.show_ear:
-			# 	frame = self.ddestimator.draw_eye_lines(frame, points, ear_R, ear_L)
-			#
-			# if self.show_mar:
-			# 	frame = self.ddestimator.draw_mouth(frame, points, mar)
 
 			if self.show_dd:
 				h = frame.shape[0]
@@ -143,7 +125,8 @@ class DddAnalysis:
 
 				if kss is not None:
 					kss_int = int(round(kss*10))
-					frame = self.ddestimator.draw_progress_bar(frame, 140, 35, kss, str(kss_int))
+					print("---------Distraction bar: {}/10---------".format(kss_int))
+					# frame = self.ddestimator.draw_progress_bar(frame, 140, 35, kss, str(kss_int))
 
 		return frame
 
