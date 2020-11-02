@@ -1,7 +1,6 @@
 import imutils
 import pyximport; pyximport.install()
 import ddestimator
-import tkinter as tk
 import base64
 import cv2
 import numpy as np
@@ -9,8 +8,7 @@ import numpy as np
 class DddAnalysis:
 
 	FRAME_WIDTH = 750
-	# WINDOW_TITLE = "Frame Distraction Estimation"
-
+	TIMESTAMP_THRESHOLD = 200
 	PROCESS_INTERVAL = 50
 
 	K_ESC = 27
@@ -92,7 +90,7 @@ class DddAnalysis:
 			did_yawn, _, _, _ = self.ddestimator.get_mouth_openess_over_time()
 
 			#Calc KSS with previous measurements
-			kss = self.ddestimator.calc_kss(200)
+			kss = self.ddestimator.calc_kss(DddAnalysis.TIMESTAMP_THRESHOLD)
 			if kss is not None:
 				print("\t%.2f" % (kss*10))
 
@@ -123,7 +121,6 @@ class DddAnalysis:
 				if kss is not None:
 					kss_int = int(round(kss*10))
 					print("---------Distraction bar: {}%---------".format(kss_int))
-					# frame = self.ddestimator.draw_progress_bar(frame, 140, 35, kss, str(kss_int))
 
 		return frame
 
