@@ -56,7 +56,7 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "PENDING",
+            "name": "SCHEDULED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

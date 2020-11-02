@@ -9,7 +9,7 @@ const fakeRoomsForClassroom = [
         name: 'Intro to Quantum Physics (Lecture 1)',
         start_time: new Date(1602632500122),
         end_time: new Date(1602632500422),
-        room_state: RoomState.Pending
+        room_state: RoomState.Scheduled
     },
     {
         room_id: '636229ae-37d7-462c-8a13-88e917c3867e',

@@ -13,7 +13,7 @@ const typeDefs = gql`
     }
 
     enum RoomState {
-        PENDING
+        SCHEDULED
         ONGOING
         ENDED
         ALL

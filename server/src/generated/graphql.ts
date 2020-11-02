@@ -20,7 +20,7 @@ export enum Role {
 }
 
 export enum RoomState {
-  Pending = 'PENDING',
+  Scheduled = 'SCHEDULED',
   Ongoing = 'ONGOING',
   Ended = 'ENDED',
   All = 'ALL'
