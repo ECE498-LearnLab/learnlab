@@ -6,6 +6,8 @@ import useActiveSinkId from './useActiveSinkId/useActiveSinkId';
 import usePasscodeAuth from './usePasscodeAuth/usePasscodeAuth';
 import { generateAccessToken } from '../utils/accessToken';
 
+
+// To-do: move this to use recoil
 export interface StateContextType {
   error: TwilioError | null;
   setError(error: TwilioError | null): void;

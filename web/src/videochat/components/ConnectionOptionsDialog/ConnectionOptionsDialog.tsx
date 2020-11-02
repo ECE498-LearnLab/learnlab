@@ -25,9 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   container: {
     width: '600px',
     minHeight: '400px',
-    [theme.breakpoints.down('xs')]: {
-      width: 'calc(100vw - 32px)',
-    },
     '& .inputSelect': {
       width: 'calc(100% - 35px)',
     },
@@ -36,9 +33,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     float: 'right',
   },
   paper: {
-    [theme.breakpoints.down('xs')]: {
-      margin: '16px',
-    },
   },
   formControl: {
     display: 'block',

@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     textTransform: 'none',
     boxShadow: 'none',
     padding: '0.3em 1em',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
     '&:hover': {
       background: 'white',
       boxShadow: 'none',
@@ -47,9 +44,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     minHeight: '120px',
   },
   submitButton: {
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
   },
 }));
 

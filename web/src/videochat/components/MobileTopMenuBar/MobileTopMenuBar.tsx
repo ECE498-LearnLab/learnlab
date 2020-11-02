@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: '1em',
     display: 'none',
     height: `${theme.mobileTopBarHeight}px`,
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-    },
   },
   endCallButton: {
     height: '28px',
@@ -20,13 +17,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0 0.6em',
   },
   settingsButton: {
-    [theme.breakpoints.down('sm')]: {
-      height: '28px',
-      minWidth: '28px',
-      border: '1px solid rgb(136, 140, 142)',
-      padding: 0,
-      margin: '0 1em',
-    },
   },
 }));
 

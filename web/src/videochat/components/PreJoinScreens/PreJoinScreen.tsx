@@ -1,16 +1,21 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import DeviceSelectionScreen from './DeviceSelectionScreen/DeviceSelectionScreen';
+import DeviceSelectionForm from './DeviceSelectionForm';
 import IntroContainer from '../IntroContainer/IntroContainer';
-import MediaErrorSnackbar from './MediaErrorSnackbar/MediaErrorSnackbar';
+import MediaErrorSnackbar from './MediaErrorSnackbar';
 import PreflightTest from './PreflightTest/PreflightTest';
-import RoomNameScreen from './RoomNameScreen/RoomNameScreen';
 import { useAppState } from '../../state';
 import { useParams } from 'react-router-dom';
 import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 import Video from 'twilio-video';
+import RoomList from './RoomList';
+import { uniqueNamesGenerator, Config, animals, colors, adjectives} from 'unique-names-generator';
+
+const config: Config = {
+  dictionaries: [adjectives, colors, animals]
+}
 
 export enum Steps {
-  roomNameStep,
+  joinRoomStep,
   deviceSelectionStep,
 }
 
@@ -18,7 +23,7 @@ export default function PreJoinScreens() {
   const { user } = useAppState();
   const { getAudioAndVideoTracks } = useVideoContext();
   const { URLRoomName } = useParams();
-  const [step, setStep] = useState(Steps.roomNameStep);
+  const [step, setStep] = useState(Steps.joinRoomStep);
 
   const [name, setName] = useState<string>(user?.displayName || '');
   const [roomName, setRoomName] = useState<string>('');
@@ -44,12 +49,10 @@ export default function PreJoinScreens() {
     }
   }, [getAudioAndVideoTracks, step]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleJoinRoom = (event: FormEvent<HTMLFormElement>, roomID: string) => {
     event.preventDefault();
-    // If this app is deployed as a twilio function, don't change the URL because routing isn't supported.
-    if (!window.location.origin.includes('twil.io')) {
-      window.history.replaceState(null, '', window.encodeURI(`/room/${roomName}${window.location.search || ''}`));
-    }
+    setName(uniqueNamesGenerator(config));
+    setRoomName(roomID);
     setStep(Steps.deviceSelectionStep);
   };
 
@@ -61,20 +64,16 @@ export default function PreJoinScreens() {
   );
 
   return (
-    <IntroContainer subContent={step === Steps.deviceSelectionStep && SubContent}>
-      {step === Steps.roomNameStep && (
-        <RoomNameScreen
-          name={name}
-          roomName={roomName}
-          setName={setName}
-          setRoomName={setRoomName}
-          handleSubmit={handleSubmit}
+    <div>
+      {step === Steps.joinRoomStep && (
+        <RoomList
+          onJoinRoom={handleJoinRoom}
         />
       )}
 
       {step === Steps.deviceSelectionStep && (
-        <DeviceSelectionScreen name={name} roomName={roomName} setStep={setStep} />
+        <DeviceSelectionForm name={name} roomName={roomName} setStep={setStep} />
       )}
-    </IntroContainer>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Snackbar from '../../Snackbar/Snackbar';
-import { useHasAudioInputDevices, useHasVideoInputDevices } from '../../../hooks/deviceHooks/deviceHooks';
-import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import Snackbar from '../Snackbar/Snackbar';
+import { useHasAudioInputDevices, useHasVideoInputDevices } from '../../hooks/deviceHooks/deviceHooks';
+import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 
 export function getSnackbarContent(hasAudio: boolean, hasVideo: boolean, error?: Error) {
   let headline = '';

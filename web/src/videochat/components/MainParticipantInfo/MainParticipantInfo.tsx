@@ -2,11 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { LocalAudioTrack, LocalVideoTrack, Participant, RemoteAudioTrack, RemoteVideoTrack } from 'twilio-video';
-<<<<<<< HEAD
 import { EuiPanel } from '@elastic/eui';
-=======
-
->>>>>>> b997de5cbfbdd7a6a7f9ddca1c9a04d1c72541e9
 import AvatarIcon from '../../icons/AvatarIcon';
 import Typography from '@material-ui/core/Typography';
 
@@ -52,15 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: 'rgba(40, 42, 43, 0.75)',
     zIndex: 1,
   },
-<<<<<<< HEAD
-=======
-  fullWidth: {
-    gridArea: '1 / 1 / 2 / 3',
-    [theme.breakpoints.down('sm')]: {
-      gridArea: '1 / 1 / 3 / 3',
-    },
-  },
->>>>>>> b997de5cbfbdd7a6a7f9ddca1c9a04d1c72541e9
   avatarContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -107,17 +94,7 @@ export default function MainParticipantInfo({ participant, children }: MainParti
   const isParticipantReconnecting = useParticipantIsReconnecting(participant);
 
   return (
-<<<<<<< HEAD
     <EuiPanel>
-=======
-    <div
-      data-cy-main-participant
-      data-cy-participant={participant.identity}
-      className={clsx(classes.container, {
-        [classes.fullWidth]: !isRemoteParticipantScreenSharing,
-      })}
-    >
->>>>>>> b997de5cbfbdd7a6a7f9ddca1c9a04d1c72541e9
       <div className={classes.infoContainer}>
         <div className={classes.identity}>
           <AudioLevelIndicator audioTrack={audioTrack} />
@@ -141,10 +118,6 @@ export default function MainParticipantInfo({ participant, children }: MainParti
         </div>
       )}
       {children}
-<<<<<<< HEAD
     </EuiPanel>
-=======
-    </div>
->>>>>>> b997de5cbfbdd7a6a7f9ddca1c9a04d1c72541e9
   );
 }

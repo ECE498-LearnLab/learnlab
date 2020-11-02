@@ -6,10 +6,10 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme, useMediaQuery } from '@material-ui/core';
 
-import ConnectionOptionsDialog from '../../../ConnectionOptionsDialog/ConnectionOptionsDialog';
-import DeviceSelectionDialog from '../../../DeviceSelectionDialog/DeviceSelectionDialog';
-import SettingsIcon from '../../../../icons/SettingsIcon';
-import { useAppState } from '../../../../state';
+import ConnectionOptionsDialog from '../ConnectionOptionsDialog/ConnectionOptionsDialog';
+import DeviceSelectionDialog from '../DeviceSelectionDialog/DeviceSelectionDialog';
+import SettingsIcon from '../../icons/SettingsIcon';
+import { useAppState } from '../../state';
 
 const useStyles = makeStyles((theme: Theme) => ({
   settingsButton: {
@@ -17,12 +17,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?: string }) {
+export default function SettingsMenu() {
   const classes = useStyles();
   const { roomType } = useAppState();
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [menuOpen, setMenuOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
   const [deviceSettingsOpen, setDeviceSettingsOpen] = useState(false);
   const [connectionSettingsOpen, setConnectionSettingsOpen] = useState(false);
 
@@ -30,25 +28,14 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
 
   return (
     <>
-      {isMobile ? (
-        <Button
-          ref={anchorRef}
-          onClick={() => setMenuOpen(true)}
-          startIcon={<MoreIcon />}
-          className={mobileButtonClass}
-        >
-          More
-        </Button>
-      ) : (
-        <Button
+      <Button
           ref={anchorRef}
           onClick={() => setMenuOpen(true)}
           startIcon={<SettingsIcon />}
           className={classes.settingsButton}
         >
           Settings
-        </Button>
-      )}
+      </Button>
       <MenuContainer
         open={menuOpen}
         onClose={() => setMenuOpen(isOpen => !isOpen)}
@@ -56,16 +43,13 @@ export default function SettingsMenu({ mobileButtonClass }: { mobileButtonClass?
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: isMobile ? 'left' : 'right',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: isMobile ? -55 : -45,
+          vertical: -45,
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={() => setAboutOpen(true)}>
-          <Typography variant="body1">About</Typography>
-        </MenuItem>
         <MenuItem onClick={() => setDeviceSettingsOpen(true)}>
           <Typography variant="body1">Audio and Video Settings</Typography>
         </MenuItem>

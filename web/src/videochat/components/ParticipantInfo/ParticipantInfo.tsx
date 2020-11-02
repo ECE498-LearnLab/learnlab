@@ -34,14 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
       border: `${BORDER_SIZE}px solid rgb(245, 248, 255)`,
       paddingTop: `calc(${(9 / 16) * 100}% - ${BORDER_SIZE}px)`,
       background: 'black',
-      [theme.breakpoints.down('sm')]: {
-        height: theme.sidebarMobileHeight,
-        width: `${(theme.sidebarMobileHeight * 16) / 9}px`,
-        marginRight: '8px',
-        marginBottom: '0',
-        fontSize: '10px',
-        paddingTop: `${theme.sidebarMobileHeight - 2}px`,
-      },
     },
     innerContainer: {
       position: 'absolute',
@@ -72,11 +64,6 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       left: 0,
       zIndex: 1,
-      [theme.breakpoints.down('sm')]: {
-        '& svg': {
-          transform: 'scale(0.7)',
-        },
-      },
     },
     reconnectingContainer: {
       position: 'absolute',
@@ -124,9 +111,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     typeography: {
       color: 'white',
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '0.75rem',
-      },
     },
     hideParticipant: {
       display: 'none',
@@ -134,8 +118,7 @@ const useStyles = makeStyles((theme: Theme) =>
     cursorPointer: {
       cursor: 'pointer',
     },
-  })
-);
+  }));
 
 interface ParticipantInfoProps {
   participant: Participant;

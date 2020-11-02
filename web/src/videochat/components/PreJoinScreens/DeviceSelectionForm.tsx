@@ -1,12 +1,12 @@
 import React from 'react';
 import { makeStyles, Typography, Grid, Button, Theme, Hidden } from '@material-ui/core';
-import LocalVideoPreview from './LocalVideoPreview/LocalVideoPreview';
-import SettingsMenu from './SettingsMenu/SettingsMenu';
-import { Steps } from '../PreJoinScreens';
-import ToggleAudioButton from '../../Buttons/ToggleAudioButton/ToggleAudioButton';
-import ToggleVideoButton from '../../Buttons/ToggleVideoButton/ToggleVideoButton';
-import { useAppState } from '../../../state';
-import useVideoContext from '../../../hooks/useVideoContext/useVideoContext';
+import LocalVideoPreview from './LocalVideoPreview';
+import SettingsMenu from './SettingsMenu';
+import { Steps } from './PreJoinScreen';
+import ToggleAudioButton from '../Buttons/ToggleAudioButton/ToggleAudioButton';
+import ToggleVideoButton from '../Buttons/ToggleVideoButton/ToggleVideoButton';
+import { useAppState } from '../../state';
+import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   gutterBottom: {
@@ -22,27 +22,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   localPreviewContainer: {
     paddingRight: '2em',
-    [theme.breakpoints.down('sm')]: {
-      padding: '0 2.5em',
-    },
   },
   joinButtons: {
     display: 'flex',
     justifyContent: 'space-between',
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column-reverse',
-      width: '100%',
-      '& button': {
-        margin: '0.5em 0',
-      },
-    },
   },
   mobileButtonBar: {
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      margin: '1.5em 0 1em',
-    },
   },
   mobileButton: {
     padding: '0.8em 0',
@@ -82,7 +67,7 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
               <ToggleAudioButton className={classes.mobileButton} disabled={disableButtons} />
               <ToggleVideoButton className={classes.mobileButton} disabled={disableButtons} />
             </Hidden>
-            <SettingsMenu mobileButtonClass={classes.mobileButton} />
+            <SettingsMenu />
           </div>
         </Grid>
         <Grid item md={5} sm={12} xs={12}>
@@ -94,7 +79,7 @@ export default function DeviceSelectionScreen({ name, roomName, setStep }: Devic
               </Hidden>
             </div>
             <div className={classes.joinButtons}>
-              <Button variant="outlined" color="primary" onClick={() => setStep(Steps.roomNameStep)}>
+              <Button variant="outlined" color="primary" onClick={() => setStep(Steps.joinRoomStep)}>
                 Cancel
               </Button>
               <Button

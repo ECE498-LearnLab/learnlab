@@ -10,10 +10,6 @@ const Container = styled('div')(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: `1fr ${theme.sidebarWidth}px`,
   gridTemplateRows: '100%',
-  [theme.breakpoints.down('sm')]: {
-    gridTemplateColumns: `100%`,
-    gridTemplateRows: `1fr ${theme.sidebarMobileHeight + 16}px`,
-  },
 }));
 
 export default function Room() {

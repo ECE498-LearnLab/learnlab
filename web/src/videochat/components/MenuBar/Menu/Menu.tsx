@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import { Theme, useMediaQuery } from '@material-ui/core';
 
 export default function Menu(props: { buttonClassName?: string }) {
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
   const [aboutOpen, setAboutOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -19,14 +18,8 @@ export default function Menu(props: { buttonClassName?: string }) {
   return (
     <>
       <Button onClick={() => setMenuOpen(isOpen => !isOpen)} ref={anchorRef} className={props.buttonClassName}>
-        {isMobile ? (
-          <MoreIcon />
-        ) : (
-          <>
             Settings
             <ExpandMoreIcon />
-          </>
-        )}
       </Button>
       <MenuContainer
         open={menuOpen}
@@ -37,7 +30,7 @@ export default function Menu(props: { buttonClassName?: string }) {
           horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: isMobile ? -55 : 'bottom',
+          vertical: 'bottom',
           horizontal: 'center',
         }}
       >
