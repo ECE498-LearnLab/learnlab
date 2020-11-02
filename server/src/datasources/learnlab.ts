@@ -49,10 +49,7 @@ class LearnlabDB extends SQLDataSource {
     getUser = async (id: string): Promise<UserResponse> => {
         const res = await this.db.select('*').from('users').where({ id }).catch(err => { throw err; });
         if (res && res[0]) {
-            return {
-                success: true,
-                user: { ...res[0] }
-            };
+            return { success: true, user: { ...res[0] } };
         } else {
             return {
                 success: false,
