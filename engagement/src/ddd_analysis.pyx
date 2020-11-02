@@ -1,7 +1,6 @@
 import imutils
 import pyximport; pyximport.install()
 import ddestimator
-import tkinter as tk
 import base64
 import cv2
 import numpy as np
@@ -9,8 +8,7 @@ import numpy as np
 class DddAnalysis:
 
 	FRAME_WIDTH = 750
-	# WINDOW_TITLE = "Frame Distraction Estimation"
-
+	TIMESTAMP_THRESHOLD = 200
 	PROCESS_INTERVAL = 50
 
 	K_ESC = 27
@@ -31,11 +29,8 @@ class DddAnalysis:
 	CALIBRATE_CAMERA_ANGLES = True
 
 	def __init__(self, b64_string):
-		# self.rootwin = tk.Tk()
-		# self.rootwin.withdraw()
 		self.images = []
 		self.images.extend(b64_string)
-		# cv2.namedWindow(DddAnalysis.WINDOW_TITLE)
 		self.show_points = True
 		self.show_bounding = True
 		self.show_gaze = True
@@ -95,27 +90,9 @@ class DddAnalysis:
 			did_yawn, _, _, _ = self.ddestimator.get_mouth_openess_over_time()
 
 			#Calc KSS with previous measurements
-			kss = self.ddestimator.calc_kss()
+			kss = self.ddestimator.calc_kss(DddAnalysis.TIMESTAMP_THRESHOLD)
 			if kss is not None:
 				print("\t%.2f" % (kss*10))
-
-			# #Show results on frame
-			# if self.show_points:
-			# 	frame = self.ddestimator.draw_points_on_face(frame, points, (0, 0, 255))
-			#
-			# if self.show_bounding:
-			# 	bc_2d_coords = self.ddestimator.proj_head_bounding_cube_coords(rotation, translation)
-			# 	frame = self.ddestimator.draw_bounding_cube(frame, bc_2d_coords, (0, 0, 255), euler)
-			#
-			# if self.show_gaze:
-			# 	gl_2d_coords = self.ddestimator.proj_gaze_line_coords(rotation, translation, gaze_D)
-			# 	self.ddestimator.draw_gaze_line(frame, gl_2d_coords, (0, 255, 0), gaze_D)
-			#
-			# if self.show_ear:
-			# 	frame = self.ddestimator.draw_eye_lines(frame, points, ear_R, ear_L)
-			#
-			# if self.show_mar:
-			# 	frame = self.ddestimator.draw_mouth(frame, points, mar)
 
 			if self.show_dd:
 				h = frame.shape[0]
@@ -143,7 +120,7 @@ class DddAnalysis:
 
 				if kss is not None:
 					kss_int = int(round(kss*10))
-					frame = self.ddestimator.draw_progress_bar(frame, 140, 35, kss, str(kss_int))
+					print("---------Distraction bar: {}%---------".format(kss_int))
 
 		return frame
 
