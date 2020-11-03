@@ -54,7 +54,8 @@ const typeDefs = gql`
     }
 
     type Room {
-        room_id: ID!
+        id: ID!
+        room_uuid: ID!
         class_id: ID!
         name: String
         start_time: Date
@@ -74,7 +75,7 @@ const typeDefs = gql`
     }
 
     type CreateRoomResponse {
-        room_id: ID!
+        room_uuid: ID!
         success: Boolean!
         message: String
     }
@@ -91,7 +92,6 @@ const typeDefs = gql`
         classroom(id: ID!): Classroom
         classroomDetails(id: ID!, role: Role): ClassroomDetails
         questions(room_id: ID!): [Question]!
-        room(room_id: ID!): Room
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!): [User]!
     }

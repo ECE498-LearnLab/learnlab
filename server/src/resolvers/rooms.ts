@@ -4,7 +4,8 @@ import { CreateRoomResponse, Resolvers, RoomState, Room } from "../generated/gra
 
 const fakeRoomsForClassroom = [
     {
-        room_id: '3e1ff1c5-f98a-468b-aad6-6c1810028363',
+        id: '1',
+        room_uuid: '3e1ff1c5-f98a-468b-aad6-6c1810028363',
         class_id: '1',
         name: 'Intro to Quantum Physics (Lecture 1)',
         start_time: new Date(1602632500122),
@@ -12,7 +13,8 @@ const fakeRoomsForClassroom = [
         room_state: RoomState.Scheduled
     },
     {
-        room_id: '636229ae-37d7-462c-8a13-88e917c3867e',
+        id: '2',
+        room_uuid: '636229ae-37d7-462c-8a13-88e917c3867e',
         class_id: '1',
         name: 'Diving into Deep Space and Time (Lecture 2)',
         start_time: new Date(1602632500122),
@@ -20,7 +22,8 @@ const fakeRoomsForClassroom = [
         room_state: RoomState.Ongoing
     },
     {
-        room_id: '290d3ac2-950b-4cf2-9106-25b211ceadae',
+        id: '3',
+        room_uuid: '290d3ac2-950b-4cf2-9106-25b211ceadae',
         class_id: '2',
         name: 'Basket Weaving Lesson 17',
         start_time: new Date(1602632500122),
@@ -34,7 +37,8 @@ const fakeRoomsForClassroom = [
  * 
  * query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]){
         roomsForClassroom(class_id: $class_id, room_states: $room_states){
-            room_id
+            id
+            room_uuid
             name
             start_time
             room_state
@@ -44,16 +48,13 @@ const fakeRoomsForClassroom = [
         createRoom(class_id: $class_id, name: $name) {
             success
             message
-            room_id
+            room_uuid
         }
     }
  */
 
 const roomResolver: Resolvers = {
     Query: {
-        room: async (_, { room_id }: { room_id: string }, { dataSources }: { dataSources: IDataSource }): Promise<Room> => {
-            return await dataSources.db.getRoom(room_id);
-        },
         roomsForClassroom: async (_, { class_id, room_states }: { class_id: string, room_states: RoomState[]}, { dataSources }: { dataSources: IDataSource }): Promise<Room[]> => {
             if (room_states.includes(RoomState.All)){
                 return fakeRoomsForClassroom.filter(r => r.class_id === class_id);
@@ -68,13 +69,13 @@ const roomResolver: Resolvers = {
     },
     Mutation: {
         createRoom: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<CreateRoomResponse> => {
-            const room_id = uuidv4();
+            const room_uuid = uuidv4();
             
-            const result = await dataSources.db.createRoom(room_id, args.name, args.class_id, args.start_time, args.end_time);
+            const result = await dataSources.db.createRoom(room_uuid, args.name, args.class_id, args.start_time, args.end_time);
             return {
-                success: result && result[0] === room_id,
-                message: `Room ${room_id} (${args.name}) ${result && result[0] === room_id ? 'created successfully': 'could not be created'}`,
-                room_id: room_id
+                success: result && result[0] === room_uuid,
+                message: `Room ${room_uuid} (${args.name}) ${result && result[0] === room_uuid ? 'created successfully': 'could not be created'}`,
+                room_uuid
             }
         },
     }

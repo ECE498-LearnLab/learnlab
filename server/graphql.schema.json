@@ -464,7 +464,23 @@
         "description": null,
         "fields": [
           {
-            "name": "room_id",
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "room_uuid",
             "description": null,
             "args": [],
             "type": {
@@ -663,7 +679,7 @@
         "description": null,
         "fields": [
           {
-            "name": "room_id",
+            "name": "room_uuid",
             "description": null,
             "args": [],
             "type": {
@@ -894,33 +910,6 @@
                   "ofType": null
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "room",
-            "description": null,
-            "args": [
-              {
-                "name": "room_id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Room",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

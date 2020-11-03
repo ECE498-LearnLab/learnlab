@@ -91,8 +91,8 @@ class LearnlabDB extends SQLDataSource {
         }
     }
 
-    createRoom = (room_id: string, name: string, class_id: string, start_time: Date, end_time: Date): Promise<string[]> => {
-        return Promise.resolve([room_id]);
+    createRoom = (room_uuid: string, name: string, class_id: string, start_time: Date, end_time: Date): Promise<string[]> => {
+        return Promise.resolve([room_uuid]);
 
         //TODO: Use once db is set up
 

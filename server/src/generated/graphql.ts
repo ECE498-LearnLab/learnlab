@@ -66,7 +66,8 @@ export type Question = {
 
 export type Room = {
   __typename?: 'Room';
-  room_id: Scalars['ID'];
+  id: Scalars['ID'];
+  room_uuid: Scalars['ID'];
   class_id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['Date']>;
@@ -89,7 +90,7 @@ export type UserResponse = {
 
 export type CreateRoomResponse = {
   __typename?: 'CreateRoomResponse';
-  room_id: Scalars['ID'];
+  room_uuid: Scalars['ID'];
   success: Scalars['Boolean'];
   message?: Maybe<Scalars['String']>;
 };
@@ -107,7 +108,6 @@ export type Query = {
   classroom?: Maybe<Classroom>;
   classroomDetails?: Maybe<ClassroomDetails>;
   questions: Array<Maybe<Question>>;
-  room?: Maybe<Room>;
   roomsForClassroom: Array<Maybe<Room>>;
   participants: Array<Maybe<User>>;
 };
@@ -130,11 +130,6 @@ export type QueryClassroomDetailsArgs = {
 
 
 export type QueryQuestionsArgs = {
-  room_id: Scalars['ID'];
-};
-
-
-export type QueryRoomArgs = {
   room_id: Scalars['ID'];
 };
 
@@ -348,7 +343,8 @@ export type QuestionResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
-  room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  room_uuid?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   class_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   start_time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -371,7 +367,7 @@ export type UserResponseResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type CreateRoomResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateRoomResponse'] = ResolversParentTypes['CreateRoomResponse']> = {
-  room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  room_uuid?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -389,7 +385,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   classroom?: Resolver<Maybe<ResolversTypes['Classroom']>, ParentType, ContextType, RequireFields<QueryClassroomArgs, 'id'>>;
   classroomDetails?: Resolver<Maybe<ResolversTypes['ClassroomDetails']>, ParentType, ContextType, RequireFields<QueryClassroomDetailsArgs, 'id'>>;
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
-  room?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<QueryRoomArgs, 'room_id'>>;
   roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id'>>;
   participants?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'room_id'>>;
 };
