@@ -171,6 +171,7 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateRoomArgs = {
   class_id: Scalars['ID'];
+  name: Scalars['String'];
   start_time?: Maybe<Scalars['Date']>;
   end_time?: Maybe<Scalars['Date']>;
 };
@@ -395,7 +396,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createUser?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'first_name' | 'last_name' | 'role' | 'email'>>;
-  createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id'>>;
+  createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id' | 'name'>>;
   submitQuestion?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;
   answerQuestion?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAnswerQuestionArgs, 'id'>>;
 };

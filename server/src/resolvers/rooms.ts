@@ -40,8 +40,8 @@ const fakeRoomsForClassroom = [
             room_state
         }
     }
-    mutation createRoom($class_id: ID!) {
-        createRoom(class_id: $class_id) {
+    mutation createRoom($class_id: ID!, $name: String!) {
+        createRoom(class_id: $class_id, name: $name) {
             success
             message
             room_id
@@ -70,10 +70,10 @@ const roomResolver: Resolvers = {
         createRoom: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<CreateRoomResponse> => {
             const room_id = uuidv4();
             
-            const result = await dataSources.db.createRoom(room_id, args.class_id, args.start_time, args.end_time);
+            const result = await dataSources.db.createRoom(room_id, args.name, args.class_id, args.start_time, args.end_time);
             return {
                 success: result && result[0] === room_id,
-                message: `Room ${room_id} ${result && result[0] === room_id ? 'created successfully': 'could not be created'}`,
+                message: `Room ${room_id} (${args.name}) ${result && result[0] === room_id ? 'created successfully': 'could not be created'}`,
                 room_id: room_id
             }
         },

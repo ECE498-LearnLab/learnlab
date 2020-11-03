@@ -98,7 +98,7 @@ const typeDefs = gql`
 
     type Mutation {
         createUser(first_name: String!, last_name: String!, middle_name: String, role: Role!, email: String!, phone_number: String, created_at: Date): CreateAccountResponse
-        createRoom(class_id: ID!, start_time: Date, end_time: Date): CreateRoomResponse
+        createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
         answerQuestion(id: ID!): Response
     }

@@ -91,7 +91,7 @@ class LearnlabDB extends SQLDataSource {
         }
     }
 
-    createRoom = (room_id: string, class_id: string, start_time: Date, end_time: Date): Promise<string[]> => {
+    createRoom = (room_id: string, name: string, class_id: string, start_time: Date, end_time: Date): Promise<string[]> => {
         return Promise.resolve([room_id]);
 
         //TODO: Use once db is set up
@@ -99,6 +99,7 @@ class LearnlabDB extends SQLDataSource {
         // return this.db('room').insert({
         //     room_id: room_id,
         //     class_id: class_id,
+        //     name: name,
         //     start_time: start_time,
         //     end_time: end_time
         // }).returning('room_id');
