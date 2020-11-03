@@ -4,14 +4,24 @@ import typeDefs from './schema';
 import { resolvers } from './resolvers';
 import LearnlabDB from './datasources/learnlab';
 
-const dbConfig = {
-    client: 'pg',
-    connection: {
+const useLocalDb = true;
+const connectionConfig = useLocalDb
+    ? {        
+        host: 'db',
+        user: 'postgres',
+        password: 'postgres',
+        database: 'learnlab_local'
+    }
+    : {
         host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
         user: 'root',
-        password: '<PWD HERE>',
+        password: '<PWD>',
         database: 'learnlab_1'
-    }
+}
+
+const dbConfig = {
+    client: 'pg',
+    connection: connectionConfig
 };
 
 export interface IDataSource {

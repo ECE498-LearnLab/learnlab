@@ -13,17 +13,23 @@ const typeDefs = gql`
     }
 
     enum RoomState {
-        PENDING
+        SCHEDULED
         ONGOING
         ENDED
+        ALL
     }
 
     type User {
         id: ID!
-        name_first: String
-        name_last: String
-        role: String
+        first_name: String!
+        last_name: String!
+        middle_name: String
+        phone_number: String
+        role: Role!
         email: String! # ! for mandatory field (cannot be null)
+        last_login: Date
+        created_at: Date
+        updated_at: Date
     }
 
     type Classroom {
@@ -47,11 +53,14 @@ const typeDefs = gql`
         created_at: Date
     }
 
-    type Session {
-        room_id: ID!
+    type Room {
+        id: ID!
+        room_uuid: ID!
         class_id: ID!
+        name: String
         start_time: Date
         end_time: Date
+        room_state: RoomState!
     }
 
     type Response {
@@ -59,24 +68,37 @@ const typeDefs = gql`
         message: String!
     }
 
+    type UserResponse {
+        success: Boolean!
+        message: String
+        user: User
+    }
+
     type CreateRoomResponse {
-        room_id: ID!
+        room_uuid: ID!
+        success: Boolean!
+        message: String
+    }
+
+    type CreateAccountResponse {
+        user_id: ID
         success: Boolean!
         message: String
     }
 
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
-        user(id: ID!): User!
+        user(id: ID!): UserResponse!
         classroom(id: ID!): Classroom
         classroomDetails(id: ID!, role: Role): ClassroomDetails
         questions(room_id: ID!): [Question]!
-        room(room_id: ID!): Session
-        roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Session]!
+        roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
+        participants(room_id: ID!): [User]!
     }
 
     type Mutation {
-        createRoom(class_id: ID!, start_time: Date, end_time: Date): CreateRoomResponse
+        createUser(first_name: String!, last_name: String!, middle_name: String, role: Role!, email: String!, phone_number: String, created_at: Date): CreateAccountResponse
+        createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
         answerQuestion(id: ID!): Response
     }

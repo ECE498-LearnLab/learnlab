@@ -1,0 +1,1 @@
+export const isUniqueViolationError = (error): boolean => error.code === '23505';
