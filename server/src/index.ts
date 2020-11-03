@@ -8,7 +8,7 @@ const dbConfig = {
     client: 'pg',
     connection: {
         // host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
-        host: 'localhost',
+        host: 'db',
         user: 'postgres',
         password: 'postgres',
         database: 'learnlab_local'
