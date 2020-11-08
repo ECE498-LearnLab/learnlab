@@ -6,9 +6,7 @@ import cv2
 import time
 import math
 import re
-from math import *
 import pandas as pd
-from scipy.optimize import curve_fit
 from lmfit.models import GaussianModel
 
 class ddestimator:
