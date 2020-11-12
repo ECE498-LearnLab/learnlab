@@ -17,10 +17,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "module": "esnext"
+    "module": "esnext",
+    "baseUrl": "src"
   },
   "include": [
-    "src",
-    "server"
+    "src"
   ]
 }

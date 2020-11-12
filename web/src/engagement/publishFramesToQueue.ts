@@ -36,7 +36,7 @@ client.configure({
 
 client.activate();
 
-function publishAllToQueue (data) {
+function publishAllToQueue (data: string) {
    console.log("Sending frame to RabbitMQ");
    client.publish({destination: `/queue/${QUEUE_NAME}`, headers: {}, body: data});
 }
