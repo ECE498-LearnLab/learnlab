@@ -1,1 +1,1 @@
-web: python3 src/consumer.py
+web: python3 src/consumer.py runserver 0.0.0.0:5000
