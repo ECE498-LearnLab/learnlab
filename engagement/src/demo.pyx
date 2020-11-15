@@ -12,7 +12,6 @@ from python_graphql_client import GraphqlClient
 class demo1:
 	ENDPOINT = "http://localhost:4000/"
 
-
 	FRAME_WIDTH = 750
 	WINDOW_TITLE = "Demo #1: live distraction and drowsiness estimation"
 
