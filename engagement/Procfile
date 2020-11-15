@@ -1,1 +1,1 @@
-web: python src/consumer.py:app
+web: python src/consumer.py
