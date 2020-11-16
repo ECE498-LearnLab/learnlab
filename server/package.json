@@ -9,7 +9,7 @@
     "start:watch": "nodemon -L",
     "build": "rimraf ./build && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts --fix",
+    "lint": "eslint . --ext .ts",
     "typegen": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
