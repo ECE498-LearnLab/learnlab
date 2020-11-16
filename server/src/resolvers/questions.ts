@@ -1,5 +1,5 @@
 import { IDataSource } from "..";
-import { Resolvers, Response } from "../generated/graphql";
+import { MutationAnswerQuestionArgs, MutationSubmitQuestionArgs, Resolvers, Response } from "../generated/graphql";
 
 const fakeQuestionData = [
     {
@@ -18,53 +18,29 @@ const fakeQuestionData = [
     }
 ];
 
-/**
- * Example queries:
- * 
- * query getQuestions($room_id: ID!) {
-        questions(room_id: $room_id) {
-            id
-            text
-            created_at
-        }
-    }
- * 
- *  mutation postQuestion($room_id: ID!, $student_id: ID!, $text: String!) {
-        submitQuestion(room_id: $room_id, student_id: $student_id, text: $text) {
-            success
-            message
-        }
-    }
-*
-*   mutation answerQuestion($id: ID!) {
-        answerQuestion(id: $id) {
-            success
-            message
-        }
-    }
- */
-
 const questionResolver: Resolvers = {
     Query: {
-        questions: (_, { room_id }) => fakeQuestionData.filter(q => q.room_id === room_id),
+        questions: (_, { room_id }) => fakeQuestionData.filter((q) => q.room_id === room_id),
     },
     Mutation: {
-        submitQuestion: async (_, args, { dataSources }: { dataSources: IDataSource }): Promise<Response> => {
-            const result = await dataSources.db.submitQuestion(args.room_id, args.student_id, args.text, args.created_at);
+        submitQuestion: async (_, args: MutationSubmitQuestionArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<Response> => {
+            const result = await dataSources.db.questionsAPI().submitQuestion(args);
             return {
                 success: result && result === [],
                 message: result && result === [] ? `Question ${result} submitted successfully` : 'Unable to submit question'
-            }
+            };
         },
-        answerQuestion: async (_, { id }: { id: string }, { dataSources }: { dataSources: IDataSource }): Promise<Response> => {
-            const result = await dataSources.db.answerQuestion(id)
+        answerQuestion: async (_, args: MutationAnswerQuestionArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<Response> => {
+            const result = await dataSources.db.questionsAPI().answerQuestion(args);
             return {
                 success: result,
-                message: result ? `Successfully marked question ${id} as answered` 
-                : `Failed to mark question ${id} as answered`
-            }
+                message: result ? `Successfully marked question ${args.id} as answered` 
+                : `Failed to mark question ${args.id} as answered`
+            };
         }
     }
-}
+};
 
 export default questionResolver;
