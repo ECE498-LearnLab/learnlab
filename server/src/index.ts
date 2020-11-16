@@ -17,7 +17,7 @@ const connectionConfig = useLocalDb
         user: 'root',
         password: '<PWD>',
         database: 'learnlab_1'
-}
+};
 
 const dbConfig = {
     client: 'pg',
@@ -31,7 +31,7 @@ export interface IDataSource {
 const buildDataSource = () => {
     return {
         db: new LearnlabDB(dbConfig)
-    } as DataSources<IDataSource>
+    } as DataSources<IDataSource>;
 };
 
 const server = new ApolloServer({
