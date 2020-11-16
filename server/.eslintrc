@@ -1,5 +1,5 @@
 {
-    // "root": true,
+    "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
       "@typescript-eslint"
@@ -10,16 +10,6 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-      "@typescript-eslint/ban-ts-comment": "off",
-      "max-len": ["warn", {
-        "code": 125
-      }],
-      "no-unreachable": "error",
-      "arrow-parens": ["warn", "always"],
-      "arrow-spacing": "warn",
-      "space-before-function-paren": ["warn", "always"],
-      "semi": "warn",
-      "key-spacing": "warn",
-      "keyword-spacing": "warn"
+      "@typescript-eslint/ban-ts-comment": "off"
     }
 }

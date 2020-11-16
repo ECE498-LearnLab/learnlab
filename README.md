@@ -9,7 +9,6 @@ https://docs.docker.com/desktop/
 ```
 docker-compose up
 ```
->Note: Windows users will need to set the *end of line sequence character* to **LF**
 
 This will start the following services:
 * Web http://localhost:3000
@@ -24,7 +23,6 @@ This will start the following services:
         * Port: 5432
         * Username: postgres
         * Password: postgres
-    * Alternatively, run `psql -U postgres -d learnlab_local` to access local db in a terminal
 ## Running tests
 
 ## Deployment
