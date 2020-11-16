@@ -16,7 +16,6 @@ const typeDefs = gql`
         SCHEDULED
         ONGOING
         ENDED
-        ALL
     }
 
     type User {
@@ -34,9 +33,11 @@ const typeDefs = gql`
 
     type Classroom {
         id: ID!
-        name: String
-        subject: String
+        name: String!
+        subject: String!
         description: String
+        created_at: Date
+        updated_at: Date
     }
 
     type ClassroomDetails {
@@ -60,7 +61,9 @@ const typeDefs = gql`
         name: String
         start_time: Date
         end_time: Date
-        room_state: RoomState!
+        room_status: RoomState!
+        created_at: Date
+        updated_at: Date
     }
 
     type Response {
@@ -75,7 +78,8 @@ const typeDefs = gql`
     }
 
     type CreateRoomResponse {
-        room_uuid: ID!
+        id: ID
+        room_uuid: ID
         success: Boolean!
         message: String
     }
@@ -86,21 +90,32 @@ const typeDefs = gql`
         message: String
     }
 
+    type CreateClassroomResponse {
+        class_id: ID
+        success: Boolean!
+        message: String
+    }
+
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): UserResponse!
         classroom(id: ID!): Classroom
-        classroomDetails(id: ID!, role: Role): ClassroomDetails
+        classroomDetails(id: ID!, role: Role!): ClassroomDetails
         questions(room_id: ID!): [Question]!
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!): [User]!
     }
 
     type Mutation {
-        createUser(first_name: String!, last_name: String!, middle_name: String, role: Role!, email: String!, phone_number: String, created_at: Date): CreateAccountResponse
+        createUser(first_name: String!, last_name: String!, 
+                   middle_name: String, role: Role!, email: String!,
+                   phone_number: String, created_at: Date, parent_email: String): CreateAccountResponse
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
+        createClassroom(name: String!, subject: String!, teacher_id: ID!, description: String): CreateClassroomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
-        answerQuestion(id: ID!): Response
+        answerQuestion(id: ID!): Response,
+        updateRoomStatus(room_id: ID!, room_status: RoomState!): Response,
+        addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
     }
 `;
 
