@@ -6,8 +6,8 @@ import json
 
 def main():
     connection_params = pika.ConnectionParameters(host='rabbitmq')
-    url = os.environ.get('URL_PLACEHOLDER', 'fallback_url')
-    params = pika.URLParameters(url)
+    # url = os.environ.get('URL_PLACEHOLDER', 'fallback_url')
+    # params = pika.URLParameters(url)
 
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
