@@ -1,9 +1,9 @@
 # GraphQL Query Example Usages
 
 ----
-* [Query Usage Examples](##Query-Usage-Examples)
-  * [Sample Execution](###Sample-Execution)
-* [Mutation Usage Examples](##Mutation-Usage-Examples)
+* [Query Usage Examples](#Query-Usage-Examples)
+  * [Sample Execution](#Sample-Execution)
+* [Mutation Usage Examples](#Mutation-Usage-Examples)
 ---
 
 
