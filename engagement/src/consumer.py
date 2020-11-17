@@ -5,11 +5,11 @@ import ddd_analysis
 import json
 
 def main():
-    # connection_params = pika.ConnectionParameters(host='rabbitmq')
+    connection_params = pika.ConnectionParameters(host='rabbitmq')
     url = os.environ.get('URL_PLACEHOLDER', 'fallback_url')
     params = pika.URLParameters(url)
 
-    connection = pika.BlockingConnection()
+    connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
     global x
     x = 0
