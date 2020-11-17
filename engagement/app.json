@@ -2,9 +2,6 @@
   "buildpacks": [
     {
       "url": "heroku/python"
-    },
-    {
-      "url": "https://github.com/hdachev/heroku-buildpack-opencv.git"
     }
   ]
 }
