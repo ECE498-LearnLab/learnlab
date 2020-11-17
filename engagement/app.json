@@ -1,10 +1,10 @@
-//{
-//  "buildpacks": [
-//    {
-//      "url": "https://github.com/heroku/heroku-buildpack-python"
-//    },
-//    {
-//      "url": "https://github.com/diogojc/heroku-buildpack-python-opencv-scipy#cedar14"
-//    }
-//  ]
-//}
+{
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/hdachev/heroku-buildpack-opencv.git"
+    }
+  ]
+}
