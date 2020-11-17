@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import pika, sys, os
-import codecs
 import pyximport; pyximport.install()
 import ddd_analysis
 import json
-import base64
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    # connection_params = pika.ConnectionParameters(host='rabbitmq')
+    url = os.environ.get('URL_PLACEHOLDER', 'fallback_url')
+    params = pika.URLParameters(url)
+
+    connection = pika.BlockingConnection()
     channel = connection.channel()
     global x
     x = 0
