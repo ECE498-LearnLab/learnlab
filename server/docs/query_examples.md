@@ -71,11 +71,11 @@ query getClassroom($id: ID!) {
 }
 ```
 **Query Variables**:
-```GraphQL
+```json
 {"id": 4}
 ```
 **Result**:
-```GraphQL
+```json
 {
   "data": {
     "classroom": {
