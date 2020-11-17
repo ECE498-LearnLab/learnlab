@@ -6,6 +6,7 @@ Cython==0.29
 numpy==1.19.2
 
 cmake
+opencv-python-headless
 
 configparser~=4.0.2
 wheel~=0.33.6
@@ -13,7 +14,6 @@ typing~=3.7.4.3
 setuptools~=44.1.1
 pika~=1.1.0
 imutils~=0.5.1
-opencv-python~=4.4.0.44
 python_graphql_client~=0.3.1
 dlib~=19.21.0
 
