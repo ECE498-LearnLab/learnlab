@@ -4,8 +4,10 @@ import ddestimator
 import base64
 import cv2
 import numpy as np
+from python_graphql_client import GraphqlClient
 
 class DddAnalysis:
+	ENDPOINT = "http://localhost:4000/"
 
 	FRAME_WIDTH = 750
 	TIMESTAMP_THRESHOLD = 200
@@ -28,9 +30,11 @@ class DddAnalysis:
 
 	CALIBRATE_CAMERA_ANGLES = True
 
-	def __init__(self, b64_string):
+	def __init__(self, b64_string, studentID, roomID):
 		self.images = []
 		self.images.extend(b64_string)
+		self.studentID = studentID
+		self.roomID = roomID
 		self.show_points = True
 		self.show_bounding = True
 		self.show_gaze = True
@@ -121,8 +125,24 @@ class DddAnalysis:
 				if kss is not None:
 					kss_int = int(round(kss*10))
 					print("---------Distraction bar: {}%---------".format(kss_int))
-
+		self.send_to_graphql()
 		return frame
+
+	def send_to_graphql(self):
+		client = GraphqlClient(endpoint=DddAnalysis.ENDPOINT)
+		# TODO: replace with actual query
+		query = """
+			query getClassroom($id: ID!) {
+			  classroom(id: $id) {
+				id
+				name
+				subject
+			  }
+			}
+		"""
+		variables = {"id": 1}
+		data = client.execute(query=query, variables=variables)
+		print(data)
 
 	def script_teardown(self):
 		print('->')
