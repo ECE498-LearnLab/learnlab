@@ -1,7 +1,8 @@
 import Knex from "knex";
 import {
-    CreateRoomResponse, MutationCreateRoomArgs, MutationUpdateRoomStatusArgs,
-    Response, Room, RoomState
+    CreateRoomResponse, MutationCreateRoomArgs, MutationJoinRoomArgs,
+    MutationUpdateRoomStatusArgs, QueryParticipantsArgs,
+    Response, Room, RoomState, User
 } from "../generated/graphql";
 
 /**
@@ -44,21 +45,26 @@ export default (db: Knex) => {
             .where({ class_id })
             .andWhere('room_status', 'in', room_states);
         },
-        getParticipantsForRoom: async (room_id: string): Promise<any> => {
-            // TODO: https://github.com/ECE498-LearnLab/learnlab/issues/81
-            /**
-             * return this.db.select('*').from('participants').join('user').on('student_id', '=', 'id')
-             * .where({ room_id });
-             */
-            return null;
+        getParticipantsInRoom: async ({room_id}: QueryParticipantsArgs): Promise<User[]> => {
+            const res = (await db.select(db.ref('*').withSchema('users')).from<User>('participants')
+                                .join('users', {'participants.student_id': 'users.id'})
+                                .where({room_id})) as unknown as User[];
+            return res;
         },
-        getQuestionsForRoom: async (room_id: string):Promise<any> => {
-            // TODO: https://github.com/ECE498-LearnLab/learnlab/issues/81
-            return null;
-        },
-        joinAsParticipant: async (student_id: string, room_id): Promise<any> => {
-            // TODO: https://github.com/ECE498-LearnLab/learnlab/issues/81
-            return null;
+        joinRoom: async ({student_id, room_id}: MutationJoinRoomArgs): Promise<Response> => {
+            let errorMsg;
+            const success = await db('participants').insert({student_id, room_id})
+            .then(() => true)
+            .catch((err) => {
+                errorMsg = err.message;
+                return false;
+            });
+
+            return {
+                success,
+                message: success ? `Student ${student_id} successfully added to room ${room_id}` 
+                                : `Failed to add student ${student_id} to room ${room_id}: ${errorMsg}`
+            };
         },
         createRoom,
         updateRoomStatus: async (roomUpdateInfo: MutationUpdateRoomStatusArgs): Promise<Response> => {
