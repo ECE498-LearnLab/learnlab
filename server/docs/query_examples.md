@@ -9,6 +9,26 @@
 
 ## Query Usage Examples
 ```GraphQL
+
+query getQuestions($room_id: ID!) {
+  questions(room_id: $room_id) {
+    id
+    text
+    created_at
+    deleted_at
+  }
+}
+
+query getParticipants {
+  participants(room_id: 1) {
+    id
+    first_name,
+    last_name,
+    role, 
+    email
+  }
+}
+
 query getUser($id: ID!) {
   user(id: $id) {
     user {
@@ -91,13 +111,6 @@ query getClassroom($id: ID!) {
 ## Mutation Usage Examples
 ```GraphQL
 
-mutation answerQuestion($id: ID!) {
-  answerQuestion(id: $id) {
-    success
-    message
-  }
-}
-
 mutation createTeacher($first_name: String!, $last_name: String!, $role: Role!, $email: String!, $created_at: Date) {
   createUser(first_name: $first_name, last_name: $last_name, role: $role, email: $email, created_at: $created_at) {
     user_id
@@ -123,6 +136,13 @@ mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time
   }
 }
 
+mutation joinRoom {
+  joinRoom(student_id: 2, room_id: 1) {
+    success
+    message
+  }
+}
+
 mutation updateRoomStatus($room_id: ID!, $room_status: RoomState!) {
   updateRoomStatus(room_id: $room_id, room_status: $room_status){
     success
@@ -138,8 +158,23 @@ mutation createClassroom($name: String!, $subject: String!, $teacher_id: ID!, $d
   }
 }
 
-mutation postQuestion($room_id: ID!, $student_id: ID!, $text: String!) {
-  submitQuestion(room_id: $room_id, student_id: $student_id, text: $text) {
+mutation submitQuestion {
+  submitQuestion(student_id: 2, room_id: 1, text: "When is dinner?") {
+    id
+    created_at
+    success
+    message
+  }
+}
+
+mutation upvoteQuestion {
+  upvoteQuestion(id: 1) {
+    upvotes
+  }
+}
+
+mutation answerQuestion($id: ID!) {
+  answerQuestion(id: $id) {
     success
     message
   }
