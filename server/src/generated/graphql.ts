@@ -62,7 +62,9 @@ export type Question = {
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
   text: Scalars['String'];
+  upvotes?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['Date']>;
+  deleted_at?: Maybe<Scalars['Date']>;
 };
 
 export type Room = {
@@ -70,7 +72,7 @@ export type Room = {
   id: Scalars['ID'];
   room_uuid: Scalars['ID'];
   class_id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  room_name?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['Date']>;
   end_time?: Maybe<Scalars['Date']>;
   room_status: RoomState;
@@ -111,6 +113,19 @@ export type CreateClassroomResponse = {
   class_id?: Maybe<Scalars['ID']>;
   success: Scalars['Boolean'];
   message?: Maybe<Scalars['String']>;
+};
+
+export type CreateQuestionResponse = {
+  __typename?: 'CreateQuestionResponse';
+  id?: Maybe<Scalars['ID']>;
+  created_at?: Maybe<Scalars['Date']>;
+  success: Scalars['Boolean'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type Upvotes = {
+  __typename?: 'Upvotes';
+  upvotes: Scalars['Int'];
 };
 
 export type Query = {
@@ -160,10 +175,12 @@ export type Mutation = {
   createUser?: Maybe<CreateAccountResponse>;
   createRoom?: Maybe<CreateRoomResponse>;
   createClassroom?: Maybe<CreateClassroomResponse>;
-  submitQuestion?: Maybe<Response>;
+  submitQuestion?: Maybe<CreateQuestionResponse>;
   answerQuestion?: Maybe<Response>;
+  upvoteQuestion?: Maybe<Upvotes>;
   updateRoomStatus?: Maybe<Response>;
   addStudentsToClassroom?: Maybe<Response>;
+  joinRoom?: Maybe<Response>;
 };
 
 
@@ -199,11 +216,15 @@ export type MutationSubmitQuestionArgs = {
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
   text?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['Date']>;
 };
 
 
 export type MutationAnswerQuestionArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpvoteQuestionArgs = {
   id: Scalars['ID'];
 };
 
@@ -217,6 +238,12 @@ export type MutationUpdateRoomStatusArgs = {
 export type MutationAddStudentsToClassroomArgs = {
   class_id: Scalars['ID'];
   student_emails?: Maybe<Array<Scalars['String']>>;
+};
+
+
+export type MutationJoinRoomArgs = {
+  student_id: Scalars['ID'];
+  room_id: Scalars['ID'];
 };
 
 
@@ -306,6 +333,7 @@ export type ResolversTypes = {
   Classroom: ResolverTypeWrapper<Classroom>;
   ClassroomDetails: ResolverTypeWrapper<ClassroomDetails>;
   Question: ResolverTypeWrapper<Question>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Room: ResolverTypeWrapper<Room>;
   Response: ResolverTypeWrapper<Response>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -313,6 +341,8 @@ export type ResolversTypes = {
   CreateRoomResponse: ResolverTypeWrapper<CreateRoomResponse>;
   CreateAccountResponse: ResolverTypeWrapper<CreateAccountResponse>;
   CreateClassroomResponse: ResolverTypeWrapper<CreateClassroomResponse>;
+  CreateQuestionResponse: ResolverTypeWrapper<CreateQuestionResponse>;
+  Upvotes: ResolverTypeWrapper<Upvotes>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 };
@@ -326,6 +356,7 @@ export type ResolversParentTypes = {
   Classroom: Classroom;
   ClassroomDetails: ClassroomDetails;
   Question: Question;
+  Int: Scalars['Int'];
   Room: Room;
   Response: Response;
   Boolean: Scalars['Boolean'];
@@ -333,6 +364,8 @@ export type ResolversParentTypes = {
   CreateRoomResponse: CreateRoomResponse;
   CreateAccountResponse: CreateAccountResponse;
   CreateClassroomResponse: CreateClassroomResponse;
+  CreateQuestionResponse: CreateQuestionResponse;
+  Upvotes: Upvotes;
   Query: {};
   Mutation: {};
 };
@@ -377,7 +410,9 @@ export type QuestionResolvers<ContextType = any, ParentType extends ResolversPar
   room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   student_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  upvotes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  deleted_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -385,7 +420,7 @@ export type RoomResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   room_uuid?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   class_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  room_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   start_time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   end_time?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   room_status?: Resolver<ResolversTypes['RoomState'], ParentType, ContextType>;
@@ -429,6 +464,19 @@ export type CreateClassroomResponseResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateQuestionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateQuestionResponse'] = ResolversParentTypes['CreateQuestionResponse']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpvotesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Upvotes'] = ResolversParentTypes['Upvotes']> = {
+  upvotes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   user?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   classroom?: Resolver<Maybe<ResolversTypes['Classroom']>, ParentType, ContextType, RequireFields<QueryClassroomArgs, 'id'>>;
@@ -442,10 +490,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createUser?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'first_name' | 'last_name' | 'role' | 'email'>>;
   createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id' | 'name'>>;
   createClassroom?: Resolver<Maybe<ResolversTypes['CreateClassroomResponse']>, ParentType, ContextType, RequireFields<MutationCreateClassroomArgs, 'name' | 'subject' | 'teacher_id'>>;
-  submitQuestion?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;
+  submitQuestion?: Resolver<Maybe<ResolversTypes['CreateQuestionResponse']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;
   answerQuestion?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAnswerQuestionArgs, 'id'>>;
+  upvoteQuestion?: Resolver<Maybe<ResolversTypes['Upvotes']>, ParentType, ContextType, RequireFields<MutationUpvoteQuestionArgs, 'id'>>;
   updateRoomStatus?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpdateRoomStatusArgs, 'room_id' | 'room_status'>>;
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
+  joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -460,6 +510,8 @@ export type Resolvers<ContextType = any> = {
   CreateRoomResponse?: CreateRoomResponseResolvers<ContextType>;
   CreateAccountResponse?: CreateAccountResponseResolvers<ContextType>;
   CreateClassroomResponse?: CreateClassroomResponseResolvers<ContextType>;
+  CreateQuestionResponse?: CreateQuestionResponseResolvers<ContextType>;
+  Upvotes?: UpvotesResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
 };

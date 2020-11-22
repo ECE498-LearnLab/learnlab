@@ -1,8 +1,8 @@
 import { ApolloServer } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
-import typeDefs from './schema';
-import { resolvers } from './resolvers';
 import LearnlabDB from './datasources/learnlab';
+import { resolvers } from './resolvers';
+import typeDefs from './schema';
 
 const useLocalDb = true;
 const connectionConfig = useLocalDb
@@ -17,7 +17,7 @@ const connectionConfig = useLocalDb
         user: 'root',
         password: '<PWD>',
         database: 'learnlab_1'
-}
+};
 
 const dbConfig = {
     client: 'pg',
@@ -31,7 +31,7 @@ export interface IDataSource {
 const buildDataSource = () => {
     return {
         db: new LearnlabDB(dbConfig)
-    } as DataSources<IDataSource>
+    } as DataSources<IDataSource>;
 };
 
 const server = new ApolloServer({
