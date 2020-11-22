@@ -1,44 +1,29 @@
 import { IDataSource } from "..";
-import { MutationAnswerQuestionArgs, MutationSubmitQuestionArgs, Resolvers, Response } from "../generated/graphql";
+import {
+    CreateQuestionResponse, MutationAnswerQuestionArgs, MutationSubmitQuestionArgs,
+    MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Resolvers, Response, Upvotes
+} from "../generated/graphql";
 
-const fakeQuestionData = [
-    {
-        id: '0',
-        room_id: '1',
-        student_id: '1',
-        text: 'Mrs.Dees, where are your nuts? I am a hungry little squirrel child.',
-        created_at: new Date(1602632500122)
-    },
-    {
-        id: '1',
-        room_id: '1',
-        student_id: '2',
-        text: 'When is lunch break?',
-        created_at: new Date(1600868700000)
-    }
-];
 
 const questionResolver: Resolvers = {
     Query: {
-        questions: (_, { room_id }) => fakeQuestionData.filter((q) => q.room_id === room_id),
+        questions: async (_, args: QueryQuestionsArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<Question[]> => {
+            return await dataSources.db.questionsAPI().getQuestionsForRoom(args);
+        },
     },
     Mutation: {
         submitQuestion: async (_, args: MutationSubmitQuestionArgs, { dataSources }: { dataSources: IDataSource })
-        : Promise<Response> => {
-            const result = await dataSources.db.questionsAPI().submitQuestion(args);
-            return {
-                success: result && result === [],
-                message: result && result === [] ? `Question ${result} submitted successfully` : 'Unable to submit question'
-            };
+        : Promise<CreateQuestionResponse> => {
+           return await dataSources.db.questionsAPI().submitQuestion(args);
         },
         answerQuestion: async (_, args: MutationAnswerQuestionArgs, { dataSources }: { dataSources: IDataSource })
         : Promise<Response> => {
-            const result = await dataSources.db.questionsAPI().answerQuestion(args);
-            return {
-                success: result,
-                message: result ? `Successfully marked question ${args.id} as answered` 
-                : `Failed to mark question ${args.id} as answered`
-            };
+            return await dataSources.db.questionsAPI().answerQuestion(args);
+        },
+        upvoteQuestion: async (_, args: MutationUpvoteQuestionArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<Upvotes> => {
+            return dataSources.db.questionsAPI().upvoteQuestion(args);
         }
     }
 };
