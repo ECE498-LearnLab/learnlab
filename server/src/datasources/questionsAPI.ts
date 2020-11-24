@@ -1,21 +1,55 @@
 import Knex from "knex";
-import { MutationAnswerQuestionArgs, MutationSubmitQuestionArgs } from "../generated/graphql";
+import {
+    CreateQuestionResponse, MutationAnswerQuestionArgs,
+    MutationSubmitQuestionArgs, MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Response, Upvotes
+} from "../generated/graphql";
 
-/**
- * WIP: TODO in https://github.com/ECE498-LearnLab/learnlab/issues/81
- */
+
 export default (db: Knex) => ({
-    submitQuestion: async (questionInfo: MutationSubmitQuestionArgs): Promise<string[]> => {
-        const {room_id, student_id, text, created_at} = questionInfo;
-        return db('question').insert({
+    getQuestionsForRoom: async ({room_id}: QueryQuestionsArgs): Promise<Question[]> => {
+        return await db.select('*').from('questions').where({ room_id });
+    },
+    submitQuestion: async (questionInfo: MutationSubmitQuestionArgs): Promise<CreateQuestionResponse> => {
+        const {room_id, student_id, text} = questionInfo;
+        let success = true, message;
+
+        const res = await db('questions').returning(['id', 'created_at']).insert({
             room_id: room_id,
             student_id: student_id,
             text: text,
-            created_at: created_at
+        }).catch((err) => {
+            success = false;
+            message = err.message;
         });
+
+        if (!success) {
+            return { success, message };
+        }
+
+        return {
+            id: res[0].id, created_at: res[0].created_at,
+            success,
+            message: `Question "${text}" submitted successfully`
+        };
     },
-    answerQuestion: ({id: question_id}: MutationAnswerQuestionArgs): boolean => {
-        //STUB: Figure out what we're doing with questions. Delete? Remove?
-        return true;
+    answerQuestion: async ({id}: MutationAnswerQuestionArgs): Promise<Response> => {
+        /**
+         * Answering a question is implemented as a soft delete of the row.
+         */
+        const success = await db('questions').where({ id }).update({
+            'deleted_at': new Date()
+        }).then(() => true).catch(() => false);
+
+        return {
+            success,
+            message: success ? `Successfully marked question ${id} as answered` 
+            : `Failed to mark question ${id} as answered`
+        };
+    },
+    upvoteQuestion: async ({id}: MutationUpvoteQuestionArgs): Promise<Upvotes> => {
+        const res = await db('questions').where({ id }).increment('upvotes', 1)
+        .returning('upvotes');
+
+        return { upvotes: res[0] };
     }
 });

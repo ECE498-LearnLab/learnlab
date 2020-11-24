@@ -51,14 +51,16 @@ const typeDefs = gql`
         room_id: ID!
         student_id: ID!
         text: String!
-        created_at: Date
+        upvotes: Int
+        created_at: Date,
+        deleted_at: Date
     }
 
     type Room {
         id: ID!
         room_uuid: ID!
         class_id: ID!
-        name: String
+        room_name: String
         start_time: Date
         end_time: Date
         room_status: RoomState!
@@ -96,6 +98,17 @@ const typeDefs = gql`
         message: String
     }
 
+    type CreateQuestionResponse {
+        id: ID
+        created_at: Date,
+        success: Boolean!
+        message: String
+    }
+
+    type Upvotes {
+        upvotes: Int!
+    }
+
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): UserResponse!
@@ -112,10 +125,12 @@ const typeDefs = gql`
                    phone_number: String, created_at: Date, parent_email: String): CreateAccountResponse
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         createClassroom(name: String!, subject: String!, teacher_id: ID!, description: String): CreateClassroomResponse
-        submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
+        submitQuestion(room_id: ID!, student_id: ID!, text: String): CreateQuestionResponse
         answerQuestion(id: ID!): Response,
+        upvoteQuestion(id: ID!): Upvotes,
         updateRoomStatus(room_id: ID!, room_status: RoomState!): Response,
         addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
+        joinRoom(student_id: ID!, room_id: ID!): Response
     }
 `;
 
