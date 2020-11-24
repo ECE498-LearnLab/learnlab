@@ -118,6 +118,25 @@ class LearnlabDB extends SQLDataSource {
         //STUB: Figure out what we're doing with questions. Delete? Remove?
         return true;
     }
+
+    updateEngagementCurrent = (room_id: string, student_id: string, score: number, classification: string, created_at: Date): Promise<string[]> => {
+        // im going to assume this upsert function works for now, until we are able to test it with real db
+
+        var data = {
+            room_id: room_id,
+            student_id: student_id,
+            score: score,
+            classification: classification,
+            created_at: created_at,
+        };
+
+        return this.db.raw(
+            `? ON CONFLICT (room_id, student_id)
+                    DO UPDATE SET
+                    role = EXCLUDED.role,
+                    RETURNING *;`,
+            [this.db("engagement_stats_history").insert(data)]);
+    }
 }
 
 export default LearnlabDB;

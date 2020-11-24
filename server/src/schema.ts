@@ -86,6 +86,15 @@ const typeDefs = gql`
         message: String
     }
 
+    type EngagementStat {
+        id: ID!
+        room_id: ID!
+        student_id: ID!
+        score: Int!
+        classification: String!
+        created_at: Date
+    }
+
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): UserResponse!
@@ -94,6 +103,9 @@ const typeDefs = gql`
         questions(room_id: ID!): [Question]!
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!): [User]!
+        singleEngagementStat(room_id: ID!, student_id: ID!): EngagementStat!
+        studentClassEngagementStat(class_id: ID!, student_id: ID!): [EngagementStat]!
+        #        need a query for gets average engagement stat of student for a classroom
     }
 
     type Mutation {
@@ -101,6 +113,7 @@ const typeDefs = gql`
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String, created_at: Date): Response
         answerQuestion(id: ID!): Response
+        updateEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String, created_at: Date): Response
     }
 `;
 
