@@ -4,6 +4,7 @@ import classroomAPI from './classroomAPI';
 import questionsAPI from './questionsAPI';
 import roomAPI from './roomAPI';
 import userAPI from './userAPI';
+import engagementAPI from './engagementAPI';
 
 
 class LearnlabDB extends SQLDataSource {
@@ -20,6 +21,8 @@ class LearnlabDB extends SQLDataSource {
     userAPI = () => userAPI(this.db);
 
     questionsAPI = () => questionsAPI(this.db);
+
+    engagementAPI = () => engagementAPI(this.db);
 }
 
 export default LearnlabDB;

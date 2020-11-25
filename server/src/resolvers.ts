@@ -5,6 +5,7 @@ import userResolver from './resolvers/users';
 import classroomResolver from './resolvers/classrooms';
 import roomResolver from './resolvers/rooms';
 import questionResolver from './resolvers/questions';
+import engagementStatsResolver from './resolvers/engagementStats';
 
 // the 4 positional arguments for a resolver are: (parent, args, context, info)
 export const resolvers: Resolvers = mergeResolvers([
@@ -12,6 +13,7 @@ export const resolvers: Resolvers = mergeResolvers([
     classroomResolver,
     roomResolver,
     questionResolver,
+    engagementStatsResolver,
     {
         Date: new GraphQLScalarType({
             name: 'Date',
