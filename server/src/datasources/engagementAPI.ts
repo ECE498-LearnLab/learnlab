@@ -1,22 +1,13 @@
 import Knex from "knex";
 import {
     EngagementStat,
-    Classroom,
-    ClassroomDetails,
-    CreateClassroomResponse,
-    MutationAddStudentsToClassroomArgs,
-    MutationCreateClassroomArgs,
-    QueryClassroomDetailsArgs,
-    Response,
-    Role,
     EngagementStatResponse,
     MutationCreateEngagementStatArgs,
     MutationUpdateEngagementCurrentArgs,
-    QueryQuestionsArgs, Question, QueryEngagementStatArgs, RoomState, Room
 } from "../generated/graphql";
 
 /**
- * Room API.
+ * Engagement API.
  * 
  * Use this API to create, retrieve, update, and manage the engagement statistics of students.
  */
@@ -67,6 +58,7 @@ export default (db: Knex) => {
                 message: `Engagement stat with room: "${room_id}" and student: "${student_id}"  was updated successfully`
             };
         },
+        // TODO: this does not work yet
         // updateEngagementCurrent: async (room_id: string, student_id: string, score: number, classification: string, created_at: Date): Promise<string[]> => {
         //     // im going to assume this upsert function works for now, until we are able to test it with real db
         //

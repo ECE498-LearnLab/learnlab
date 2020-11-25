@@ -1,18 +1,10 @@
 import { IDataSource } from "..";
 import {
-    Classroom,
-    CreateClassroomResponse,
     EngagementStat,
     EngagementStatResponse,
-    MutationCreateClassroomArgs,
     MutationCreateEngagementStatArgs, MutationUpdateEngagementCurrentArgs,
-    MutationUpdateRoomStatusArgs, QueryClassroomArgs,
     QueryEngagementStatArgs,
     Resolvers,
-    Response,
-    Room,
-    RoomState,
-    UserResponse
 } from "../generated/graphql";
 
 const fakeEngagementHistory = [
@@ -36,12 +28,6 @@ const fakeEngagementHistory = [
 
 const engagementStatsResolver: Resolvers = {
     Query: {
-        // getEngagementStat: async (_, { room_id, student_id }: { room_id: string, student_id: string},
-        //                           { dataSources }: { dataSources: IDataSource }): Promise<EngagementStat[]> => {
-        //     return await dataSources.db.engagementAPI().getEngagementStat(
-        //         room_id, student_id
-        //     );
-        // },
         engagementStat: async (_, { room_id, student_id }: QueryEngagementStatArgs, { dataSources }: { dataSources: IDataSource })
             : Promise<EngagementStat[]> => {
             return await dataSources.db.engagementAPI().getEngagementStat(room_id, student_id);
