@@ -128,15 +128,14 @@ export type Upvotes = {
   upvotes: Scalars['Int'];
 };
 
-export type EngagementStat = {
-  __typename?: 'EngagementStat';
+export type EngagementHistory = {
+  __typename?: 'EngagementHistory';
   id: Scalars['ID'];
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
   score: Scalars['Int'];
   classification: Scalars['String'];
   created_at?: Maybe<Scalars['Date']>;
-  updated_at?: Maybe<Scalars['Date']>;
 };
 
 export type EngagementStatResponse = {
@@ -155,8 +154,7 @@ export type Query = {
   questions: Array<Maybe<Question>>;
   roomsForClassroom: Array<Maybe<Room>>;
   participants: Array<Maybe<User>>;
-  engagementStat: Array<Maybe<EngagementStat>>;
-  studentClassEngagementStat: Array<Maybe<EngagementStat>>;
+  engagementHistory: Array<Maybe<EngagementHistory>>;
 };
 
 
@@ -192,14 +190,8 @@ export type QueryParticipantsArgs = {
 };
 
 
-export type QueryEngagementStatArgs = {
+export type QueryEngagementHistoryArgs = {
   room_id: Scalars['ID'];
-  student_id: Scalars['ID'];
-};
-
-
-export type QueryStudentClassEngagementStatArgs = {
-  class_id: Scalars['ID'];
   student_id: Scalars['ID'];
 };
 
@@ -214,8 +206,7 @@ export type Mutation = {
   updateRoomStatus?: Maybe<Response>;
   addStudentsToClassroom?: Maybe<Response>;
   joinRoom?: Maybe<Response>;
-  createEngagementStat?: Maybe<EngagementStatResponse>;
-  updateEngagementCurrent?: Maybe<EngagementStatResponse>;
+  upsertEngagementCurrent?: Maybe<EngagementStatResponse>;
 };
 
 
@@ -282,16 +273,7 @@ export type MutationJoinRoomArgs = {
 };
 
 
-export type MutationCreateEngagementStatArgs = {
-  room_id: Scalars['ID'];
-  student_id: Scalars['ID'];
-  score?: Maybe<Scalars['Int']>;
-  classification?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['Date']>;
-};
-
-
-export type MutationUpdateEngagementCurrentArgs = {
+export type MutationUpsertEngagementCurrentArgs = {
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
   score?: Maybe<Scalars['Int']>;
@@ -396,7 +378,7 @@ export type ResolversTypes = {
   CreateClassroomResponse: ResolverTypeWrapper<CreateClassroomResponse>;
   CreateQuestionResponse: ResolverTypeWrapper<CreateQuestionResponse>;
   Upvotes: ResolverTypeWrapper<Upvotes>;
-  EngagementStat: ResolverTypeWrapper<EngagementStat>;
+  EngagementHistory: ResolverTypeWrapper<EngagementHistory>;
   EngagementStatResponse: ResolverTypeWrapper<EngagementStatResponse>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -421,7 +403,7 @@ export type ResolversParentTypes = {
   CreateClassroomResponse: CreateClassroomResponse;
   CreateQuestionResponse: CreateQuestionResponse;
   Upvotes: Upvotes;
-  EngagementStat: EngagementStat;
+  EngagementHistory: EngagementHistory;
   EngagementStatResponse: EngagementStatResponse;
   Query: {};
   Mutation: {};
@@ -534,14 +516,13 @@ export type UpvotesResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EngagementStatResolvers<ContextType = any, ParentType extends ResolversParentTypes['EngagementStat'] = ResolversParentTypes['EngagementStat']> = {
+export type EngagementHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['EngagementHistory'] = ResolversParentTypes['EngagementHistory']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   student_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   score?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   classification?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  updated_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -560,8 +541,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
   roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id'>>;
   participants?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'room_id'>>;
-  engagementStat?: Resolver<Array<Maybe<ResolversTypes['EngagementStat']>>, ParentType, ContextType, RequireFields<QueryEngagementStatArgs, 'room_id' | 'student_id'>>;
-  studentClassEngagementStat?: Resolver<Array<Maybe<ResolversTypes['EngagementStat']>>, ParentType, ContextType, RequireFields<QueryStudentClassEngagementStatArgs, 'class_id' | 'student_id'>>;
+  engagementHistory?: Resolver<Array<Maybe<ResolversTypes['EngagementHistory']>>, ParentType, ContextType, RequireFields<QueryEngagementHistoryArgs, 'room_id' | 'student_id'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -574,8 +554,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateRoomStatus?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpdateRoomStatusArgs, 'room_id' | 'room_status'>>;
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
   joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
-  createEngagementStat?: Resolver<Maybe<ResolversTypes['EngagementStatResponse']>, ParentType, ContextType, RequireFields<MutationCreateEngagementStatArgs, 'room_id' | 'student_id'>>;
-  updateEngagementCurrent?: Resolver<Maybe<ResolversTypes['EngagementStatResponse']>, ParentType, ContextType, RequireFields<MutationUpdateEngagementCurrentArgs, 'room_id' | 'student_id'>>;
+  upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['EngagementStatResponse']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -592,7 +571,7 @@ export type Resolvers<ContextType = any> = {
   CreateClassroomResponse?: CreateClassroomResponseResolvers<ContextType>;
   CreateQuestionResponse?: CreateQuestionResponseResolvers<ContextType>;
   Upvotes?: UpvotesResolvers<ContextType>;
-  EngagementStat?: EngagementStatResolvers<ContextType>;
+  EngagementHistory?: EngagementHistoryResolvers<ContextType>;
   EngagementStatResponse?: EngagementStatResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

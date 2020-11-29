@@ -9,7 +9,6 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('score').unsigned().notNullable();
         table.string('classification').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());
-        table.timestamp('updated_at').defaultTo(knex.fn.now());
 
         table.foreign(['student_id', 'room_id']).references(['student_id', 'room_id']).inTable('engagementCurrent');
     })

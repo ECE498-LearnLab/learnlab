@@ -1,9 +1,9 @@
 import { IDataSource } from "..";
 import {
-    EngagementStat,
+    EngagementHistory,
     EngagementStatResponse,
-    MutationCreateEngagementStatArgs, MutationUpdateEngagementCurrentArgs,
-    QueryEngagementStatArgs,
+    QueryEngagementHistoryArgs,
+    MutationUpsertEngagementCurrentArgs,
     Resolvers,
 } from "../generated/graphql";
 
@@ -28,19 +28,15 @@ const fakeEngagementHistory = [
 
 const engagementStatsResolver: Resolvers = {
     Query: {
-        engagementStat: async (_, { room_id, student_id }: QueryEngagementStatArgs, { dataSources }: { dataSources: IDataSource })
-            : Promise<EngagementStat[]> => {
-            return await dataSources.db.engagementAPI().getEngagementStat(room_id, student_id);
+        engagementHistory: async (_, { room_id, student_id }: QueryEngagementHistoryArgs, { dataSources }: { dataSources: IDataSource })
+            : Promise<EngagementHistory[]> => {
+            return await dataSources.db.engagementAPI().getEngagementHistory(room_id, student_id);
         },
     },
     Mutation: {
-        createEngagementStat: async (_, args: MutationCreateEngagementStatArgs, { dataSources }: { dataSources: IDataSource })
+        upsertEngagementCurrent: async (_, args: MutationUpsertEngagementCurrentArgs, { dataSources }: { dataSources: IDataSource })
             : Promise<EngagementStatResponse> => {
-            return await dataSources.db.engagementAPI().createEngagementStat(args);
-        },
-        updateEngagementCurrent: async (_, args: MutationUpdateEngagementCurrentArgs, { dataSources }: { dataSources: IDataSource })
-            : Promise<EngagementStatResponse> => {
-            return await dataSources.db.engagementAPI().updateEngagementCurrent(args);
+            return await dataSources.db.engagementAPI().upsertEngagementCurrent(args);
         }
     }
 }

@@ -109,14 +109,13 @@ const typeDefs = gql`
         upvotes: Int!
     }
 
-    type EngagementStat {
+    type EngagementHistory {
         id: ID!
         room_id: ID!
         student_id: ID!
         score: Int!
         classification: String!
         created_at: Date
-        updated_at: Date
     }
 
     type EngagementStatResponse {
@@ -134,10 +133,10 @@ const typeDefs = gql`
         questions(room_id: ID!): [Question]!
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!): [User]!
-        engagementStat(room_id: ID!, student_id: ID!): [EngagementStat]!
+        engagementHistory(room_id: ID!, student_id: ID!): [EngagementHistory]!
         
-        #        need a query for gets average engagement stat of student for a classroom
-        studentClassEngagementStat(class_id: ID!, student_id: ID!): [EngagementStat]!
+#        might need a query for gets average engagement stat of student for a classroom
+#        studentClassEngagementStat(class_id: ID!, student_id: ID!): [EngagementStat]!
     }
 
     type Mutation {
@@ -152,9 +151,9 @@ const typeDefs = gql`
         updateRoomStatus(room_id: ID!, room_status: RoomState!): Response,
         addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
         joinRoom(student_id: ID!, room_id: ID!): Response
-        createEngagementStat(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,): 
-                    EngagementStatResponse
-        updateEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String, created_at: Date): 
+        # createEngagementHistory(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,): 
+        #             EngagementStatResponse
+        upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,):
                     EngagementStatResponse
     }
 `;

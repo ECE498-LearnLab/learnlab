@@ -186,4 +186,11 @@ mutation addStudentsToClass($class_id: ID!, $student_emails: [String!]){
     message
   }
 }
+
+mutation upsertEngagementStatCurrent($room_id: ID!, $student_id: ID!, $score: Int, $classification: String) {
+  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
+    success,
+    message
+  }
+}
 ```
