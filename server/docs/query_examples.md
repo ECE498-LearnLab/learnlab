@@ -187,6 +187,18 @@ mutation addStudentsToClass($class_id: ID!, $student_emails: [String!]){
   }
 }
 
+query getEngagementHistory($room_id: ID!, $student_id: ID!) {
+  engagementHistory(room_id: $room_id, student_id: $student_id) {
+      id,
+      room_id,
+      student_id,
+      score,
+      classification,
+      created_at,
+      updated_at
+  }
+}
+
 mutation upsertEngagementStatCurrent($room_id: ID!, $student_id: ID!, $score: Int, $classification: String) {
   upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
     success,
