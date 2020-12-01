@@ -13,7 +13,6 @@ import {
 export default (db: Knex) => {
 
     const createEngagementHistory = async (row: EngagementHistory) => {
-
         let success = true, message;
         const {room_id, student_id, score, classification} = row;
 
@@ -36,7 +35,6 @@ export default (db: Knex) => {
             return res;
         },
         upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<EngagementStatResponse> => {
-            console.log(engagementInfo);
 
             const { room_id, student_id, score, classification } = engagementInfo;
             const {success, message} = await db.raw(
@@ -59,7 +57,7 @@ export default (db: Knex) => {
 
             return {
                 success,
-                message: `Engagement stat with room: "${room_id}" and student: "${student_id}"  was upserted successfully`
+                message: `Engagement stat with room: "${room_id}" and student: "${student_id}" was upserted successfully`
             };
         },
     };
