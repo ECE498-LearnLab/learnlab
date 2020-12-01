@@ -118,13 +118,6 @@ const typeDefs = gql`
         created_at: Date
     }
 
-    type EngagementStatResponse {
-        room_id: ID
-        student_id: ID
-        success: Boolean!
-        message: String     
-    }
-
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): UserResponse!
@@ -149,9 +142,8 @@ const typeDefs = gql`
         updateRoomStatus(room_id: ID!, room_status: RoomState!): Response,
         addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
         joinRoom(student_id: ID!, room_id: ID!): Response
-        #             EngagementStatResponse
         upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,):
-                    EngagementStatResponse
+                    Response
     }
 `;
 

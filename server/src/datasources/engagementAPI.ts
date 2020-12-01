@@ -1,8 +1,8 @@
 import Knex from "knex";
 import {
     EngagementHistory,
-    EngagementStatResponse, MutationAddStudentsToClassroomArgs,
-    MutationUpsertEngagementCurrentArgs, Response,
+    MutationUpsertEngagementCurrentArgs,
+    Response,
 } from "../generated/graphql";
 
 /**
@@ -34,7 +34,7 @@ export default (db: Knex) => {
             const res = await db.select('*').from('engagementHistory').where({ room_id, student_id}) as EngagementHistory[];
             return res;
         },
-        upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<EngagementStatResponse> => {
+        upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<Response> => {
 
             const { room_id, student_id, score, classification } = engagementInfo;
             const {success, message} = await db.raw(
