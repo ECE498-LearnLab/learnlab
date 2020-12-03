@@ -12,7 +12,7 @@ import {
  */
 export default (db: Knex) => {
 
-    const createEngagementHistory = async (row: EngagementHistory) => {
+    const createEngagementHistory = async (row: EngagementHistory): Promise<Response> => {
         let success = true, message;
         const {room_id, student_id, score, classification} = row;
 
