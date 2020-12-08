@@ -7,7 +7,7 @@ import numpy as np
 from python_graphql_client import GraphqlClient
 
 class DddAnalysis:
-	ENDPOINT = "http://localhost:4000/"
+	ENDPOINT = "http://server:4000/"
 
 	FRAME_WIDTH = 750
 	TIMESTAMP_THRESHOLD = 200
@@ -57,7 +57,6 @@ class DddAnalysis:
 			frame = cv2.imdecode(npimg, 1)
 			frame = imutils.resize(frame, width=DddAnalysis.FRAME_WIDTH)
 			frame = self.process_frame(frame)
-			# self.script_teardown()
 
 	def process_frame(self, frame=None):
 		print("...")
@@ -124,25 +123,34 @@ class DddAnalysis:
 
 				if kss is not None:
 					kss_int = int(round(kss*10))
-					print("---------Distraction bar: {}%---------".format(kss_int))
-		self.send_to_graphql()
+					print("--------- Distraction: {}% ---------".format(kss_int))
+					self.send_to_graphql(kss_int)
 		return frame
 
-	def send_to_graphql(self):
-		client = GraphqlClient(endpoint=DddAnalysis.ENDPOINT)
-		# TODO: replace with actual query
-		query = """
-			query getClassroom($id: ID!) {
-			  classroom(id: $id) {
-				id
-				name
-				subject
-			  }
+	def send_to_graphql(self, score):
+		print("sending via graphql")
+		try:
+			client = GraphqlClient(endpoint=DddAnalysis.ENDPOINT)
+			query = """
+				mutation addEngagement($room_id:ID!, $student_id:ID!, $score:Int, $classification:String) {
+				  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
+					success,
+					message
+				  }
+				}
+			"""
+			variables = {
+				"room_id":self.roomID,
+				"student_id":self.studentID,
+				"score":score,
+				"classification":"-----"
 			}
-		"""
-		variables = {"id": 1}
-		data = client.execute(query=query, variables=variables)
-		print(data)
+			print("Executing room_id: {}, student_id: {}, score: {}, classification: {}"
+				  .format(self.roomID, self.studentID, score, "-----"))
+			data = client.execute(query=query, variables=variables)
+			print(data)
+		except Exception as e:
+			print("ERROR: {}".format(e))
 
 	def script_teardown(self):
 		print('->')

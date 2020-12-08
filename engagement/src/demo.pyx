@@ -70,15 +70,19 @@ class demo1:
 	def send_to_graphql(self):
 		client = GraphqlClient(endpoint=demo1.ENDPOINT)
 		query = """
-			query getClassroom($id: ID!) {
-			  classroom(id: $id) {
-				id
-				name
-				subject
+			mutation addEngagement($room_id:ID!, $student_id:ID!, $score:Int, $classification:String) {
+			  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
+				success,
+				message
 			  }
 			}
 		"""
-		variables = {"id": 1}
+		variables = {
+			"room_id":1,
+			"student_id":1,
+			"score":1,
+			"classification":"idk"
+		}
 		data = client.execute(query=query, variables=variables)
 		print(data)
 

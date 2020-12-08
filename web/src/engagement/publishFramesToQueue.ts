@@ -10,7 +10,7 @@ const CONNECTION_URL = 'ws://localhost:15674/ws';
 const QUEUE_NAME = 'frames';
 
 const client = new Client();
-const batchedData: BATCH = {frames: [], studentID: 123456, roomID: 'test'};
+const batchedData: BATCH = {frames: [], studentID: 1, roomID: '1'};
 
 client.configure({
    brokerURL: CONNECTION_URL,
