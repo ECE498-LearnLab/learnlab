@@ -9,7 +9,14 @@ https://docs.docker.com/desktop/
 ```
 docker-compose up
 ```
+
+If changes to engagement are not being registered, add `build` flag:
+```
+docker-compose up --build
+```
+
 >Note: Windows users will need to set the *end of line sequence character* to **LF**
+
 
 This will start the following services:
 * Web http://localhost:3000
