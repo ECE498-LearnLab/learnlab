@@ -25,6 +25,11 @@ export enum RoomState {
   Ended = 'ENDED'
 }
 
+export enum ParticipantStatus {
+  Invited = 'INVITED',
+  Joined = 'JOINED'
+}
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -179,6 +184,7 @@ export type QueryRoomsForClassroomArgs = {
 
 export type QueryParticipantsArgs = {
   room_id: Scalars['ID'];
+  statuses?: Maybe<Array<Maybe<ParticipantStatus>>>;
 };
 
 
@@ -197,6 +203,7 @@ export type Mutation = {
   upvoteQuestion?: Maybe<Upvotes>;
   updateRoomStatus?: Maybe<Response>;
   addStudentsToClassroom?: Maybe<Response>;
+  invite?: Maybe<Response>;
   joinRoom?: Maybe<Response>;
   upsertEngagementCurrent?: Maybe<Response>;
 };
@@ -256,6 +263,12 @@ export type MutationUpdateRoomStatusArgs = {
 export type MutationAddStudentsToClassroomArgs = {
   class_id: Scalars['ID'];
   student_emails?: Maybe<Array<Scalars['String']>>;
+};
+
+
+export type MutationInviteArgs = {
+  student_id: Scalars['ID'];
+  room_id: Scalars['ID'];
 };
 
 
@@ -354,6 +367,7 @@ export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Role: Role;
   RoomState: RoomState;
+  ParticipantStatus: ParticipantStatus;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -535,6 +549,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   upvoteQuestion?: Resolver<Maybe<ResolversTypes['Upvotes']>, ParentType, ContextType, RequireFields<MutationUpvoteQuestionArgs, 'id'>>;
   updateRoomStatus?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpdateRoomStatusArgs, 'room_id' | 'room_status'>>;
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
+  invite?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationInviteArgs, 'student_id' | 'room_id'>>;
   joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
   upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id'>>;
 };
