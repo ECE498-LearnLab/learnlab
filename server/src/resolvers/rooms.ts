@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IDataSource } from "..";
 import {
     CreateRoomResponse, MutationCreateRoomArgs,
+    MutationInviteArgs,
     MutationJoinRoomArgs,
     MutationUpdateRoomStatusArgs, QueryParticipantsArgs, Resolvers, Response,
     Room, RoomState, User
@@ -26,6 +27,10 @@ const roomResolver: Resolvers = {
         : Promise<CreateRoomResponse> => {
             const room_uuid = uuidv4();
             return await dataSources.db.roomAPI().createRoom(room_uuid, args);
+        },
+        invite: async (_, args: MutationInviteArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<Response> => {
+            return await dataSources.db.roomAPI().inviteToRoom(args);
         },
         joinRoom: async (_, args: MutationJoinRoomArgs, { dataSources }: { dataSources: IDataSource })
         : Promise<Response> => {

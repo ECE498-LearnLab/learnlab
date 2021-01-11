@@ -1,7 +1,8 @@
 import Knex from "knex";
 import {
-    CreateRoomResponse, MutationCreateRoomArgs, MutationJoinRoomArgs,
-    MutationUpdateRoomStatusArgs, QueryParticipantsArgs,
+    CreateRoomResponse, MutationCreateRoomArgs,
+    MutationInviteArgs, MutationJoinRoomArgs,
+    MutationUpdateRoomStatusArgs, ParticipantStatus, QueryParticipantsArgs,
     Response, Room, RoomState, User
 } from "../generated/graphql";
 
@@ -45,25 +46,42 @@ export default (db: Knex) => {
             .where({ class_id })
             .andWhere('room_status', 'in', room_states);
         },
-        getParticipantsInRoom: async ({room_id}: QueryParticipantsArgs): Promise<User[]> => {
+        getParticipantsInRoom: async (args: QueryParticipantsArgs): Promise<User[]> => {
+            const {room_id, statuses = [ParticipantStatus.Invited, ParticipantStatus.Joined]} = args;
             const res = (await db.select(db.ref('*').withSchema('users')).from<User>('participants')
                                 .join('users', {'participants.student_id': 'users.id'})
-                                .where({room_id})) as unknown as User[];
+                                .where({room_id})
+                                .andWhere('status', 'in', statuses)) as unknown as User[];
             return res;
+        },
+        inviteToRoom: async ({student_id, room_id}: MutationInviteArgs): Promise<Response> => {            
+            let errorMsg;
+            const success = await db('participants').insert({student_id, room_id})
+                .then(() => true)
+                .catch((err) => {
+                    errorMsg = err.message;
+                    return false;
+                });
+    
+            return {
+                success,
+                message: success ? `Student ${student_id} successfully invited to room ${room_id}` 
+                                : `Failed to invite student ${student_id} to room ${room_id}: ${errorMsg}`
+            };
         },
         joinRoom: async ({student_id, room_id}: MutationJoinRoomArgs): Promise<Response> => {
             let errorMsg;
-            const success = await db('participants').insert({student_id, room_id})
-            .then(() => true)
-            .catch((err) => {
-                errorMsg = err.message;
-                return false;
-            });
+            const success = await db('participants').where({student_id, room_id}).update({ status: 'JOINED' })
+                .then(() => true)
+                .catch((err) => {
+                    errorMsg = err.message;
+                    return false;
+                });
 
             return {
                 success,
-                message: success ? `Student ${student_id} successfully added to room ${room_id}` 
-                                : `Failed to add student ${student_id} to room ${room_id}: ${errorMsg}`
+                message: success ? `Student ${student_id} successfully joined room ${room_id}` 
+                                : `Student ${student_id} failed to join room ${room_id}: ${errorMsg}`
             };
         },
         createRoom,
