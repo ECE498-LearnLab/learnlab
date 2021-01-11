@@ -13,7 +13,7 @@ docker-compose up
 This will start the following services:
 * Web http://localhost:3000
 * Server http://localhost:4000
-* RabbitMQ Management Portal http://localhost:15672/
+* RabbitMQ Management Portal http://localhost:15672/ (username:guest, password:guest)
 * PostgreSQL http://localhost:5432 (username:postgres, password: postgres)
 
     **Note:** The database `learnlab_local` will automatically be created. In order to connect to the docker PostgreSQL, make sure to stop your local PostgreSQL service (check Services on Windows).
