@@ -9,7 +9,6 @@ const typeDefs = gql`
     enum Role {
         STUDENT
         INSTRUCTOR
-        ADMIN
     }
 
     enum RoomState {
@@ -21,6 +20,12 @@ const typeDefs = gql`
     enum ParticipantStatus {
         INVITED
         JOINED
+    }
+
+    enum TeacherPrefix {
+        Mr
+        Mrs
+        Ms
     }
 
     type User {
@@ -136,9 +141,12 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        createUser(first_name: String!, last_name: String!, 
-                   middle_name: String, role: Role!, email: String!,
-                   phone_number: String, created_at: Date, parent_email: String): CreateAccountResponse
+        createStudent(first_name: String!, last_name: String!, 
+                   middle_name: String, email: String!,
+                   phone_number: String, created_at: Date, parent_email: String): CreateAccountResponse,
+        createTeacher(first_name: String!, last_name: String!, 
+                   middle_name: String, prefix: TeacherPrefix, email: String!,
+                   phone_number: String, created_at: Date): CreateAccountResponse,
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         createClassroom(name: String!, subject: String!, teacher_id: ID!, description: String): CreateClassroomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String): CreateQuestionResponse

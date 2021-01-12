@@ -1,12 +1,15 @@
 import Knex from "knex";
-import { CreateAccountResponse, MutationCreateUserArgs, Role, UserResponse } from "../generated/graphql";
+import {
+    CreateAccountResponse, MutationCreateStudentArgs, MutationCreateTeacherArgs,
+    Role, UserResponse
+} from "../generated/graphql";
 import { isUniqueViolationError } from "./utils";
 
 
 export default (db: Knex) => {
 
-    const createUser = async (userInfo: MutationCreateUserArgs): Promise<CreateAccountResponse> => {
-        const { first_name, last_name, middle_name, role, email, phone_number, created_at } = userInfo;
+    const createStudent = async (userInfo: MutationCreateStudentArgs): Promise<CreateAccountResponse> => {
+        const { first_name, last_name, middle_name, email, phone_number, created_at } = userInfo;
         let success = true;
         let message;
 
@@ -14,7 +17,7 @@ export default (db: Knex) => {
             first_name,
             last_name,
             middle_name,
-            role,
+            role: Role.Student,
             email,
             phone_number,
             created_at
@@ -31,27 +34,61 @@ export default (db: Knex) => {
             return { success, message };
         }
 
-        if (role === Role.Student) {
-            const { parent_email } = userInfo;
-            await db('students').insert({
-                id: res[0],
-                parent_email
-            });
-        } else if (role === Role.Instructor) {
-            await db('teachers').insert({
-                id: res[0]
-            });
-        }
+        const { parent_email } = userInfo;
+        await db('students').insert({
+            id: res[0],
+            parent_email
+        });
 
         return {
             user_id: res[0],
             success,
-            message: `User account for ${email} successfully created`
+            message: `Student user account for ${email} successfully created`
+        };
+    };
+
+    const createTeacher = async (userInfo: MutationCreateTeacherArgs): Promise<CreateAccountResponse> => {
+        const { first_name, last_name, middle_name, email, phone_number, created_at } = userInfo;
+        let success = true;
+        let message;
+
+        const res = await db('users').returning('id').insert({
+            first_name,
+            last_name,
+            middle_name,
+            role: Role.Instructor,
+            email,
+            phone_number,
+            created_at
+        }).catch((err) => {
+            success = false;
+            if (isUniqueViolationError(err)) {
+                message = 'A user matching this information already exists!';
+            } else {
+                message = err.message;
+            }
+        });
+
+        if (!success) {
+            return { success, message };
+        }
+
+        const { prefix } = userInfo;
+        await db('teachers').insert({
+            id: res[0],
+            prefix
+        });
+
+        return {
+            user_id: res[0],
+            success,
+            message: `Instructor user account for ${email} successfully created`
         };
     };
 
     return {
-        createUser,
+        createStudent,
+        createTeacher,
         getUser: async (id: string): Promise<UserResponse> => {
             const res = await db.select('*').from('users').where({ id }).catch((err) => { throw err; });
             if (res && res[0]) {

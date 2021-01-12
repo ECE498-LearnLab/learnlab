@@ -15,8 +15,7 @@ export type Scalars = {
 
 export enum Role {
   Student = 'STUDENT',
-  Instructor = 'INSTRUCTOR',
-  Admin = 'ADMIN'
+  Instructor = 'INSTRUCTOR'
 }
 
 export enum RoomState {
@@ -28,6 +27,12 @@ export enum RoomState {
 export enum ParticipantStatus {
   Invited = 'INVITED',
   Joined = 'JOINED'
+}
+
+export enum TeacherPrefix {
+  Mr = 'Mr',
+  Mrs = 'Mrs',
+  Ms = 'Ms'
 }
 
 export type User = {
@@ -195,7 +200,8 @@ export type QueryEngagementHistoryArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser?: Maybe<CreateAccountResponse>;
+  createStudent?: Maybe<CreateAccountResponse>;
+  createTeacher?: Maybe<CreateAccountResponse>;
   createRoom?: Maybe<CreateRoomResponse>;
   createClassroom?: Maybe<CreateClassroomResponse>;
   submitQuestion?: Maybe<CreateQuestionResponse>;
@@ -209,15 +215,25 @@ export type Mutation = {
 };
 
 
-export type MutationCreateUserArgs = {
+export type MutationCreateStudentArgs = {
   first_name: Scalars['String'];
   last_name: Scalars['String'];
   middle_name?: Maybe<Scalars['String']>;
-  role: Role;
   email: Scalars['String'];
   phone_number?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['Date']>;
   parent_email?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationCreateTeacherArgs = {
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  middle_name?: Maybe<Scalars['String']>;
+  prefix?: Maybe<TeacherPrefix>;
+  email: Scalars['String'];
+  phone_number?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['Date']>;
 };
 
 
@@ -368,6 +384,7 @@ export type ResolversTypes = {
   Role: Role;
   RoomState: RoomState;
   ParticipantStatus: ParticipantStatus;
+  TeacherPrefix: TeacherPrefix;
   User: ResolverTypeWrapper<User>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -541,7 +558,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createUser?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'first_name' | 'last_name' | 'role' | 'email'>>;
+  createStudent?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'first_name' | 'last_name' | 'email'>>;
+  createTeacher?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateTeacherArgs, 'first_name' | 'last_name' | 'email'>>;
   createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id' | 'name'>>;
   createClassroom?: Resolver<Maybe<ResolversTypes['CreateClassroomResponse']>, ParentType, ContextType, RequireFields<MutationCreateClassroomArgs, 'name' | 'subject' | 'teacher_id'>>;
   submitQuestion?: Resolver<Maybe<ResolversTypes['CreateQuestionResponse']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;

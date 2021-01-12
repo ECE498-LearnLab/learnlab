@@ -111,16 +111,16 @@ query getClassroom($id: ID!) {
 ## Mutation Usage Examples
 ```GraphQL
 
-mutation createTeacher($first_name: String!, $last_name: String!, $role: Role!, $email: String!, $created_at: Date) {
-  createUser(first_name: $first_name, last_name: $last_name, role: $role, email: $email, created_at: $created_at) {
+mutation createTeacher($first_name: String!, $last_name: String!, $email: String!, $created_at: Date, $prefix: TeacherPrefix) {
+  createTeacher(first_name: $first_name, last_name: $last_name, email: $email, created_at: $created_at, prefix: $prefix) {
     user_id
     success
     message
   }
 }
 
-mutation createStudent($first_name: String!, $last_name: String!, $role: Role!, $email: String!, $created_at: Date, $parent_email: String) {
-  createUser(first_name: $first_name, last_name: $last_name, role: $role, email: $email, created_at: $created_at, parent_email: $parent_email) {
+mutation createStudent($first_name: String!, $last_name: String!, $email: String!, $created_at: Date, $parent_email: String) {
+  createStudent(first_name: $first_name, last_name: $last_name, email: $email, created_at: $created_at, parent_email: $parent_email) {
     user_id
     success
     message

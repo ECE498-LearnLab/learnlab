@@ -1,5 +1,8 @@
 import { IDataSource } from "..";
-import { CreateAccountResponse, MutationCreateUserArgs, Resolvers, UserResponse } from "../generated/graphql";
+import {
+    CreateAccountResponse, MutationCreateStudentArgs, MutationCreateTeacherArgs,
+    Resolvers, UserResponse
+} from "../generated/graphql";
 
 
 const userResolver: Resolvers = {
@@ -8,9 +11,13 @@ const userResolver: Resolvers = {
         : Promise<UserResponse> => await dataSources.db.userAPI().getUser(id),
     },
     Mutation: {
-        createUser: async (_, args: MutationCreateUserArgs, { dataSources }: { dataSources: IDataSource })
+        createStudent: async (_, args: MutationCreateStudentArgs, { dataSources }: { dataSources: IDataSource })
         : Promise<CreateAccountResponse> => {
-            return await dataSources.db.userAPI().createUser(args);
+            return await dataSources.db.userAPI().createStudent(args);
+        },
+        createTeacher: async (_, args: MutationCreateTeacherArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<CreateAccountResponse> => {
+            return await dataSources.db.userAPI().createTeacher(args);
         },
     }
 };
