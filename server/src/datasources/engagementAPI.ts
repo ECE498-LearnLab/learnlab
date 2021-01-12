@@ -2,7 +2,7 @@ import Knex from "knex";
 import {
     EngagementHistory,
     MutationUpsertEngagementCurrentArgs,
-    Response,
+    Response
 } from "../generated/graphql";
 
 /**
@@ -35,7 +35,6 @@ export default (db: Knex) => {
             return res;
         },
         upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<Response> => {
-
             const { room_id, student_id, score, classification } = engagementInfo;
             const {success, message} = await db.raw(
                 `? ON CONFLICT (room_id, student_id)

@@ -27,7 +27,7 @@ export default (db: Knex) => {
             const classInfo = (await db.select('*').from('classrooms').where({id: class_id}))[0];
 
             let studentFields = ['id', 'first_name', 'last_name', 'role', 'email'];
-            if ([Role.Admin, Role.Instructor].includes(role)) {
+            if (Role.Instructor === role) {
                 studentFields = studentFields.concat(['last_login', 'phone_number']);
             }
 
