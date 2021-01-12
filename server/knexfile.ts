@@ -16,4 +16,18 @@ module.exports = {
     }
   },
 
+  production: {
+    client: "postgresql",
+    connection: {
+      host: "learnlab-1.csosestc6lcm.ca-central-1.rds.amazonaws.com",
+      port: 5432,
+      database: "learnlab",
+      user: "postgres",
+      password: "postgres"
+    },
+    migrations: {
+      tableName: "knex_migrations"
+    }
+  },
+
 };
