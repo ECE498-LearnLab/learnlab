@@ -15,7 +15,7 @@ const Lobby = ({
         <input type="text" id="field" value={username} onChange={handleUsernameChange} required />
       </div>
       <div>
-        <label htmlFor="room">Room name:</label>
+        <label htmlFor="room">Class ID:</label>
         <input type="text" id="room" value={roomName} onChange={handleRoomNameChange} required />
       </div>
       <button type="submit">Submit</button>
