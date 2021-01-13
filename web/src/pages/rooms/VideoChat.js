@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client'
 import Fab from '@bit/mui-org.material-ui.fab'
 import { Badge } from 'antd'
 import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
@@ -80,6 +81,22 @@ const VideoChat = ({
       isLocalParticipant={false}
     />
   ))
+
+  /* eslint-disable */
+  const ROOM_QUERY = gql`
+      query getRoom {
+        roomsForClassroom(
+          class_id: ${room.name}
+          room_states: [ONGOING]
+        ) {
+          class_id
+          room_name
+        }
+      }
+    `
+  const queryResults = useQuery(ROOM_QUERY).data
+  const roomsData = queryResults ? queryResults.roomsForClassroom[0].room_name : 'Classroom'
+  /* eslint-enable */
 
   return (
     <>
