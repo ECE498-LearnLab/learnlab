@@ -12,6 +12,10 @@ import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 
+// apollo client
+import { ApolloClient, ApolloProvider } from '@apollo/client'
+import { cache } from './cache'
+
 import reducers from './redux/reducers'
 import sagas from './redux/sagas'
 import Localization from './localization'
@@ -20,6 +24,11 @@ import * as serviceWorker from './serviceWorker'
 
 // mocking api
 import 'services/axios/fakeApi'
+
+const client = new ApolloClient({
+  cache,
+  uri: 'http://localhost:4000/graphql',
+})
 
 // middlewared
 const history = createHashHistory()
@@ -33,11 +42,13 @@ const store = createStore(reducers(history), compose(applyMiddleware(...middlewa
 sagaMiddleware.run(sagas)
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Localization>
-      <Router history={history} />
-    </Localization>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <Localization>
+        <Router history={history} />
+      </Localization>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root'),
 )
 

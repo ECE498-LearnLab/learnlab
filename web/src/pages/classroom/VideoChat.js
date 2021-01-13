@@ -3,6 +3,7 @@ import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
 import useScreenShareToggle from 'hooks/useScreenShareToggle'
 import { Badge } from 'antd'
 import { Card, CardBody, CardHeader } from 'reactstrap'
+import { gql, useQuery } from '@apollo/client'
 
 import { Animated } from 'react-animated-css'
 import { Maximize, Mic, MicOff, Monitor, X, Users } from 'react-feather'
@@ -81,13 +82,27 @@ const VideoChat = ({
     />
   ))
 
+  const ROOM_QUERY = gql`
+      query getRoom {
+        roomsForClassroom(
+          class_id: ${room.name}
+          room_states: [ONGOING]
+        ) {
+          class_id
+          room_name
+        }
+      }
+    `
+  const queryResults = useQuery(ROOM_QUERY).data
+  const roomsData = queryResults ? queryResults.roomsForClassroom[0].room_name : 'Classroom'
+
   return (
     <>
       <Card style={styles.videoWrapper}>
         <CardHeader className="card-header-borderless">
           <h5 className="mb-0 mr-2">
             <i className="fe fe-book-open mr-2 font-size-18 text-muted" />
-            Intro to Algebra <small className="text-muted">30 Students</small>
+            {roomsData} <small className="text-muted">30 Students</small>
           </h5>
         </CardHeader>
         <CardBody>
