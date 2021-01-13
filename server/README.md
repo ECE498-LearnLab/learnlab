@@ -29,7 +29,10 @@ See [Migrations API](http://knexjs.org/#Migrations-API) for how to run and rollb
 I find `migrate:up` and `migrate:down` the most useful.
 
 ## Production Database Migration
-After merging a migration file, you need to update the production database with the new schema changes. Currently this needs to be done locally by running the following command:
+After merging a migration file, you need to update the production database with the new schema changes. Currently this needs to be done locally (in the server directory) by running the following command:
+
 `npx knex migrate:latest --env production`
+
+**Note:** To avoid potential problems, make sure this is done on the latest master branch!
 
 After running the command, connect to the production database (you can use pgAdmin) and ensure that the changes are good.
