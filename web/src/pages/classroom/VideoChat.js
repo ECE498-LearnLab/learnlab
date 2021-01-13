@@ -86,7 +86,7 @@ const VideoChat = ({
       query getRoom {
         roomsForClassroom(
           class_id: ${room.name}
-          room_states: [ONGOING, SCHEDULED, ENDED]
+          room_states: [ONGOING]
         ) {
           class_id
           room_name
