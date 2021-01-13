@@ -14,6 +14,15 @@ const messages = {
   'topBar.profileMenu.phone': '电话',
   'topBar.profileMenu.editProfile': '编辑个人资料',
   'topBar.profileMenu.logout': '登出',
+  'lobbyCard.joinRoom': '会合',
+  'lobbyCard.scheduled': '预定的',
+  'lobbyCard.ended': '已结束',
+  'lobbyCard.participantsInvited':
+    '{count, plural, =0 {不邀请任何人} one {邀请一名学生} other {邀请#名学生}}',
+  'lobbyCard.participantsJoined':
+    '{count, plural, =0 {没有人加入} one {#名学生已加入} other {#名学生已加入}}',
+  'lobbyCard.participantsAttended':
+    '{count, plural, =0 {没有人参加} one {#名学生参加} other {#名学生参加}}',
 }
 
 export default {

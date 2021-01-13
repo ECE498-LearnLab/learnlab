@@ -14,6 +14,15 @@ const messages = {
   'topBar.profileMenu.phone': 'Phone',
   'topBar.profileMenu.editProfile': 'Edit Profile',
   'topBar.profileMenu.logout': 'Logout',
+  'lobbyCard.joinRoom': 'Join',
+  'lobbyCard.scheduled': 'Scheduled',
+  'lobbyCard.ended': 'Ended',
+  'lobbyCard.participantsInvited':
+    '{count, plural, =0 {No one is invited} one {# student is invited} other {# students are invited}}',
+  'lobbyCard.participantsJoined':
+    '{count, plural, =0 {No one has joined} one {# student has joined} other {# students have joined}}',
+  'lobbyCard.participantsAttended':
+    '{count, plural, =0 {No one attended} one {# student attended} other {# students attended}}',
 }
 
 export default {

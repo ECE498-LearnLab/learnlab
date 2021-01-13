@@ -4,3 +4,7 @@ server/node_modules
 .notes
 .DS_Store
 .vscode/settings.json
+web/public/resources/fonts/font-linearicons/fonts/Linearicons-Free.eot
+web/public/resources/fonts/font-linearicons/fonts/Linearicons-Free.ttf
+web/public/resources/fonts/font-linearicons/fonts/Linearicons-Free.woff
+engagement/src/shape_predictor_68_face_landmarks.dat

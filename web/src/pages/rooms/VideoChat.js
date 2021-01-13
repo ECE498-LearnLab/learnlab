@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import Fab from '@bit/mui-org.material-ui.fab'
+import { Badge } from 'antd'
 import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
 import useScreenShareToggle from 'hooks/useScreenShareToggle'
-import { Badge } from 'antd'
-import { Card, CardBody, CardHeader } from 'reactstrap'
-
+import React, { useState } from 'react'
 import { Animated } from 'react-animated-css'
-import { Maximize, Mic, MicOff, Monitor, X, Users } from 'react-feather'
-import Fab from '@bit/mui-org.material-ui.fab'
+import { Maximize, Mic, MicOff, Monitor, Users, X } from 'react-feather'
+import { Card, CardBody, CardHeader } from 'reactstrap'
 import MainParticipant from './MainParticipant'
 import RemoteParticipant from './RemoteParticipant'
 
@@ -54,18 +53,19 @@ const styles = {
 
 const VideoChat = ({
   room,
+  twilioRoom,
   participants,
   dominantSpeaker,
   screenShareParticipant,
   onLeaveRoomHandler,
 }) => {
   const [isLocalAudioEnabled, toggleIsLocalAudioEnabled] = useLocalAudioToggle(
-    room.localParticipant,
+    twilioRoom.localParticipant,
   )
-  const [isSharing, toggleScreenShare] = useScreenShareToggle(room)
+  const [isSharing, toggleScreenShare] = useScreenShareToggle(twilioRoom)
   const [isAllParticipantsVisible, setIsAllParticipantsVisible] = useState(true)
 
-  const mainParticipant = screenShareParticipant || dominantSpeaker || room.localParticipant
+  const mainParticipant = screenShareParticipant || dominantSpeaker || twilioRoom.localParticipant
 
   console.log('isSharing', isSharing)
   console.log('screenShareParticipant', screenShareParticipant?.identity)
@@ -87,7 +87,7 @@ const VideoChat = ({
         <CardHeader className="card-header-borderless">
           <h5 className="mb-0 mr-2">
             <i className="fe fe-book-open mr-2 font-size-18 text-muted" />
-            Intro to Algebra <small className="text-muted">30 Students</small>
+            {room.room_name} <small className="text-muted">30 Students</small>
           </h5>
         </CardHeader>
         <CardBody>
@@ -107,8 +107,8 @@ const VideoChat = ({
               <div className="m-2" style={styles.otherParticipantsContainer}>
                 <div className="hideScrollBar" style={styles.otherParticipants}>
                   <RemoteParticipant
-                    key={room.localParticipant.identity}
-                    participant={room.localParticipant}
+                    key={twilioRoom.localParticipant.identity}
+                    participant={twilioRoom.localParticipant}
                     isLocalParticipant={true}
                     isLocalAudioEnabled={isLocalAudioEnabled}
                   />
