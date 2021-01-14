@@ -33,6 +33,27 @@ export async function seed(knex: Knex): Promise<void> {
             last_name: "Pei",
             role: "INSTRUCTOR",
             email: "pei@instructor.com"
+        },
+        {
+            id: 5,
+            first_name: "Jessie",
+            last_name: "Foo",
+            role: "STUDENT",
+            email: "jessie@student.com"
+        },
+        {
+            id: 6,
+            first_name: "Andrew",
+            last_name: "Xia",
+            role: "STUDENT",
+            email: "andrew@student.com"
+        },
+        {
+            id: 7,
+            first_name: "Tian",
+            last_name: "Tian",
+            role: "STUDENT",
+            email: "tian@student.com"
         }
     ]);
 };
