@@ -2,6 +2,7 @@ import { Tabs } from 'antd'
 import { addToBatch } from 'engagement/publishFramesToQueue'
 import useTwilioRoom from 'hooks/useTwilioRoom'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 import VideoChat from './VideoChat'
 
@@ -63,6 +64,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
 
   return (
     <Card style={styles.roomWrapper}>
+      <Helmet title={`Rooms | ${room.room_name ?? 'Classroom'}`} />
       {twilioRoom ? (
         <>
           <VideoChat

@@ -1,4 +1,3 @@
-import { gql, useQuery } from '@apollo/client'
 import Fab from '@bit/mui-org.material-ui.fab'
 import { Badge } from 'antd'
 import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
@@ -68,11 +67,6 @@ const VideoChat = ({
 
   const mainParticipant = screenShareParticipant || dominantSpeaker || twilioRoom.localParticipant
 
-  console.log('isSharing', isSharing)
-  console.log('screenShareParticipant', screenShareParticipant?.identity)
-  console.log('dominant', dominantSpeaker?.identity)
-  console.log('main', mainParticipant?.identity)
-
   const allParticipantsLength = participants.length + 1
   const remoteParticipants = participants.map(participant => (
     <RemoteParticipant
@@ -82,29 +76,13 @@ const VideoChat = ({
     />
   ))
 
-  /* eslint-disable */
-  const ROOM_QUERY = gql`
-      query getRoom {
-        roomsForClassroom(
-          class_id: ${room.name}
-          room_states: [ONGOING]
-        ) {
-          class_id
-          room_name
-        }
-      }
-    `
-  const queryResults = useQuery(ROOM_QUERY).data
-  const roomsData = queryResults ? queryResults.roomsForClassroom[0].room_name : 'Classroom'
-  /* eslint-enable */
-
   return (
     <>
       <Card style={styles.videoWrapper}>
         <CardHeader className="card-header-borderless">
           <h5 className="mb-0 mr-2">
             <i className="fe fe-book-open mr-2 font-size-18 text-muted" />
-            {room.room_name} <small className="text-muted">30 Students</small>
+            {room.room_name ?? 'Classroom'}
           </h5>
         </CardHeader>
         <CardBody>

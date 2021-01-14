@@ -1,20 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { generateAccessToken } from 'utils/accessToken'
-import Room from './Room'
 import Lobby from './Lobby'
+import Room from './Room'
 
 const Classroom = () => {
   const [selectedRoom, setSelectedRoom] = useState('')
   const [token, setToken] = useState(null)
-
-  // const joinRoom = useCallback(
-  //   async event => {
-  //     event.preventDefault()
-  //     // to-do: for now we're generating random user name, once we have user management set up, change this
-  //     setToken(generateAccessToken(Math.floor(Math.random()*16777215).toString(16), selectedRoom.room_uuid))
-  //   },
-  //   [selectedRoom],
-  // )
 
   const onLeaveRoomHandler = useCallback(() => {
     setToken(null)
@@ -32,9 +23,8 @@ const Classroom = () => {
     )
   }, [])
 
-  let render
-  if (token) {
-    render = (
+  if (token)
+    return (
       <Room
         room={selectedRoom}
         twilioRoomSid={selectedRoom.room_uuid}
@@ -42,10 +32,7 @@ const Classroom = () => {
         onLeaveRoomHandler={onLeaveRoomHandler}
       />
     )
-  } else {
-    render = <Lobby onJoinRoomHandler={onJoinRoomHandler} />
-  }
-  return render
+  return <Lobby onJoinRoomHandler={onJoinRoomHandler} />
 }
 
 export default Classroom

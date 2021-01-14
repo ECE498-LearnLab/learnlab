@@ -1,127 +1,76 @@
+import { gql, useQuery } from '@apollo/client'
 import LobbyCard from 'components/learnlab/LobbyCard'
-import React from 'react'
+import _ from 'lodash'
+import React, { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 
-const data = [
-  {
-    id: '3',
-    room_uuid: '3',
-    room_name: 'Project Overview',
-    start_time: (new Date().getTime() / 1000).toString(),
-    end_time: new Date().getTime().toString(),
-    room_status: 'ONGOING',
-  },
-  {
-    id: '4',
-    room_uuid: '4',
-    room_name: 'Office Hours',
-    start_time: (new Date().getTime() / 1000).toString(),
-    end_time: 1610226145,
-    room_status: 'ONGOING',
-  },
-  {
-    id: '5',
-    room_uuid: '5',
-    room_name: 'Project Overview',
-    start_time: (new Date().getTime() / 1000).toString(),
-    end_time: 1610524145,
-    room_status: 'ONGOING',
-  },
-  {
-    id: '46',
-    room_uuid: '46',
-    room_name: 'Office Hours 2',
-    start_time: 1610222416,
-    end_time: 1610226145,
-    room_status: 'SCHEDULED',
-  },
-  {
-    id: '1',
-    room_uuid: '1',
-    room_name: 'Lecture 1',
-    start_time: 1610922416,
-    end_time: 1610926145,
-    room_status: 'SCHEDULED',
-  },
-  {
-    id: '2',
-    room_uuid: '2',
-    room_name: 'Homework Help',
-    start_time: 1610722416,
-    end_time: 1610726145,
-    room_status: 'SCHEDULED',
-  },
-  {
-    id: '2',
-    room_uuid: '2',
-    room_name: 'Homework Help',
-    start_time: 1616722416,
-    end_time: 1616726145,
-    room_status: 'SCHEDULED',
-  },
-  {
-    id: '36',
-    room_uuid: '56',
-    room_name: 'Project Overview 2',
-    start_time: 1610542416,
-    end_time: 1610524145,
-    room_status: 'ENDED',
-  },
-  {
-    id: '47',
-    room_uuid: '47',
-    room_name: 'Office Hours 3',
-    start_time: 1610222416,
-    end_time: 1610226145,
-    room_status: 'ENDED',
-  },
-]
-
-const data1 = ['CZ', 'JL', 'JS', 'MK', 'JY', 'SU', 'JY', 'IO']
-
 const Lobby = ({ onJoinRoomHandler }) => {
-  const todaysDate = new Date().getDate()
+  // to:do once global class_id selection is done, change hardcoded value below
+  const GET_ROOMS_FOR_CLASSROOM = gql`
+    query getRooms {
+      roomsForClassroom(class_id: "2", room_states: [ONGOING, SCHEDULED]) {
+        id
+        room_uuid
+        room_name
+        start_time
+        end_time
+        room_status
+      }
+    }
+  `
 
-  // to-do make this cleaner once its connected to backend :)
-  const todaysSessions = data
-    .filter(room => new Date(room.start_time * 1000).getDate() === todaysDate)
-    .map((room, index) => (
-      <LobbyCard
-        key={room.room_uuid}
-        roomName={room.room_name}
-        roomUUID={room.room_uuid}
-        startTime={room.start_time}
-        endTime={room.end_time}
-        roomStatus={room.room_status}
-        onJoinRoomHandler={() => {
-          onJoinRoomHandler(room)
-        }}
-        participants={data1.slice(0, index)}
-      />
-    ))
-  const upcomingSessions = data
-    .filter(
-      room =>
-        new Date(room.start_time * 1000).getDate() !== todaysDate && room.room_status !== 'ENDED',
-    )
-    .map((room, index) => (
-      <LobbyCard
-        key={room.room_uuid}
-        roomName={room.room_name}
-        roomUUID={room.room_uuid}
-        startTime={room.start_time}
-        endTime={room.end_time}
-        roomStatus={room.room_status}
-        onJoinRoomHandler={() => {
-          onJoinRoomHandler(room)
-        }}
-        participants={data1.slice(0, index)}
-      />
-    ))
+  const { data, loading, error } = useQuery(GET_ROOMS_FOR_CLASSROOM)
+
+  // Memoize this so todaysSession and upcomingSessions only rerenders when queryResults change
+  const [todaysSessions, upcomingSessions] = useMemo(() => {
+    if (data) {
+      const todaysDate = new Date().getDate()
+
+      const todaysRooms = _.orderBy(
+        data.roomsForClassroom.filter(room => new Date(room.start_time).getDate() === todaysDate),
+        'start_time',
+        'asc',
+      )
+
+      const upcomingRooms = _.orderBy(
+        data.roomsForClassroom.filter(room => new Date(room.start_time).getDate() > todaysDate),
+        'start_time',
+        'asc',
+      )
+
+      // Create LobbyCard components
+      // to-do have a fallback state when todaysRooms or upcomingRooms is null
+      const todays = todaysRooms.map(room => (
+        <LobbyCard
+          key={room.room_uuid}
+          room={room}
+          onJoinRoomHandler={() => {
+            onJoinRoomHandler(room)
+          }}
+        />
+      ))
+
+      const upcoming = upcomingRooms.map(room => (
+        <LobbyCard
+          key={room.room_uuid}
+          room={room}
+          onJoinRoomHandler={() => {
+            onJoinRoomHandler(room)
+          }}
+        />
+      ))
+      return [todays, upcoming]
+    }
+    return [null, null]
+  }, [data, onJoinRoomHandler])
+
+  // create proper error and loading screens for this screen
+  if (loading) return 'Loading...'
+  if (error) return `Error! ${error.message}`
 
   return (
     <div>
-      <Helmet title="Rooms" />
+      <Helmet title="Rooms | Lobby" />
       <div className="kit__utils__heading">
         <h3>
           <span className="mr-3">Rooms</span>
