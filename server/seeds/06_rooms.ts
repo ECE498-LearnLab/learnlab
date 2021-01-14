@@ -31,7 +31,7 @@ export async function seed(knex: Knex): Promise<void> {
             id: 4,
             class_id: 2,
             room_name: "OS Lesson 2",
-            room_uuid: "0208002a-da45-4506-9ff4-test04uuidv4 \n",
+            room_uuid: "0208002a-da45-4506-9ff4-test04uuidv4",
             room_status: "ENDED"
         },
     ]);
