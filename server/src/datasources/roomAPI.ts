@@ -57,7 +57,7 @@ export default (db: Knex) => {
         inviteToRoom: async ({student_ids, room_id}: MutationInviteArgs): Promise<Response> => {            
             let errorMsg;
             const success = await db('participants')
-                .insert(student_ids.map((id) => ({student_id: id, room_id})))
+                .insert(student_ids.map((id) => ({student_id: id, room_id, status: "INVITED"})))
                 .then(() => true)
                 .catch((err) => {
                     errorMsg = err.message;
