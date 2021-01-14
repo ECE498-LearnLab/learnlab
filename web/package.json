@@ -9,7 +9,7 @@
     "test": "react-app-rewired test",
     "lint-staged": "lint-staged",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,scss,less}\"",
-    "eslint": "eslint --fix --ext .js,jsx src",
+    "eslint": "eslint --fix --ext .jsx --ext .js src/",
     "stylelint": "stylelint \"src/**/*.{scss,less}\""
   },
   "husky": {

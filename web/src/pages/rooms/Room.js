@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { Tabs } from 'antd'
 import { addToBatch } from 'engagement/publishFramesToQueue'
 import useTwilioRoom from 'hooks/useTwilioRoom'
-import { Tabs } from 'antd'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 import VideoChat from './VideoChat'
 
@@ -28,9 +29,9 @@ const styles = {
   },
 }
 
-const Classroom = ({ twilioRoomSid, token, onLeaveRoomHandler }) => {
+const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   const [frameCapture, setFrameCapture] = useState(null)
-  const [room, participants, dominantSpeaker, screenShareParticipant] = useTwilioRoom({
+  const [twilioRoom, participants, dominantSpeaker, screenShareParticipant] = useTwilioRoom({
     twilioRoomSid,
     token,
     setFrameCapture,
@@ -63,11 +64,13 @@ const Classroom = ({ twilioRoomSid, token, onLeaveRoomHandler }) => {
 
   return (
     <Card style={styles.roomWrapper}>
-      {room ? (
+      <Helmet title={`Rooms | ${room.room_name ?? 'Classroom'}`} />
+      {twilioRoom ? (
         <>
           <VideoChat
             style={styles.videoWrapper}
             room={room}
+            twilioRoom={twilioRoom}
             participants={participants}
             dominantSpeaker={dominantSpeaker}
             screenShareParticipant={screenShareParticipant}
@@ -97,4 +100,4 @@ function drawCanvas(canvas, img) {
   return canvas.toDataURL()
 }
 
-export default Classroom
+export default Room

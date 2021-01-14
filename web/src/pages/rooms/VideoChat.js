@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import Fab from '@bit/mui-org.material-ui.fab'
+import { Badge } from 'antd'
 import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
 import useScreenShareToggle from 'hooks/useScreenShareToggle'
-import { Badge } from 'antd'
-import { Card, CardBody, CardHeader } from 'reactstrap'
-import { gql, useQuery } from '@apollo/client'
-
+import React, { useState } from 'react'
 import { Animated } from 'react-animated-css'
-import { Maximize, Mic, MicOff, Monitor, X, Users } from 'react-feather'
-import Fab from '@bit/mui-org.material-ui.fab'
+import { Maximize, Mic, MicOff, Monitor, Users, X } from 'react-feather'
+import { Card, CardBody, CardHeader } from 'reactstrap'
 import MainParticipant from './MainParticipant'
 import RemoteParticipant from './RemoteParticipant'
 
@@ -55,23 +53,19 @@ const styles = {
 
 const VideoChat = ({
   room,
+  twilioRoom,
   participants,
   dominantSpeaker,
   screenShareParticipant,
   onLeaveRoomHandler,
 }) => {
   const [isLocalAudioEnabled, toggleIsLocalAudioEnabled] = useLocalAudioToggle(
-    room.localParticipant,
+    twilioRoom.localParticipant,
   )
-  const [isSharing, toggleScreenShare] = useScreenShareToggle(room)
+  const [isSharing, toggleScreenShare] = useScreenShareToggle(twilioRoom)
   const [isAllParticipantsVisible, setIsAllParticipantsVisible] = useState(true)
 
-  const mainParticipant = screenShareParticipant || dominantSpeaker || room.localParticipant
-
-  console.log('isSharing', isSharing)
-  console.log('screenShareParticipant', screenShareParticipant?.identity)
-  console.log('dominant', dominantSpeaker?.identity)
-  console.log('main', mainParticipant?.identity)
+  const mainParticipant = screenShareParticipant || dominantSpeaker || twilioRoom.localParticipant
 
   const allParticipantsLength = participants.length + 1
   const remoteParticipants = participants.map(participant => (
@@ -82,27 +76,13 @@ const VideoChat = ({
     />
   ))
 
-  const ROOM_QUERY = gql`
-      query getRoom {
-        roomsForClassroom(
-          class_id: ${room.name}
-          room_states: [ONGOING]
-        ) {
-          class_id
-          room_name
-        }
-      }
-    `
-  const queryResults = useQuery(ROOM_QUERY).data
-  const roomsData = queryResults ? queryResults.roomsForClassroom[0].room_name : 'Classroom'
-
   return (
     <>
       <Card style={styles.videoWrapper}>
         <CardHeader className="card-header-borderless">
           <h5 className="mb-0 mr-2">
             <i className="fe fe-book-open mr-2 font-size-18 text-muted" />
-            {roomsData} <small className="text-muted">30 Students</small>
+            {room.room_name ?? 'Classroom'}
           </h5>
         </CardHeader>
         <CardBody>
@@ -122,8 +102,8 @@ const VideoChat = ({
               <div className="m-2" style={styles.otherParticipantsContainer}>
                 <div className="hideScrollBar" style={styles.otherParticipants}>
                   <RemoteParticipant
-                    key={room.localParticipant.identity}
-                    participant={room.localParticipant}
+                    key={twilioRoom.localParticipant.identity}
+                    participant={twilioRoom.localParticipant}
                     isLocalParticipant={true}
                     isLocalAudioEnabled={isLocalAudioEnabled}
                   />

@@ -79,7 +79,7 @@ const Breadcrumbs = props => {
     (breadcrumbs.length ? (
       <div className={styles.breadcrumbs}>
         <div className={styles.path}>
-          <Link to="/dashboard/alpha">Home</Link>
+          <Link to="/dashboard/">Home</Link>
           {breadcrumbs}
         </div>
       </div>

@@ -14,6 +14,15 @@ const messages = {
   'topBar.profileMenu.phone': 'Téléphone',
   'topBar.profileMenu.editProfile': 'Editer le profil',
   'topBar.profileMenu.logout': 'Connectez - Out',
+  'lobbyCard.joinRoom': 'Joindre',
+  'lobbyCard.scheduled': 'Programmé',
+  'lobbyCard.ended': 'Terminé',
+  'lobbyCard.participantsInvited':
+    '{count, plural, =0 {Personne n’est invité} one {# étudiant est invité} other {# étudiants sont invités}}',
+  'lobbyCard.participantsJoined':
+    '{count, plural, =0 {Personne n’a adhéré} one {# étudiant a adhéré à } other {# étudiants ont rejoint}}',
+  'lobbyCard.participantsAttended':
+    '{count, plural, =0 {Personne n’était là} one {# étudiant ont participé à} other {# students ont participé}}',
 }
 
 export default {

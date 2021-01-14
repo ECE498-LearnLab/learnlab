@@ -1,10 +1,9 @@
-import React, { lazy, Suspense } from 'react'
-import { Route, Redirect, Switch } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
-import { CSSTransition, SwitchTransition } from 'react-transition-group'
-import { connect } from 'react-redux'
-
 import Layout from 'layouts'
+import React, { lazy, Suspense } from 'react'
+import { connect } from 'react-redux'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
 const routes = [
   // Dashboard
@@ -14,8 +13,8 @@ const routes = [
     exact: true,
   },
   {
-    path: '/classroom',
-    Component: lazy(() => import('pages/classroom')),
+    path: '/rooms',
+    Component: lazy(() => import('pages/rooms')),
     exact: true,
   },
   // Auth Pages

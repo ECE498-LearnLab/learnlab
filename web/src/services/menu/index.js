@@ -8,10 +8,10 @@ export default async function getMenuData() {
       // roles: ['admin'], // set user roles with access to this route
     },
     {
-      title: 'Classroom',
-      key: 'classroom',
+      title: 'Rooms',
+      key: 'rooms',
       icon: 'fe fe-tv',
-      url: '/classroom/',
+      url: '/rooms/',
       // roles: ['admin'], // set user roles with access to this route
     },
   ]
