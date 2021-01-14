@@ -137,7 +137,7 @@ mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time
 }
 
 mutation invite {
-  invite(student_id: 3, room_id: 1) {
+  invite(student_ids: [1,2], room_id: 1) {
     success
     message
   }

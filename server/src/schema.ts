@@ -154,7 +154,7 @@ const typeDefs = gql`
         upvoteQuestion(id: ID!): Upvotes,
         updateRoomStatus(room_id: ID!, room_status: RoomState!): Response,
         addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
-        invite(student_id: ID!, room_id: ID!): Response
+        invite(student_ids: [ID!], room_id: ID!): Response
         joinRoom(student_id: ID!, room_id: ID!): Response
         upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,):
                     Response
