@@ -54,9 +54,10 @@ export default (db: Knex) => {
                                 .andWhere('status', 'in', statuses)) as unknown as User[];
             return res;
         },
-        inviteToRoom: async ({student_id, room_id}: MutationInviteArgs): Promise<Response> => {            
+        inviteToRoom: async ({student_ids, room_id}: MutationInviteArgs): Promise<Response> => {            
             let errorMsg;
-            const success = await db('participants').insert({student_id, room_id})
+            const success = await db('participants')
+                .insert(student_ids.map((id) => ({student_id: id, room_id})))
                 .then(() => true)
                 .catch((err) => {
                     errorMsg = err.message;
@@ -65,8 +66,8 @@ export default (db: Knex) => {
     
             return {
                 success,
-                message: success ? `Student ${student_id} successfully invited to room ${room_id}` 
-                                : `Failed to invite student ${student_id} to room ${room_id}: ${errorMsg}`
+                message: success ? `Students ${student_ids} successfully invited to room ${room_id}` 
+                                : `Invitations to room ${room_id} failed: ${errorMsg}`
             };
         },
         joinRoom: async ({student_id, room_id}: MutationJoinRoomArgs): Promise<Response> => {

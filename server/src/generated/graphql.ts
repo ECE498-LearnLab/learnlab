@@ -283,7 +283,7 @@ export type MutationAddStudentsToClassroomArgs = {
 
 
 export type MutationInviteArgs = {
-  student_id: Scalars['ID'];
+  student_ids?: Maybe<Array<Scalars['ID']>>;
   room_id: Scalars['ID'];
 };
 
@@ -567,7 +567,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   upvoteQuestion?: Resolver<Maybe<ResolversTypes['Upvotes']>, ParentType, ContextType, RequireFields<MutationUpvoteQuestionArgs, 'id'>>;
   updateRoomStatus?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpdateRoomStatusArgs, 'room_id' | 'room_status'>>;
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
-  invite?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationInviteArgs, 'student_id' | 'room_id'>>;
+  invite?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationInviteArgs, 'room_id'>>;
   joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
   upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id'>>;
 };
