@@ -21,6 +21,5 @@ export function generateAccessToken(userName, roomName) {
   const videoGrant = new VideoGrant({ room: roomName })
   token.identity = userName
   token.addGrant(videoGrant)
-  console.log(token)
   return token.toJwt()
 }

@@ -1,24 +1,8 @@
-import { all, takeEvery, put, call, select } from 'redux-saga/effects'
 import { notification } from 'antd'
 import { history } from 'index'
+import { all, call, put, takeEvery } from 'redux-saga/effects'
 import * as firebase from 'services/firebase'
-import * as jwt from 'services/jwt'
 import actions from './actions'
-
-const mapAuthProviders = {
-  firebase: {
-    login: firebase.login,
-    register: firebase.register,
-    currentAccount: firebase.currentAccount,
-    logout: firebase.logout,
-  },
-  jwt: {
-    login: jwt.login,
-    register: jwt.register,
-    currentAccount: jwt.currentAccount,
-    logout: jwt.logout,
-  },
-}
 
 export function* LOGIN({ payload }) {
   const { email, password } = payload
@@ -28,8 +12,7 @@ export function* LOGIN({ payload }) {
       loading: true,
     },
   })
-  const { authProvider: autProviderName } = yield select(state => state.settings)
-  const success = yield call(mapAuthProviders[autProviderName].login, email, password)
+  const success = yield call(firebase.login, email, password)
   if (success) {
     yield put({
       type: 'user/LOAD_CURRENT_ACCOUNT',
@@ -51,15 +34,14 @@ export function* LOGIN({ payload }) {
 }
 
 export function* REGISTER({ payload }) {
-  const { email, password, name } = payload
+  const { role, first_name, last_name, email, password } = payload
   yield put({
     type: 'user/SET_STATE',
     payload: {
       loading: true,
     },
   })
-  const { authProvider } = yield select(state => state.settings)
-  const success = yield call(mapAuthProviders[authProvider].register, email, password, name)
+  const success = yield call(firebase.register, role, first_name, last_name, email, password)
   if (success) {
     yield put({
       type: 'user/LOAD_CURRENT_ACCOUNT',
@@ -87,17 +69,16 @@ export function* LOAD_CURRENT_ACCOUNT() {
       loading: true,
     },
   })
-  const { authProvider } = yield select(state => state.settings)
-  const response = yield call(mapAuthProviders[authProvider].currentAccount)
+  const response = yield call(firebase.currentAccount)
   if (response) {
-    const { id, email, name, avatar, role } = response
+    const { id, email, first_name, last_name, role } = response
     yield put({
       type: 'user/SET_STATE',
       payload: {
         id,
-        name,
+        first_name,
+        last_name,
         email,
-        avatar,
         role,
         authorized: true,
       },
@@ -112,16 +93,15 @@ export function* LOAD_CURRENT_ACCOUNT() {
 }
 
 export function* LOGOUT() {
-  const { authProvider } = yield select(state => state.settings)
-  yield call(mapAuthProviders[authProvider].logout)
+  yield call(firebase.logout)
   yield put({
     type: 'user/SET_STATE',
     payload: {
       id: '',
-      name: '',
+      first_name: '',
+      last_name: '',
       role: '',
       email: '',
-      avatar: '',
       authorized: false,
       loading: false,
     },

@@ -40,7 +40,6 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   const canvasRef = useRef(null)
 
   const onGrabFrame = useCallback(() => {
-    console.log('grabbing frame')
     frameCapture
       .grabFrame()
       .then(imageBitmap => {

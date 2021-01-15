@@ -1,33 +1,41 @@
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 import 'antd/lib/style/index.less' // antd core styles
-import './components/kit/vendors/antd/themes/default.less' // default theme antd components
-import './components/kit/vendors/antd/themes/dark.less' // dark theme antd components
-import './global.scss' // app & third-party component styles
-
+import { routerMiddleware } from 'connected-react-router'
+import { createHashHistory } from 'history'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createHashHistory } from 'history'
-import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
+import { applyMiddleware, compose, createStore } from 'redux'
 // import { logger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
-import { routerMiddleware } from 'connected-react-router'
-
-// apollo client
-import { ApolloClient, ApolloProvider } from '@apollo/client'
-import { cache } from './cache'
-
+import './components/kit/vendors/antd/themes/dark.less' // dark theme antd components
+import './components/kit/vendors/antd/themes/default.less' // default theme antd components
+import './global.scss' // app & third-party component styles
+import Localization from './localization'
 import reducers from './redux/reducers'
 import sagas from './redux/sagas'
-import Localization from './localization'
 import Router from './router'
 import * as serviceWorker from './serviceWorker'
 
-// mocking api
-import 'services/axios/fakeApi'
-
-const client = new ApolloClient({
-  cache,
+// apollo client set up
+const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
+})
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token')
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  }
+})
+const apolloClient = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
 })
 
 // middlewared
@@ -42,7 +50,7 @@ const store = createStore(reducers(history), compose(applyMiddleware(...middlewa
 sagaMiddleware.run(sagas)
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
+  <ApolloProvider client={apolloClient}>
     <Provider store={store}>
       <Localization>
         <Router history={history} />
@@ -56,4 +64,5 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister()
-export { store, history }
+
+export { apolloClient, store, history }

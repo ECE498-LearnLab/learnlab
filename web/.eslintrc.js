@@ -39,7 +39,8 @@ module.exports = {
     "react/no-multi-comp": 0,
     "import/prefer-default-export": 0,
     // "no-unused-vars": 0
-    "semi": [ "error", "never" ]
+    "semi": [ "error", "never" ],
+    'camelcase': 'off',
   },
   "parserOptions": {
     "ecmaFeatures": {

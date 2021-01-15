@@ -99,6 +99,17 @@ export default (db: Knex) => {
                     message: `User ${id} does not exist`
                 };
             }
+        },
+        getUserByEmail: async (email: string): Promise<UserResponse> => {
+            const res = await db.select('*').from('users').where({ email }).catch((err) => { throw err; });
+            if (res && res[0]) {
+                return { success: true, user: { ...res[0] } };
+            } else {
+                return {
+                    success: false,
+                    message: `User with this email(${email}) does not exist`
+                };
+            }
         }
     };
 };
