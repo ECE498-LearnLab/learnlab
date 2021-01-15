@@ -5,6 +5,10 @@
 https://docs.docker.com/desktop/
 
 ## Setup
+
+### Authentication
+Client-side authentication is done using Firebase. The Firebase Console is avaiable at (https://console.firebase.google.com/u/1/project/learnlab-ef56a/authentication/users). Login using the learnlabcanada account to view the console.
+
 ### To Run
 ```
 docker-compose up
@@ -19,7 +23,7 @@ docker-compose up --build
 
 
 This will start the following services:
-* Web http://localhost:3000
+* Web http://localhost:3000 (It's best when developing in web, to run it locally as opposed to in the the docker)
 * Server http://localhost:4000
 * RabbitMQ Management Portal http://localhost:15672/ (username: guest, password: guest)
 * PostgreSQL http://localhost:5432 (username:postgres, password: postgres)
