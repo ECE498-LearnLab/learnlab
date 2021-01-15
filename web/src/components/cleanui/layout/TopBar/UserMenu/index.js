@@ -1,8 +1,8 @@
+import { UserOutlined } from '@ant-design/icons'
+import { Avatar, Badge, Dropdown, Menu } from 'antd'
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { connect } from 'react-redux'
-import { UserOutlined } from '@ant-design/icons'
-import { Menu, Dropdown, Avatar, Badge } from 'antd'
 import styles from './style.module.scss'
 
 const mapStateToProps = ({ user }) => ({ user })
@@ -25,7 +25,7 @@ const ProfileMenu = ({ dispatch, user }) => {
     <Menu selectable={false}>
       <Menu.Item>
         <strong>
-          <FormattedMessage id="topBar.profileMenu.hello" />, {user.name || 'Anonymous'}
+          <FormattedMessage id="topBar.profileMenu.hello" />, {user.first_name} {user.last_name}
         </strong>
         <div>
           <strong className="mr-1">

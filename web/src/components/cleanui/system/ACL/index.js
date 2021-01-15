@@ -1,7 +1,7 @@
+import { notification } from 'antd'
+import { history } from 'index'
 import React, { Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { notification } from 'antd'
-import { history } from 'components/cleanui/system/ACL/node_modules/index'
 
 const mapStateToProps = ({ user }) => ({ user })
 
