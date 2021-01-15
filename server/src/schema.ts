@@ -131,6 +131,7 @@ const typeDefs = gql`
     # Query type is special; it lists all the available queries that the client can execute
     type Query {
         user(id: ID!): UserResponse!
+        userByEmail(email: String!): UserResponse!
         classroom(id: ID!): Classroom
         classroomDetails(id: ID!, role: Role!): ClassroomDetails
         questions(room_id: ID!): [Question]!

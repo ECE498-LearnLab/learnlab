@@ -9,6 +9,8 @@ const userResolver: Resolvers = {
     Query: {
         user: async (_, { id }: { id: string }, { dataSources }: { dataSources: IDataSource })
         : Promise<UserResponse> => await dataSources.db.userAPI().getUser(id),
+        userByEmail: async (_, { email }: { email : string }, { dataSources }: { dataSources: IDataSource })
+        : Promise<UserResponse> => await dataSources.db.userAPI().getUserByEmail(email),
     },
     Mutation: {
         createStudent: async (_, args: MutationCreateStudentArgs, { dataSources }: { dataSources: IDataSource })
