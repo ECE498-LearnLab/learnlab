@@ -1,9 +1,11 @@
 # GraphQL Query Example Usages
 
 ----
-* [Query Usage Examples](#Query-Usage-Examples)
-  * [Sample Execution](#Sample-Execution)
-* [Mutation Usage Examples](#Mutation-Usage-Examples)
+- [GraphQL Query Example Usages](#graphql-query-example-usages)
+  - [- Mutation Usage Examples](#--mutation-usage-examples)
+  - [Query Usage Examples](#query-usage-examples)
+    - [Sample Execution](#sample-execution)
+  - [Mutation Usage Examples](#mutation-usage-examples)
 ---
 
 
@@ -32,6 +34,20 @@ query getParticipants {
 query getUser($id: ID!) {
   user(id: $id) {
     user {
+      first_name,
+      last_name
+      email
+      created_at
+    }
+	success
+    message
+  }
+}
+
+query getUserByEmail($email: String!) {
+  userByEmail(email: $email) {
+    user {
+      id
       first_name,
       last_name
       email

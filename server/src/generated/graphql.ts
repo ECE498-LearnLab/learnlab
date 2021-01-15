@@ -151,6 +151,7 @@ export type EngagementHistory = {
 export type Query = {
   __typename?: 'Query';
   user: UserResponse;
+  userByEmail: UserResponse;
   classroom?: Maybe<Classroom>;
   classroomDetails?: Maybe<ClassroomDetails>;
   questions: Array<Maybe<Question>>;
@@ -162,6 +163,11 @@ export type Query = {
 
 export type QueryUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryUserByEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -549,6 +555,7 @@ export type EngagementHistoryResolvers<ContextType = any, ParentType extends Res
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   user?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  userByEmail?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>;
   classroom?: Resolver<Maybe<ResolversTypes['Classroom']>, ParentType, ContextType, RequireFields<QueryClassroomArgs, 'id'>>;
   classroomDetails?: Resolver<Maybe<ResolversTypes['ClassroomDetails']>, ParentType, ContextType, RequireFields<QueryClassroomDetailsArgs, 'id' | 'role'>>;
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
