@@ -67,7 +67,6 @@ export default function useTwilioRoom({ twilioRoomSid, token, setFrameCapture })
   // screenshare effect
   useEffect(() => {
     if (room?.state === 'connected') {
-      console.log('hello')
       const updateScreenShareParticipant = () => {
         setScreenShareParticipant(
           Array.from(room.participants.values())

@@ -11,10 +11,10 @@ client.configure({
   heartbeatIncoming: 4000,
   heartbeatOutgoing: 4000,
   onConnect: () => {
-    console.log('Connected to RabbitMQ')
+    // console.log('Connected to RabbitMQ')
   },
-  debug: str => {
-    console.log(new Date(), str)
+  debug: () => {
+    // console.log(new Date(), str)
   },
   onStompError: frame => {
     // Will be invoked in case of error encountered at Broker
@@ -29,12 +29,10 @@ client.configure({
 client.activate()
 
 function publishAllToQueue(data) {
-  console.log('Sending frame to RabbitMQ')
   client.publish({ destination: `/queue/${QUEUE_NAME}`, headers: {}, body: data })
 }
 
 export function addToBatch(frameBase64String) {
-  console.log('adding to batch')
   batchedData.frames.push(frameBase64String)
   if (batchedData.frames.length === 25) {
     publishAllToQueue(JSON.stringify(batchedData))
