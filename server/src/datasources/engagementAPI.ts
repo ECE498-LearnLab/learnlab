@@ -16,7 +16,7 @@ export default (db: Knex) => {
         let success = true, message;
         const {room_id, student_id, score, classification} = row;
 
-        await db('engagementHistory')
+        await db('engagement_history')
             .insert({room_id, student_id, score, classification})
             .catch((err) => {
                 success = false;
@@ -31,7 +31,7 @@ export default (db: Knex) => {
 
     return {
         getEngagementHistory: async (room_id: string, student_id: string): Promise<EngagementHistory[]> => {
-            const res = await db.select('*').from('engagementHistory').where({ room_id, student_id}) as EngagementHistory[];
+            const res = await db.select('*').from('engagement_history').where({ room_id, student_id}) as EngagementHistory[];
             return res;
         },
         upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<Response> => {
@@ -43,7 +43,7 @@ export default (db: Knex) => {
                         score = EXCLUDED.score,
                         updated_at = CURRENT_TIMESTAMP
                         RETURNING *;`,
-                [db("engagementCurrent").insert({
+                [db("engagement_current").insert({
                     room_id, student_id, score, classification 
                 })],
             ).then((res) => {
