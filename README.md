@@ -23,7 +23,7 @@ docker-compose up --build
 
 
 This will start the following services:
-* Web http://localhost:3000 (It's best when developing in web, to run it locally as opposed to in the the docker)
+* Web http://localhost:3000 (It's best when developing in web, to run it locally as opposed to in the docker)
 * Server http://localhost:4000
 * RabbitMQ Management Portal http://localhost:15672/ (username: guest, password: guest)
 * PostgreSQL http://localhost:5432 (username:postgres, password: postgres)
