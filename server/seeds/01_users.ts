@@ -8,7 +8,8 @@ export async function seed(knex: Knex): Promise<void> {
             first_name: "John",
             last_name: "Smith",
             role: "STUDENT",
-            email: "john@student.com"
+            email: "john@student.com",
+            phone_number: "416-111-1111"
         },
         {
             id: 2,
@@ -22,21 +23,24 @@ export async function seed(knex: Knex): Promise<void> {
             first_name: "Jeff",
             last_name: "Zarnett",
             role: "INSTRUCTOR",
-            email: "zarnett@instructor.com"
+            email: "zarnett@instructor.com",
+            phone_number: "519-888-4567 ext 31719"
         },
         {
             id: 4,
             first_name: "Martin",
             last_name: "Pei",
             role: "INSTRUCTOR",
-            email: "pei@instructor.com"
+            email: "pei@instructor.com",
+            phone_number: "519-888-4567 ext 35587"
         },
         {
             id: 5,
             first_name: "Jessie",
             last_name: "Foo",
             role: "STUDENT",
-            email: "jessie@student.com"
+            email: "jessie@student.com",
+            phone_number: "666-666-6666"
         },
         {
             id: 6,

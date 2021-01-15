@@ -20,6 +20,10 @@ export async function seed(knex: Knex): Promise<void> {
             class_id: "1"
         },
         {
+            student_id: "7",
+            class_id: "1"
+        },
+        {
             student_id: "1",
             class_id: "2"
         },
