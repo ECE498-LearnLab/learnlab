@@ -9,6 +9,7 @@ const connectionConfig = useLocalDb
     ? {        
         host: 'db',
         user: 'postgres',
+        port: 5432,
         password: 'postgres',
         database: 'learnlab_local'
     }
