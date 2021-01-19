@@ -1,5 +1,7 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, AuthenticationError } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
+import * as admin from 'firebase-admin';
+import { firebaseConfig } from './auth/verification';
 import LearnlabDB from './datasources/learnlab';
 import { resolvers } from './resolvers';
 import typeDefs from './schema';
@@ -34,10 +36,22 @@ const buildDataSource = () => {
         db: new LearnlabDB(dbConfig)
     } as DataSources<IDataSource>;
 };
+  
+admin.initializeApp(firebaseConfig);
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: async ({ req }) => {
+        const token = req.headers.authorization || '';
+        const uid = await admin.auth().verifyIdToken(token).then((decodedToken) => {
+            return decodedToken.uid;
+        }).catch(() => null);
+
+        if (!uid) throw new AuthenticationError('You must be logged in!');
+
+        return { loggedIn: true };
+    },
     dataSources: () => buildDataSource()
 });
 

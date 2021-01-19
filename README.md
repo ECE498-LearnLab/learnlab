@@ -7,7 +7,7 @@ https://docs.docker.com/desktop/
 ## Setup
 
 ### Authentication
-Client-side authentication is done using Firebase. The Firebase Console is avaiable at (https://console.firebase.google.com/u/1/project/learnlab-ef56a/authentication/users). Login using the learnlabcanada account to view the console.
+Client-side authentication is done using Firebase. The Firebase Console is available at (https://console.firebase.google.com/u/1/project/learnlab-ef56a/authentication/users). Login using the learnlabcanada account to view the console.
 
 ### To Run
 ```
