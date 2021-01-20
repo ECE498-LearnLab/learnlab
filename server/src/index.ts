@@ -43,12 +43,17 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: async ({ req }) => {
-        const token = req.headers.authorization || '';
-        const uid = await admin.auth().verifyIdToken(token).then((decodedToken) => {
-            return decodedToken.uid;
-        }).catch(() => null);
-
-        if (!uid) throw new AuthenticationError('You must be logged in!');
+        let token = req.headers.authorization;
+        if (token) {
+            token = token.replace('Bearer ', '');
+            const uid = await admin.auth().verifyIdToken(token).then((decodedToken) => {
+                return decodedToken.uid;
+            }).catch(() => null);
+    
+            if (!uid) throw new AuthenticationError('You must be logged in!');
+        } else {
+            throw new AuthenticationError('Token missing in request');
+        }
 
         return { loggedIn: true };
     },

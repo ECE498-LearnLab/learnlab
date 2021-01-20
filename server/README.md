@@ -17,7 +17,7 @@ curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?
          -H 'Content-Type: application/json' \
          --data-binary '{"email":"kimpope@yahoo.ca","password":"test123","returnSecureToken":true}'
 ```
-You will need to add the token to `authorization` in the HTTP headers section in the graphql playground if you're using that.
+You will need to add the token to `authorization: Bearer <>` in the HTTP headers section in the graphql playground if you're using that.
 
 # Migrations
 ## Setup
