@@ -140,12 +140,22 @@ export type Upvotes = {
 
 export type EngagementHistory = {
   __typename?: 'EngagementHistory';
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
   score: Scalars['Int'];
   classification: Scalars['String'];
   created_at?: Maybe<Scalars['Date']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  engagementStatAdded?: Maybe<EngagementHistory>;
+};
+
+
+export type SubscriptionEngagementStatAddedArgs = {
+  student_id: Scalars['ID'];
 };
 
 export type Query = {
@@ -303,9 +313,9 @@ export type MutationJoinRoomArgs = {
 export type MutationUpsertEngagementCurrentArgs = {
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
-  score?: Maybe<Scalars['Int']>;
-  classification?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['Date']>;
+  score: Scalars['Int'];
+  classification: Scalars['String'];
+  created_at: Scalars['Date'];
 };
 
 
@@ -408,6 +418,7 @@ export type ResolversTypes = {
   CreateQuestionResponse: ResolverTypeWrapper<CreateQuestionResponse>;
   Upvotes: ResolverTypeWrapper<Upvotes>;
   EngagementHistory: ResolverTypeWrapper<EngagementHistory>;
+  Subscription: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 };
@@ -432,6 +443,7 @@ export type ResolversParentTypes = {
   CreateQuestionResponse: CreateQuestionResponse;
   Upvotes: Upvotes;
   EngagementHistory: EngagementHistory;
+  Subscription: {};
   Query: {};
   Mutation: {};
 };
@@ -544,13 +556,17 @@ export type UpvotesResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type EngagementHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['EngagementHistory'] = ResolversParentTypes['EngagementHistory']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   student_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   score?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   classification?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  engagementStatAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementHistory']>, "engagementStatAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementStatAddedArgs, 'student_id'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -576,7 +592,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
   invite?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationInviteArgs, 'room_id'>>;
   joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
-  upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id'>>;
+  upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id' | 'score' | 'classification' | 'created_at'>>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -594,6 +610,7 @@ export type Resolvers<ContextType = any> = {
   CreateQuestionResponse?: CreateQuestionResponseResolvers<ContextType>;
   Upvotes?: UpvotesResolvers<ContextType>;
   EngagementHistory?: EngagementHistoryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
 };

@@ -93,6 +93,18 @@ query getClassroomDetails($class_id: ID!, $role: Role!) {
     }
   }
 }
+
+query getEngagementHistory($room_id: ID!, $student_id: ID!) {
+  engagementHistory(room_id: $room_id, student_id: $student_id) {
+      id,
+      room_id,
+      student_id,
+      score,
+      classification,
+      created_at,
+      updated_at
+  }
+}
 ```
 ### Sample Execution
 **Query**:
@@ -210,22 +222,37 @@ mutation addStudentsToClass($class_id: ID!, $student_emails: [String!]){
   }
 }
 
-query getEngagementHistory($room_id: ID!, $student_id: ID!) {
-  engagementHistory(room_id: $room_id, student_id: $student_id) {
-      id,
-      room_id,
-      student_id,
-      score,
-      classification,
-      created_at,
-      updated_at
-  }
-}
-
-mutation upsertEngagementStatCurrent($room_id: ID!, $student_id: ID!, $score: Int, $classification: String) {
-  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
+mutation upsertEngagementStatCurrent($room_id: ID!, $student_id: ID!, $score: Int!, $classification: String!, $created_at: String!) {
+  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification, created_at: $created_at) {
     success,
     message
+  }
+}
+```
+
+# Subscriptions
+```GraphQL
+subscription onEngagementAdded($student_id: ID!) {
+  engagementStatAdded(student_id: $student_id) {
+    room_id
+    student_id
+    score
+    classification
+    created_at
+  }
+}
+```
+Example of data received from subscription:
+```json
+{
+  "data": {
+    "engagementStatAdded": {
+      "room_id": "1",
+      "student_id": "1",
+      "score": 40,
+      "classification": "ENGAGED",
+      "created_at": 1605154556229
+    }
   }
 }
 ```

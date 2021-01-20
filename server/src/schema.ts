@@ -120,12 +120,16 @@ const typeDefs = gql`
     }
 
     type EngagementHistory {
-        id: ID!
+        id: ID
         room_id: ID!
         student_id: ID!
         score: Int!
         classification: String!
         created_at: Date
+    }
+
+    type Subscription {
+        engagementStatAdded(student_id: ID!): EngagementHistory
     }
 
     # Query type is special; it lists all the available queries that the client can execute
@@ -157,7 +161,7 @@ const typeDefs = gql`
         addStudentsToClassroom(class_id: ID!, student_emails: [String!]): Response
         invite(student_ids: [ID!], room_id: ID!): Response
         joinRoom(student_id: ID!, room_id: ID!): Response
-        upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int, classification: String,  created_at: Date,):
+        upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int!, classification: String!, created_at: Date!):
                     Response
     }
 `;
