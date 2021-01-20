@@ -1,5 +1,7 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, AuthenticationError } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
+import * as admin from 'firebase-admin';
+import { firebaseConfig } from './auth/verification';
 import LearnlabDB from './datasources/learnlab';
 import { resolvers } from './resolvers';
 import typeDefs from './schema';
@@ -9,6 +11,7 @@ const connectionConfig = useLocalDb
     ? {        
         host: 'db',
         user: 'postgres',
+        port: 5432,
         password: 'postgres',
         database: 'learnlab_local'
     }
@@ -33,10 +36,27 @@ const buildDataSource = () => {
         db: new LearnlabDB(dbConfig)
     } as DataSources<IDataSource>;
 };
+  
+admin.initializeApp(firebaseConfig);
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: async ({ req }) => {
+        let token = req.headers.authorization;
+        if (token) {
+            token = token.replace('Bearer ', '');
+            const uid = await admin.auth().verifyIdToken(token).then((decodedToken) => {
+                return decodedToken.uid;
+            }).catch(() => null);
+    
+            if (!uid) throw new AuthenticationError('You must be logged in!');
+        } else {
+            throw new AuthenticationError('Token missing in request');
+        }
+
+        return { loggedIn: true };
+    },
     dataSources: () => buildDataSource()
 });
 

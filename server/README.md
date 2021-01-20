@@ -10,6 +10,15 @@
 ## Generating Types
 Run `npm run typegen` to watch modifications to the GraphQL schema and regenerate types.
 
+## Auth Token for Local Testing
+To get an auth token to use for local testing, use the following cURL:
+```bash
+curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=<FIREBASE_API_KEY>' \
+         -H 'Content-Type: application/json' \
+         --data-binary '{"email":"kimpope@yahoo.ca","password":"test123","returnSecureToken":true}'
+```
+You will need to add the token to `authorization: Bearer <>` in the HTTP headers section in the graphql playground if you're using that.
+
 # Migrations
 ## Setup
 1. If you haven't already, `npm install -g knex` to install knex globally
