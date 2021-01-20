@@ -13,11 +13,21 @@ Run `npm run typegen` to watch modifications to the GraphQL schema and regenerat
 ## Auth Token for Local Testing
 To get an auth token to use for local testing, use the following cURL:
 ```bash
-curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=<FIREBASE_API_KEY>' \
+curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDqWf-FmQC1aQU3SMRT6Z2i7--6l_ltmW0' \
          -H 'Content-Type: application/json' \
          --data-binary '{"email":"kimpope@yahoo.ca","password":"test123","returnSecureToken":true}'
 ```
 You will need to add the token to `authorization: Bearer <>` in the HTTP headers section in the graphql playground if you're using that.
+
+## Using CURL
+You can also hit the server using cURL. For example, upserting an engagement stat:
+```bash
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  --data '{ "query": "mutation { upsertEngagementCurrent(room_id: 1, student_id: 1, score: 100, classification: \"ENGAGED\", created_at: 1605154556229){success\n message\n}}" }' http://localhost:4000
+```
 
 # Migrations
 ## Setup
