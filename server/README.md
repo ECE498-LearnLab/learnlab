@@ -18,6 +18,8 @@ curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?
          --data-binary '{"email":"kimpope@yahoo.ca","password":"test123","returnSecureToken":true}'
 ```
 You will need to add the token to `authorization: Bearer <>` in the HTTP headers section in the graphql playground if you're using that.
+### Subscriptions Testing (Local)
+You will need to set another parameter `authToken` that is the same as the auth token above in the HTTP headers (GraphQL Playground)
 
 ## Using CURL
 You can also hit the server using cURL. For example, upserting an engagement stat:

@@ -59,6 +59,8 @@ const server = new ApolloServer({
                 if (!uid) throw new AuthenticationError('You must be logged in!');
                 return { loggedIn: true };
             }
+
+            throw new AuthenticationError("Missing auth token.");
         }
     },
     context: async ({ req, connection }) => {
