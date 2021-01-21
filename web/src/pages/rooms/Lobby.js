@@ -1,10 +1,35 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery, useSubscription } from '@apollo/client'
 import LobbyCard from 'components/learnlab/LobbyCard'
 import _ from 'lodash'
 import React, { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 
 const Lobby = ({ onJoinRoomHandler }) => {
+  // engagement score subscription
+  const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
+    subscription onEngagementAdded($student_id: ID!) {
+      engagementStatAdded(student_id: $student_id) {
+        room_id
+        student_id
+        score
+        classification
+        created_at
+      }
+    }
+  `
+
+  function LatestEngagementScores(student_id) {
+    const { data, loading } = useSubscription(ENGAGEMENT_SCORES_SUBSCRIPTION, {
+      variables: { student_id },
+    })
+    if (!loading && data) {
+      return data.engagementStatAdded
+    }
+  }
+
+  const placeholder_stud_id = 1
+  console.log('engagement stat received: ', LatestEngagementScores(placeholder_stud_id))
+
   // to:do once global class_id selection is done, change hardcoded value below
   const GET_ROOMS_FOR_CLASSROOM = gql`
     query getRooms {
