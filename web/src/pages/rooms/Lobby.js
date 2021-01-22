@@ -3,6 +3,7 @@ import LobbyCard from 'components/learnlab/LobbyCard'
 import _ from 'lodash'
 import React, { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
+import ScheduleRoom from './ScheduleRoom'
 
 const Lobby = ({ onJoinRoomHandler }) => {
   // to:do once global class_id selection is done, change hardcoded value below
@@ -73,6 +74,7 @@ const Lobby = ({ onJoinRoomHandler }) => {
       <div className="kit__utils__heading">
         <h3>
           <span className="mr-3">Rooms</span>
+          <ScheduleRoom />
         </h3>
       </div>
       <div className="cui__utils__heading">

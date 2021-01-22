@@ -23,6 +23,9 @@ const messages = {
     '{count, plural, =0 {No one has joined} one {# student has joined} other {# students have joined}}',
   'lobbyCard.participantsAttended':
     '{count, plural, =0 {No one attended} one {# student attended} other {# students attended}}',
+  'scheduleRoom.button': 'Schedule Room',
+  'scheduleRoom.form.roomName': 'Room Name',
+  'scheduleRoom.form.time': 'Start and End Time',
 }
 
 export default {
