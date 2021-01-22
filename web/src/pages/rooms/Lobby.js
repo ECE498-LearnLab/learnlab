@@ -19,7 +19,8 @@ const Lobby = ({ onJoinRoomHandler }) => {
       }
     }
   `
-  const { data, loading, error } = useQuery(GET_ROOMS_FOR_CLASSROOM)
+
+  const { data, loading, error, refetch } = useQuery(GET_ROOMS_FOR_CLASSROOM)
 
   // Memoize this so todaysSession and upcomingSessions only rerenders when queryResults change
   const [todaysSessions, upcomingSessions] = useMemo(() => {
@@ -64,6 +65,10 @@ const Lobby = ({ onJoinRoomHandler }) => {
     return [null, null]
   }, [data, onJoinRoomHandler])
 
+  const onRoomScheduled = () => {
+    refetch()
+  }
+
   // create proper error and loading screens for this screen
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
@@ -74,7 +79,7 @@ const Lobby = ({ onJoinRoomHandler }) => {
       <div className="kit__utils__heading">
         <h3>
           <span className="mr-3">Rooms</span>
-          <ScheduleRoom />
+          <ScheduleRoom onSuccess={onRoomScheduled} />
         </h3>
       </div>
       <div className="cui__utils__heading">

@@ -6,12 +6,10 @@ import { gql } from '@apollo/client'
 import { injectIntl } from 'react-intl'
 import { Button } from 'reactstrap'
 
-const ScheduleRoom = props => {
+const ScheduleRoom = ({ intl, onSuccess }) => {
   // to:do
-  // don't hardcode class
-  // add translations for other locales
-  // invite list
-  // refresh
+  // don't hardcode class (need list of class that teacher is teaching)
+  // invite list (need list of students in that classroom)
   const CREATE_ROOM = gql`
     mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time: Date) {
       createRoom(class_id: $class_id, name: $name, start_time: $start_time, end_time: $end_time) {
@@ -22,23 +20,13 @@ const ScheduleRoom = props => {
       }
     }
   `
-  const { intl } = props
   const { RangePicker } = DatePicker
   const [form] = Form.useForm()
   const [show, setShow] = useState(false)
 
   const toggleShow = () => setShow(!show)
 
-  const onSubmit = values => {
-    console.log('Success:', values)
-    createRoomGql(values)
-  }
-
-  const onSubmitFailed = errorInfo => {
-    console.log('Failed:', errorInfo)
-  }
-
-  const createRoomGql = async values => {
+  const onSubmit = async values => {
     await apolloClient
       .mutate({
         mutation: CREATE_ROOM,
@@ -50,8 +38,8 @@ const ScheduleRoom = props => {
         },
       })
       .then(result => {
-        if (result.data.success) {
-          console.log('Mutation success:', result)
+        if (result.data.createRoom.success) {
+          onSuccess()
           return true
         }
         return false
@@ -62,6 +50,10 @@ const ScheduleRoom = props => {
           description: error.message,
         })
       })
+  }
+
+  const onSubmitFailed = errorInfo => {
+    console.log('Failed:', errorInfo)
   }
 
   return (
