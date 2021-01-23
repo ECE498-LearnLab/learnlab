@@ -24,8 +24,13 @@ const messages = {
   'lobbyCard.participantsAttended':
     '{count, plural, =0 {No one attended} one {# student attended} other {# students attended}}',
   'scheduleRoom.button': 'Schedule Room',
+  'scheduleRoom.modal.title': 'Schedule Room',
+  'scheduleRoom.modal.okText': 'Schedule',
+  'scheduleRoom.modal.cancelText': 'Cancel',
   'scheduleRoom.form.roomName': 'Room Name',
+  'scheduleRoom.form.roomNameMissing': 'Please input the room name',
   'scheduleRoom.form.time': 'Start and End Time',
+  'scheduleRoom.form.timeMissing': 'Please input the time',
 }
 
 export default {

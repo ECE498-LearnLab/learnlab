@@ -24,8 +24,13 @@ const messages = {
   'lobbyCard.participantsAttended':
     '{count, plural, =0 {没有人参加} one {#名学生参加} other {#名学生参加}}',
   'scheduleRoom.button': '安排房间',
+  'scheduleRoom.modal.title': '安排房间',
+  'scheduleRoom.modal.okText': '安排',
+  'scheduleRoom.modal.cancelText': '取消',
   'scheduleRoom.form.roomName': '房间名称',
+  'scheduleRoom.form.roomNameMissing': '请输入房间名称',
   'scheduleRoom.form.time': '开始和结束时间',
+  'scheduleRoom.form.timeMissing': '请输入时间',
 }
 
 export default {
