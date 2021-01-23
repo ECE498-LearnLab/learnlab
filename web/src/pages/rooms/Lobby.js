@@ -18,7 +18,6 @@ const Lobby = ({ onJoinRoomHandler }) => {
       }
     }
   `
-
   const { data, loading, error } = useQuery(GET_ROOMS_FOR_CLASSROOM)
 
   // Memoize this so todaysSession and upcomingSessions only rerenders when queryResults change
