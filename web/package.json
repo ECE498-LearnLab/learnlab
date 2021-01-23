@@ -35,7 +35,7 @@
     "@bit/mui-org.material-ui.fab": "^4.9.10",
     "@stomp/stompjs": "^6.0.0",
     "@types/react-transition-group": "1.x",
-    "antd": "^4.6.3",
+    "antd": "^4.10.3",
     "axios": "^0.19.2",
     "axios-mock-adapter": "^1.18.1",
     "bootstrap": "^4.5.2",

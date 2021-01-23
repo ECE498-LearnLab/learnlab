@@ -1,4 +1,5 @@
 import ACL from 'components/cleanui/system/ACL'
+import moment from 'moment'
 import { DatePicker, Form, Input, Modal, notification } from 'antd'
 import { apolloClient } from 'index'
 import React, { useState } from 'react'
@@ -24,6 +25,29 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   const [show, setShow] = useState(false)
 
   const toggleShow = () => setShow(!show)
+
+  const onOk = () => {
+    form
+      .validateFields()
+      .then(values => {
+        form.resetFields()
+        onSubmit(values)
+        toggleShow()
+      })
+      .catch(error => {
+        onSubmitFailed(error)
+      })
+  }
+
+  const onCancel = () => {
+    form.resetFields()
+    toggleShow()
+  }
+
+  const disabledDate = current => {
+    // Can not select days before today
+    return current && current < moment().startOf('day')
+  }
 
   const onSubmit = async values => {
     await apolloClient
@@ -74,19 +98,8 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
         title={intl.formatMessage({ id: 'scheduleRoom.modal.title' })}
         okText={intl.formatMessage({ id: 'scheduleRoom.modal.okText' })}
         cancelText={intl.formatMessage({ id: 'scheduleRoom.modal.cancelText' })}
-        onCancel={toggleShow}
-        onOk={() => {
-          form
-            .validateFields()
-            .then(values => {
-              form.resetFields()
-              onSubmit(values)
-              toggleShow()
-            })
-            .catch(error => {
-              onSubmitFailed(error)
-            })
-        }}
+        onCancel={onCancel}
+        onOk={onOk}
       >
         <Form form={form} layout="vertical" hideRequiredMark>
           <Form.Item
@@ -112,7 +125,14 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
               },
             ]}
           >
-            <RangePicker showTime />
+            <RangePicker
+              format="YYYY-MM-DD HH:mm"
+              disabledDate={disabledDate}
+              showTime={{
+                format: 'HH:mm',
+                defaultValue: [moment('00:00', 'HH:mm')],
+              }}
+            />
           </Form.Item>
         </Form>
       </Modal>
