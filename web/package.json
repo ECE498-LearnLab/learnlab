@@ -1,5 +1,5 @@
 {
-  "name": "cleanui-admin-template-react-cra",
+  "name": "learnlab",
   "version": "3.3.0",
   "private": true,
   "scripts": {
@@ -36,11 +36,7 @@
     "@stomp/stompjs": "^6.0.0",
     "@types/react-transition-group": "1.x",
     "antd": "^4.6.3",
-    "axios": "^0.19.2",
-    "axios-mock-adapter": "^1.18.1",
     "bootstrap": "^4.5.2",
-    "chart.js": "^2.9.3",
-    "chartist": "^0.11.4",
     "chartist-plugin-tooltips-updated": "^0.1.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
@@ -119,5 +115,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "react-scripts/eslint-webpack-plugin": "2.4.1"
   }
 }
