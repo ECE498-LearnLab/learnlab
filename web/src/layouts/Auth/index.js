@@ -46,7 +46,12 @@ const AuthLayout = ({
           >
             <div className={style.logoContainer}>
               <div className={style.logo}>
-                <img src="resources/images/logo.svg" className="mr-2" alt="LearnLab" />
+                <img
+                  style={{ height: 32, width: 32 }}
+                  src="resources/images/logo.svg"
+                  className="mr-4"
+                  alt="LearnLab"
+                />
                 <div className={style.name}>{logo}</div>
               </div>
             </div>

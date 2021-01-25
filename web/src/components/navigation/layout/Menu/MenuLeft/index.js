@@ -193,7 +193,7 @@ const MenuLeft = ({
             <img
               style={{ height: 32, width: 32 }}
               src="resources/images/logo.svg"
-              className="mr-2"
+              className="mr-3"
               alt="LearnLab"
             />
             <div className={style.name}>{logo}</div>
