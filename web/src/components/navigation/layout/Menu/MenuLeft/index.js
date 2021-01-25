@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { Layout, Menu } from 'antd'
+import classNames from 'classnames'
+import { find } from 'lodash'
+import React, { useEffect, useState } from 'react'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
-import { Menu, Layout } from 'antd'
-import classNames from 'classnames'
 import store from 'store'
-import PerfectScrollbar from 'react-perfect-scrollbar'
-import { find } from 'lodash'
 import style from './style.module.scss'
 
 const mapStateToProps = ({ menu, settings, user }) => ({
@@ -190,7 +190,12 @@ const MenuLeft = ({
       >
         <div className={style.logoContainer}>
           <div className={style.logo}>
-            <img src="resources/images/logo.svg" className="mr-2" alt="Clean UI" />
+            <img
+              style={{ height: 32, width: 32 }}
+              src="resources/images/logo.svg"
+              className="mr-2"
+              alt="LearnLab"
+            />
             <div className={style.name}>{logo}</div>
           </div>
         </div>
