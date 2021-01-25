@@ -23,6 +23,14 @@ const messages = {
     '{count, plural, =0 {никто не присоединился} one {# студент присоединился} other {Присоединились # студента}}',
   'lobbyCard.participantsAttended':
     '{count, plural, =0 {никто присутствовал} one {Присутствовал # студент} other {Посетили # студента}}',
+  'scheduleRoom.button': 'Запланировать комнату',
+  'scheduleRoom.modal.title': 'Запланировать комнату',
+  'scheduleRoom.modal.okText': 'назначать',
+  'scheduleRoom.modal.cancelText': 'отменить',
+  'scheduleRoom.form.roomName': 'название комнаты',
+  'scheduleRoom.form.roomNameMissing': 'Пожалуйста, введите название комнаты',
+  'scheduleRoom.form.time': 'Время начала и окончания',
+  'scheduleRoom.form.timeMissing': 'Пожалуйста, введите время',
 }
 
 export default {
