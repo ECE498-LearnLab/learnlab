@@ -31,10 +31,20 @@ export interface IDataSource {
     db: LearnlabDB
 }
 
+interface ConnectionParams {
+    authToken: string
+}
+
 const buildDataSource = () => {
     return {
         db: new LearnlabDB(dbConfig)
     } as DataSources<IDataSource>;
+};
+
+const uidFromValidToken = async (token: string) => {
+    return await admin.auth().verifyIdToken(token).then((decodedToken) => {
+        return decodedToken.uid;
+    }).catch(() => null);
 };
   
 admin.initializeApp(firebaseConfig);
@@ -42,13 +52,27 @@ admin.initializeApp(firebaseConfig);
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async ({ req }) => {
+    subscriptions: {
+        onConnect: async (connectionParams: ConnectionParams, _, __) => {
+            if (connectionParams.authToken) {
+                const uid = await uidFromValidToken(connectionParams.authToken);
+                if (!uid) throw new AuthenticationError('You must be logged in!');
+                return { loggedIn: true };
+            }
+
+            throw new AuthenticationError("Missing auth token.");
+        }
+    },
+    context: async ({ req, connection }) => {
+        if (connection) {
+            // context for subscriptions is in connection and is different from queries/mutations
+            return connection.context;
+        }
+
         let token = req.headers.authorization;
         if (token) {
             token = token.replace('Bearer ', '');
-            const uid = await admin.auth().verifyIdToken(token).then((decodedToken) => {
-                return decodedToken.uid;
-            }).catch(() => null);
+            const uid = await uidFromValidToken(token);
     
             if (!uid) throw new AuthenticationError('You must be logged in!');
         } else {
