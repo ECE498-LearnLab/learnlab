@@ -89,7 +89,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
 
   return (
     <ACL roles={['INSTRUCTOR']}>
-      <Button className="mr-3" onClick={toggleShow}>
+      <Button color="success" className="mr-3" onClick={toggleShow}>
         {intl.formatMessage({ id: 'scheduleRoom.button' })}
       </Button>
 
