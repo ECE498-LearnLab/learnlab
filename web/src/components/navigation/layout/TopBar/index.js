@@ -6,8 +6,14 @@ import UserMenu from './UserMenu'
 const TopBar = () => {
   return (
     <div className={style.topbar}>
+      <div className="mr-auto">
+        <UserMenu />
+      </div>
       <div className="mr-4 d-none d-sm-block">
         <LanguageSwitcher />
+      </div>
+      <div className="mr-4 d-none d-sm-block">
+        <UserMenu />
       </div>
       <div className="">
         <UserMenu />
