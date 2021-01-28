@@ -4,7 +4,7 @@ import ddestimator
 import base64
 import cv2
 import numpy as np
-from python_graphql_client import GraphqlClient
+from graphqlclient import GraphQLClient
 
 class DddAnalysis:
 	ENDPOINT = "http://server:4000/"
@@ -30,7 +30,8 @@ class DddAnalysis:
 
 	CALIBRATE_CAMERA_ANGLES = True
 
-	def __init__(self, b64_string, studentID, roomID):
+	def __init__(self, b64_string, studentID, roomID, token):
+		self.token = token
 		self.images = []
 		self.images.extend(b64_string)
 		self.studentID = studentID
@@ -130,23 +131,27 @@ class DddAnalysis:
 	def send_to_graphql(self, score):
 		print("sending via graphql")
 		try:
-			client = GraphqlClient(endpoint=DddAnalysis.ENDPOINT)
-			query = """
-				mutation addEngagement($room_id:ID!, $student_id:ID!, $score:Int, $classification:String) {
-				  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification) {
+			auth = "Bearer " + self.token
+			client = GraphQLClient(DddAnalysis.ENDPOINT)
+			client.inject_token(auth)
+			query = '''mutation addEngagement($room_id:ID!, $student_id:ID!, $score:Int!, $classification:String!, $created_at:Date!) {
+				  upsertEngagementCurrent(room_id: $room_id, student_id: $student_id, score: $score, classification: $classification, created_at: $created_at) {
 					success,
 					message
 				  }
-				}
-			"""
+				}'''
+
+			#TODO: unhardcode created_at date
 			variables = {
 				"room_id":self.roomID,
 				"student_id":self.studentID,
 				"score":score,
-				"classification":"-----"
+				"classification":"---",
+				"created_at":"06/27/2019 14:22:00"
 			}
 			print("Executing room_id: {}, student_id: {}, score: {}, classification: {}"
 				  .format(self.roomID, self.studentID, score, "-----"))
+			print("Query: ".format(query))
 			data = client.execute(query=query, variables=variables)
 			print(data)
 		except Exception as e:

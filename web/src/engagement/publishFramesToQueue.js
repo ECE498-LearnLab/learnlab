@@ -4,7 +4,7 @@ const CONNECTION_URL = 'ws://localhost:15674/ws'
 const QUEUE_NAME = 'frames'
 
 const client = new Client()
-const batchedData = { frames: [], studentID: 123456, roomID: 'test' }
+const batchedData = { frames: [], studentID: 1, roomID: 1, token: localStorage.getItem('token') }
 
 client.configure({
   brokerURL: CONNECTION_URL,
@@ -34,7 +34,7 @@ function publishAllToQueue(data) {
 
 export function addToBatch(frameBase64String) {
   batchedData.frames.push(frameBase64String)
-  if (batchedData.frames.length === 25) {
+  if (batchedData.frames.length === 10) {
     publishAllToQueue(JSON.stringify(batchedData))
     batchedData.frames = []
   }
