@@ -1,14 +1,13 @@
-import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Badge, Dropdown, Menu } from 'antd'
-import React, { useState } from 'react'
+import { Dropdown, Menu } from 'antd'
+import UserAvatar from 'components/learnlab/UserAvatar'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styles from './style.module.scss'
 
-const mapStateToProps = ({ user }) => ({ user })
-
-const ProfileMenu = ({ dispatch, user }) => {
-  const [count, setCount] = useState(7)
+const ProfileMenu = () => {
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
 
   const logout = e => {
     e.preventDefault()
@@ -17,22 +16,12 @@ const ProfileMenu = ({ dispatch, user }) => {
     })
   }
 
-  const addCount = () => {
-    setCount(count + 1)
-  }
-
   const menu = (
     <Menu selectable={false}>
       <Menu.Item>
         <strong>
           <FormattedMessage id="topBar.profileMenu.hello" />, {user.first_name} {user.last_name}
         </strong>
-        <div>
-          <strong className="mr-1">
-            <FormattedMessage id="topBar.profileMenu.billingPlan" />:{' '}
-          </strong>
-          Professional
-        </div>
         <div>
           <strong>
             <FormattedMessage id="topBar.profileMenu.role" />:{' '}
@@ -47,11 +36,6 @@ const ProfileMenu = ({ dispatch, user }) => {
             <FormattedMessage id="topBar.profileMenu.email" />:{' '}
           </strong>
           {user.email || '—'}
-          <br />
-          <strong>
-            <FormattedMessage id="topBar.profileMenu.phone" />:{' '}
-          </strong>
-          {user.phone || '—'}
         </div>
       </Menu.Item>
       <Menu.Divider />
@@ -71,14 +55,12 @@ const ProfileMenu = ({ dispatch, user }) => {
     </Menu>
   )
   return (
-    <Dropdown overlay={menu} trigger={['click']} onVisibleChange={addCount}>
+    <Dropdown overlay={menu} trigger={['click']}>
       <div className={styles.dropdown}>
-        <Badge count={count}>
-          <Avatar className={styles.avatar} shape="circle" size="large" icon={<UserOutlined />} />
-        </Badge>
+        <UserAvatar user={user} size="large" />
       </div>
     </Dropdown>
   )
 }
 
-export default connect(mapStateToProps)(ProfileMenu)
+export default ProfileMenu

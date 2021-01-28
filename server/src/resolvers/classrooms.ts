@@ -1,8 +1,8 @@
 import { IDataSource } from "..";
 import {
-    Classroom, ClassroomDetails, CreateClassroomResponse,
+    Classroom, ClassroomDetails, ClassroomsTaken, ClassroomsTaught, CreateClassroomResponse,
     MutationAddStudentsToClassroomArgs, MutationCreateClassroomArgs,
-    QueryClassroomArgs, QueryClassroomDetailsArgs, Resolvers, Response
+    QueryClassroomArgs, QueryClassroomDetailsArgs, QueryClassroomsTakenArgs, QueryClassroomsTaughtArgs, Resolvers, Response
 } from "../generated/graphql";
 
 
@@ -15,6 +15,14 @@ const classroomResolver: Resolvers = {
         classroomDetails: async (_, args: QueryClassroomDetailsArgs, { dataSources }: { dataSources: IDataSource })
         : Promise<ClassroomDetails> => {
             return await dataSources.db.classroomAPI().getClassDetails(args);
+        },
+        classroomsTaught: async (_, args: QueryClassroomsTaughtArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<ClassroomsTaught> => {
+            return await dataSources.db.classroomAPI().getClassroomsTaught(args);
+        },
+        classroomsTaken: async (_, args: QueryClassroomsTakenArgs, { dataSources }: { dataSources: IDataSource })
+        : Promise<ClassroomsTaken> => {
+            return await dataSources.db.classroomAPI().getClassroomsTaken(args);
         },
     },
     Mutation: {

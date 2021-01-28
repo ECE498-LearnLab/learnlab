@@ -56,6 +56,14 @@ const typeDefs = gql`
         students: [User]
     }
 
+    type ClassroomsTaught {
+        classrooms: [Classroom]
+    }
+
+    type ClassroomsTaken {
+        classrooms: [Classroom]
+    }
+
     type Question {
         id: ID!
         room_id: ID!
@@ -138,6 +146,8 @@ const typeDefs = gql`
         userByEmail(email: String!): UserResponse!
         classroom(id: ID!): Classroom
         classroomDetails(id: ID!, role: Role!): ClassroomDetails
+        classroomsTaken(student_id: ID!): ClassroomsTaken
+        classroomsTaught(teacher_id: ID!): ClassroomsTaught
         questions(room_id: ID!): [Question]!
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!, statuses: [ParticipantStatus]): [User]!

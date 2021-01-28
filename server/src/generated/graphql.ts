@@ -66,6 +66,16 @@ export type ClassroomDetails = {
   students?: Maybe<Array<Maybe<User>>>;
 };
 
+export type ClassroomsTaught = {
+  __typename?: 'ClassroomsTaught';
+  classrooms?: Maybe<Array<Maybe<Classroom>>>;
+};
+
+export type ClassroomsTaken = {
+  __typename?: 'ClassroomsTaken';
+  classrooms?: Maybe<Array<Maybe<Classroom>>>;
+};
+
 export type Question = {
   __typename?: 'Question';
   id: Scalars['ID'];
@@ -164,6 +174,8 @@ export type Query = {
   userByEmail: UserResponse;
   classroom?: Maybe<Classroom>;
   classroomDetails?: Maybe<ClassroomDetails>;
+  classroomsTaken?: Maybe<ClassroomsTaken>;
+  classroomsTaught?: Maybe<ClassroomsTaught>;
   questions: Array<Maybe<Question>>;
   roomsForClassroom: Array<Maybe<Room>>;
   participants: Array<Maybe<User>>;
@@ -189,6 +201,16 @@ export type QueryClassroomArgs = {
 export type QueryClassroomDetailsArgs = {
   id: Scalars['ID'];
   role: Role;
+};
+
+
+export type QueryClassroomsTakenArgs = {
+  student_id: Scalars['ID'];
+};
+
+
+export type QueryClassroomsTaughtArgs = {
+  teacher_id: Scalars['ID'];
 };
 
 
@@ -406,6 +428,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Classroom: ResolverTypeWrapper<Classroom>;
   ClassroomDetails: ResolverTypeWrapper<ClassroomDetails>;
+  ClassroomsTaught: ResolverTypeWrapper<ClassroomsTaught>;
+  ClassroomsTaken: ResolverTypeWrapper<ClassroomsTaken>;
   Question: ResolverTypeWrapper<Question>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Room: ResolverTypeWrapper<Room>;
@@ -431,6 +455,8 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Classroom: Classroom;
   ClassroomDetails: ClassroomDetails;
+  ClassroomsTaught: ClassroomsTaught;
+  ClassroomsTaken: ClassroomsTaken;
   Question: Question;
   Int: Scalars['Int'];
   Room: Room;
@@ -480,6 +506,16 @@ export type ClassroomDetailsResolvers<ContextType = any, ParentType extends Reso
   classroom?: Resolver<ResolversTypes['Classroom'], ParentType, ContextType>;
   instructor?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   students?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassroomsTaughtResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassroomsTaught'] = ResolversParentTypes['ClassroomsTaught']> = {
+  classrooms?: Resolver<Maybe<Array<Maybe<ResolversTypes['Classroom']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassroomsTakenResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassroomsTaken'] = ResolversParentTypes['ClassroomsTaken']> = {
+  classrooms?: Resolver<Maybe<Array<Maybe<ResolversTypes['Classroom']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -574,6 +610,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userByEmail?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryUserByEmailArgs, 'email'>>;
   classroom?: Resolver<Maybe<ResolversTypes['Classroom']>, ParentType, ContextType, RequireFields<QueryClassroomArgs, 'id'>>;
   classroomDetails?: Resolver<Maybe<ResolversTypes['ClassroomDetails']>, ParentType, ContextType, RequireFields<QueryClassroomDetailsArgs, 'id' | 'role'>>;
+  classroomsTaken?: Resolver<Maybe<ResolversTypes['ClassroomsTaken']>, ParentType, ContextType, RequireFields<QueryClassroomsTakenArgs, 'student_id'>>;
+  classroomsTaught?: Resolver<Maybe<ResolversTypes['ClassroomsTaught']>, ParentType, ContextType, RequireFields<QueryClassroomsTaughtArgs, 'teacher_id'>>;
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
   roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id'>>;
   participants?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'room_id'>>;
@@ -600,6 +638,8 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   Classroom?: ClassroomResolvers<ContextType>;
   ClassroomDetails?: ClassroomDetailsResolvers<ContextType>;
+  ClassroomsTaught?: ClassroomsTaughtResolvers<ContextType>;
+  ClassroomsTaken?: ClassroomsTakenResolvers<ContextType>;
   Question?: QuestionResolvers<ContextType>;
   Room?: RoomResolvers<ContextType>;
   Response?: ResponseResolvers<ContextType>;

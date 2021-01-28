@@ -1,0 +1,17 @@
+@import 'components/mixins.scss';
+
+.dropdownFixedWidth {
+  min-width: rem(200);
+  max-width: rem(200);
+  text-overflow: ellipsis;
+
+  /* Required for text-overflow to do anything */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dropdownToggleFlex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

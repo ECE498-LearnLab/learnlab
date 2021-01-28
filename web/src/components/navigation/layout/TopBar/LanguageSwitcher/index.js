@@ -3,6 +3,7 @@ import { Menu, Dropdown } from 'antd'
 import { connect } from 'react-redux'
 import styles from './style.module.scss'
 
+// to:do convert to using useSelector and useDispatch where possible
 const mapStateToProps = ({ settings }) => ({
   locale: settings.locale,
 })

@@ -6,6 +6,7 @@ const {
   useEslintRc,
   addDecoratorsLegacy,
   useBabelRc,
+  fixBabelImports,
 } = require('customize-cra')
 
 // eslint config
@@ -45,4 +46,9 @@ module.exports = override(
   }),
   useEslintConfig(eslintConfig),
   useBabelRc(),
+  fixBabelImports('import', {
+    libraryName: 'antd',
+    libraryDirectory: 'es',
+    style: 'css',
+  }),
 )

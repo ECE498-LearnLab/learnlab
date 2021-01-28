@@ -1,7 +1,9 @@
 import Knex from "knex";
 import {
-    Classroom, ClassroomDetails, CreateClassroomResponse,
+    Classroom, ClassroomDetails, ClassroomsTaken, ClassroomsTaught, CreateClassroomResponse,
     MutationAddStudentsToClassroomArgs, MutationCreateClassroomArgs, QueryClassroomDetailsArgs,
+    QueryClassroomsTakenArgs,
+    QueryClassroomsTaughtArgs,
     Response,
     Role
 } from "../generated/graphql";
@@ -40,6 +42,26 @@ export default (db: Knex) => {
                 classroom: classInfo,
                 instructor: teacherInfo,
                 students
+            };
+        },
+        getClassroomsTaken: async ({student_id}: QueryClassroomsTakenArgs): Promise<ClassroomsTaken>  => {
+            const classroomFields = ['id', 'name', 'subject', 'description', 'created_at', 'updated_at'];
+            const classes = await db.select(classroomFields)
+                                     .from('takes')
+                                     .join('classrooms', {'classrooms.id': 'takes.class_id'})
+                                     .where({student_id});
+            return {
+                classrooms: classes
+            };
+        },
+        getClassroomsTaught: async ({teacher_id}: QueryClassroomsTaughtArgs): Promise<ClassroomsTaught> => {
+            const classroomFields = ['id', 'name', 'subject', 'description', 'created_at', 'updated_at'];
+            const classes = await db.select(classroomFields)
+                                     .from('teaches')
+                                     .join('classrooms', {'classrooms.id': 'teaches.class_id'})
+                                     .where({teacher_id});
+            return {
+                classrooms: classes
             };
         },
         createClassroom: async (classInfo: MutationCreateClassroomArgs): Promise<CreateClassroomResponse> => {
