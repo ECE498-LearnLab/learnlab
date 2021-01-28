@@ -76,6 +76,7 @@ const CreateClassModalForm = ({ intl, isModalVisible, toggleModalVisible, refetc
             name: values.name,
             subject: values.subject,
             teacher_id: userId,
+            description: values.description,
           },
         })
       })
@@ -104,7 +105,7 @@ const CreateClassModalForm = ({ intl, isModalVisible, toggleModalVisible, refetc
         onCancel={onCancel}
         onOk={onOk}
       >
-        <Form form={form} layout="vertical" requiredMark="optional">
+        <Form form={form} layout="vertical" requiredMark>
           <Form.Item
             label={intl.formatMessage({ id: 'createClass.form.className' })}
             name="name"

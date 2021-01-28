@@ -83,14 +83,14 @@ const LobbyCard = ({ room, onJoinRoomHandler, locale }) => {
           <div className={`${style.status} bg-${STATUS_MAP[room.room_status].color}`} />
           <div className="d-flex flex-nowrap align-items-center pb-3 pl-4 pr-4">
             <div className="mr-auto">
-              <div className="text-uppercase font-weight-bold font-size-24 text-dark">
-                {room.room_name}
-              </div>
-              <div className="font-size-18">
-                {roomDate} {roomTimeInterval}
-              </div>
+              <h3>{room.room_name}</h3>
+              <h5>
+                <small>
+                  {roomDate} {roomTimeInterval}
+                </small>
+              </h5>
             </div>
-            <div className={`ml-1 text-${STATUS_MAP[room.room_status].color}`}>
+            <div className={`ml-2 text-${STATUS_MAP[room.room_status].color}`}>
               <Button
                 onClick={onJoinRoomHandler}
                 color={STATUS_MAP[room.room_status].color}
