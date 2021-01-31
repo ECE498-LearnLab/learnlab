@@ -14,9 +14,9 @@ Client-side authentication is done using Firebase. The Firebase Console is avail
 docker-compose up
 ```
 
-If changes to engagement are not being registered, add `build` flag:
+If changes to engagement are not being registered, execute the following before running:
 ```
-docker-compose up --build
+docker-compose build engagement
 ```
 
 >Note: Windows users will need to set the *end of line sequence character* to **LF**
