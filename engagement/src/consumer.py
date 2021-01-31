@@ -42,7 +42,8 @@ def main():
             #     # save image to frame.jpg in current directory
             #     f.write(frameImage)
         
-        analyze = ddd_analysis.DddAnalysis(base64Frames, batchedData["studentID"], batchedData["roomID"])
+        analyze = ddd_analysis.DddAnalysis(base64Frames,
+                                           batchedData["studentID"], batchedData["roomID"], batchedData["token"])
         analyze.run()
 
     channel.basic_consume(queue='frames', on_message_callback=callback, auto_ack=True)
