@@ -109,7 +109,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   })
 
   const children = []
-  data.classroomDetails.students.forEach(function studentEntry(student) {
+  data.classroomDetails.students.forEach((student) => {
     children.push(
       <Option value={student.id} label={student.email}>
         {student.email}
