@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react'
-import { withRouter, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
 import NProgress from 'nprogress'
+import React, { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
-// import Loader from 'components/cleanui/layout/Loader'
-import PublicLayout from './Public'
+import { connect } from 'react-redux'
+import { Redirect, withRouter } from 'react-router-dom'
 import AuthLayout from './Auth'
 import MainLayout from './Main'
+// import Loader from 'components/navigation/layout/Loader'
+import PublicLayout from './Public'
 
 const Layouts = {
   public: PublicLayout,

@@ -19,13 +19,13 @@ const initialState = {
     isSupportChatOpen: false,
     isMobileView: false,
     isMobileMenuOpen: false,
-    isMenuCollapsed: false,
+    isMenuCollapsed: true,
     menuLayoutType: 'left', // left, top, nomenu
     routerAnimation: 'slide-fadein-up', // none, slide-fadein-up, slide-fadein-right, fadein, zoom-fadein
     menuColor: 'white', // white, dark, gray
     theme: 'default', // default, dark
     authPagesColor: 'white', // white, gray, image
-    primaryColor: '#4b7cf3',
+    primaryColor: '#0052CC',
     leftMenuWidth: 256,
     isMenuUnfixed: false,
     isMenuShadow: true,

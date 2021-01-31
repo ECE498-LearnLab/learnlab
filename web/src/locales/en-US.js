@@ -31,6 +31,17 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': 'Please input the room name',
   'scheduleRoom.form.time': 'Start and End Time',
   'scheduleRoom.form.timeMissing': 'Please input the time',
+  'createClass.modal.title': 'Create Class',
+  'createClass.modal.okText': 'Create',
+  'createClass.modal.cancelText': 'Cancel',
+  'createClass.form.className': 'Class name',
+  'createClass.form.classNameMissing': 'Please input the class name',
+  'createClass.form.classSubject': 'Subject',
+  'createClass.form.classSubjectMissing': 'Please input the subject',
+  'createClass.form.classDescription': 'Description',
+  'home.createClass.button': 'Create new class',
+  'home.title.allClasses': 'All Classes',
+  'classMenu.placeholder.selectClass': 'Select a class',
 }
 
 export default {

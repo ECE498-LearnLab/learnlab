@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import ForgotPassword from 'components/cleanui/system/Auth/ForgotPassword'
+import ForgotPassword from 'components/navigation/system/Auth/ForgotPassword'
 
 const SystemForgotPassword = () => {
   return (

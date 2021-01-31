@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Error404 from 'components/cleanui/system/Errors/404'
+import Error404 from 'components/navigation/system/Errors/404'
 
 const System404 = () => {
   return (

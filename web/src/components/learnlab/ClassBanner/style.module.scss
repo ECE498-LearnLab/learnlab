@@ -1,0 +1,9 @@
+@import 'components/mixins.scss';
+
+.banner {
+  min-height: rem(200);
+}
+
+.desc {
+  max-width: rem(800);
+}

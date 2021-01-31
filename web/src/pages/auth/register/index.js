@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Register from 'components/cleanui/system/Auth/Register'
+import Register from 'components/navigation/system/Auth/Register'
 
 const SystemRegister = () => {
   return (

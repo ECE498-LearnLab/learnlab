@@ -3,13 +3,14 @@ import LobbyCard from 'components/learnlab/LobbyCard'
 import _ from 'lodash'
 import React, { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
+import { useSelector } from 'react-redux'
 import ScheduleRoom from './ScheduleRoom'
 
 const Lobby = ({ onJoinRoomHandler }) => {
-  // to:do once global class_id selection is done, change hardcoded value below
+  const selectedClassId = useSelector(state => state.menu.selectedClassId)
   const GET_ROOMS_FOR_CLASSROOM = gql`
-    query getRooms {
-      roomsForClassroom(class_id: "2", room_states: [ONGOING, SCHEDULED]) {
+    query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]) {
+      roomsForClassroom(class_id: $class_id, room_states: $room_states) {
         id
         room_uuid
         room_name
@@ -20,7 +21,9 @@ const Lobby = ({ onJoinRoomHandler }) => {
     }
   `
 
-  const { data, loading, error, refetch } = useQuery(GET_ROOMS_FOR_CLASSROOM)
+  const { data, loading, error, refetch } = useQuery(GET_ROOMS_FOR_CLASSROOM, {
+    variables: { class_id: selectedClassId, room_states: ['ONGOING', 'SCHEDULED'] },
+  })
 
   // Memoize this so todaysSession and upcomingSessions only rerenders when queryResults change
   const [todaysSessions, upcomingSessions] = useMemo(() => {

@@ -1,12 +1,11 @@
-### Clean UI Pro React (Create-React-App) Admin Template Preview ###
-https://react.cleanui.cloud
+### References ###
+Documentation: https://docs.sellpixels.com
+Preview: https://react.cleanui.cloud
 
-### Documentation ###
-Please read documentation here https://docs.sellpixels.com
 
-### Quick Start ###
+### Set up ###
 * Install node.js: https://nodejs.org​
-* Install yarn package manager: https://yarnpkg.com/​
+* Install yarn package manager: https://yarnpkg.com/​ (Please install latest Yarn 1.x version)
 * Install node modules by running terminal command `yarn install`
 * Run the app `yarn start`
 * Or build production app `yarn build`

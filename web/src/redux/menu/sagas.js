@@ -1,4 +1,4 @@
-import { all, put, call } from 'redux-saga/effects'
+import { all, call, put } from 'redux-saga/effects'
 import getMenuData from 'services/menu'
 
 export function* GET_DATA() {

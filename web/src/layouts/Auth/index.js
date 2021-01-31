@@ -1,8 +1,8 @@
+import { Layout } from 'antd'
+import classNames from 'classnames'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Layout } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
-import classNames from 'classnames'
 import style from './style.module.scss'
 
 const mapStateToProps = ({ settings }) => ({
@@ -46,9 +46,13 @@ const AuthLayout = ({
           >
             <div className={style.logoContainer}>
               <div className={style.logo}>
-                <img src="resources/images/logo.svg" className="mr-2" alt="Clean UI" />
+                <img
+                  style={{ height: 32, width: 32 }}
+                  src="resources/images/logo.svg"
+                  className="mr-3"
+                  alt="LearnLab"
+                />
                 <div className={style.name}>{logo}</div>
-                {logo === 'Clean UI Pro' && <div className={style.descr}>React</div>}
               </div>
             </div>
             <div className="d-none d-sm-block">

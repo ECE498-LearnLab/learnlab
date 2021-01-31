@@ -106,6 +106,13 @@ export function* LOGOUT() {
       loading: false,
     },
   })
+  yield put({
+    type: 'menu/SET_STATE',
+    payload: {
+      selectedClassId: '',
+      selectedClassName: '',
+    },
+  })
 }
 
 export default function* rootSaga() {

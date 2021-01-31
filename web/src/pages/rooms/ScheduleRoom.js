@@ -1,13 +1,14 @@
-import ACL from 'components/cleanui/system/ACL'
-import moment from 'moment'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { DatePicker, Form, Input, Modal, notification } from 'antd'
+import ACL from 'components/navigation/system/ACL'
+import moment from 'moment'
 import React, { useState } from 'react'
-import { gql, useQuery, useMutation } from '@apollo/client'
 import { injectIntl } from 'react-intl'
+import { useSelector } from 'react-redux'
 import { Button } from 'reactstrap'
 
 const ScheduleRoom = ({ intl, onSuccess }) => {
-  // to:do once global class_id selection is done, change hardcoded class_id value
+  const selectedClassId = useSelector(state => state.menu.selectedClassId)
   const CREATE_ROOM = gql`
     mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time: Date) {
       createRoom(class_id: $class_id, name: $name, start_time: $start_time, end_time: $end_time) {
@@ -18,11 +19,9 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       }
     }
   `
-
-  // to:do once global class_id selection is done, change hardcoded class_id value
   const GET_CLASSROOM = gql`
-    query getClassDetails {
-      classroomDetails(id: "2", role: INSTRUCTOR) {
+    query GetClassroomDetails($id: ID!, $role: Role!) {
+      classroomDetails(id: $id, role: $role) {
         students {
           id
           first_name
@@ -84,7 +83,9 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
     })
   }
 
-  const { data } = useQuery(GET_CLASSROOM)
+  const { data } = useQuery(GET_CLASSROOM, {
+    variables: { id: selectedClassId, role: 'INSTRUCTOR' },
+  })
 
   const [createRoom] = useMutation(CREATE_ROOM, {
     onCompleted: onCreateRoomSuccess,
@@ -121,7 +122,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   const onSubmit = values => {
     createRoom({
       variables: {
-        class_id: 2,
+        class_id: selectedClassId,
         name: values.name,
         start_time: values.time[0],
         end_time: values.time[1],
