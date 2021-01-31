@@ -31,6 +31,8 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': 'Please input the room name',
   'scheduleRoom.form.time': 'Start and End Time',
   'scheduleRoom.form.timeMissing': 'Please input the time',
+  'scheduleRoom.form.participants': 'Participants',
+  'scheduleRoom.form.selectParticipants.placeholder': 'Please select participants',
   'createClass.modal.title': 'Create Class',
   'createClass.modal.okText': 'Create',
   'createClass.modal.cancelText': 'Cancel',

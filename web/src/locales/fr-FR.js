@@ -31,6 +31,8 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': 'Veuillez saisir le nom de la salle',
   'scheduleRoom.form.time': 'Heure de début et de fin',
   'scheduleRoom.form.timeMissing': "Veuillez saisir l'heure",
+  'scheduleRoom.form.participants': 'Les participants',
+  'scheduleRoom.form.selectParticipants.placeholder': 'Veuillez sélectionner les participants',
   'createClass.modal.title': 'Créer une classe',
   'createClass.modal.okText': 'Créer',
   'createClass.modal.cancelText': 'Annuler',

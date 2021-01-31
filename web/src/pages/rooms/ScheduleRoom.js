@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
-import { DatePicker, Form, Input, Modal, notification } from 'antd'
+import { DatePicker, Form, Input, Modal, notification, Radio, Select } from 'antd'
 import ACL from 'components/navigation/system/ACL'
 import moment from 'moment'
 import React, { useState } from 'react'
@@ -19,6 +19,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       }
     }
   `
+
   const GET_CLASSROOM = gql`
     query GetClassroomDetails($id: ID!, $role: Role!) {
       classroomDetails(id: $id, role: $role) {
@@ -40,19 +41,24 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       }
     }
   `
+  const ParticipantsEnum = Object.freeze({ all: 1, custom: 2 })
 
   const { RangePicker } = DatePicker
+  const { Option } = Select
+
   const [form] = Form.useForm()
   const [show, setShow] = useState(false)
+  const [participants, setParticipants] = useState([])
+  const [participantsType, setParticipantsType] = useState(ParticipantsEnum.all)
 
   const toggleShow = () => setShow(!show)
+  const onParticipantsTypeChange = e => setParticipantsType(e.target.value)
 
   const onCreateRoomSuccess = res => {
     if (res.createRoom.success) {
-      const student_ids = data.classroomDetails.students.map(r => r.id)
       inviteParticipants({
         variables: {
-          student_ids,
+          student_ids: participants,
           room_id: res.createRoom.id,
         },
       })
@@ -76,7 +82,12 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
     })
   }
 
+  const onInviteParticipantsSuccess = () => {
+    setParticipants([])
+  }
+
   const onInviteParticipantsError = err => {
+    setParticipants([])
     notification.warning({
       message: 'Invite Participants Failure',
       description: err.message,
@@ -93,13 +104,33 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   })
 
   const [inviteParticipants] = useMutation(INVITE_PARTICIPANTS, {
+    onCompleted: onInviteParticipantsSuccess,
     onError: onInviteParticipantsError,
+  })
+
+  const children = []
+  data.classroomDetails.students.forEach(function studentEntry(student) {
+    children.push(
+      <Option value={student.id} label={student.email}>
+        {student.email}
+      </Option>,
+    )
   })
 
   const onOk = () => {
     form
       .validateFields()
       .then(values => {
+        setParticipants(() => {
+          if (participantsType !== ParticipantsEnum.custom) {
+            return data.classroomDetails.students.map(r => r.id)
+          }
+          if (values.participants) {
+            return values.participants
+          }
+          return []
+        })
+        setParticipantsType(ParticipantsEnum.all)
         form.resetFields()
         onSubmit(values)
         toggleShow()
@@ -180,6 +211,29 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
                 defaultValue: [moment('00:00', 'HH:mm')],
               }}
             />
+          </Form.Item>
+          <Form.Item
+            name="participantsType"
+            label={intl.formatMessage({ id: 'scheduleRoom.form.participants' })}
+          >
+            <Radio.Group onChange={onParticipantsTypeChange} defaultValue={ParticipantsEnum.all}>
+              <Radio value={ParticipantsEnum.all}>All</Radio>
+              <Radio value={ParticipantsEnum.custom}>Custom</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item name="participants">
+            <Select
+              mode="multiple"
+              optionFilterProp="label"
+              allowClear
+              disabled={participantsType === ParticipantsEnum.all}
+              style={{ width: '100%' }}
+              placeholder={intl.formatMessage({
+                id: 'scheduleRoom.form.selectParticipants.placeholder',
+              })}
+            >
+              {children}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

@@ -31,6 +31,8 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': 'Пожалуйста, введите название комнаты',
   'scheduleRoom.form.time': 'Время начала и окончания',
   'scheduleRoom.form.timeMissing': 'Пожалуйста, введите время',
+  'scheduleRoom.form.participants': 'Участников',
+  'scheduleRoom.form.selectParticipants.placeholder': 'Пожалуйста, выберите участников',
   'createClass.modal.title': 'Создать класс',
   'createClass.modal.okText': 'Создать',
   'createClass.modal.cancelText': 'Отмена',
