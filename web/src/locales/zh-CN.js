@@ -31,6 +31,8 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': '请输入房间名称',
   'scheduleRoom.form.time': '开始和结束时间',
   'scheduleRoom.form.timeMissing': '请输入时间',
+  'scheduleRoom.form.participants': '参加者',
+  'scheduleRoom.form.selectParticipants.placeholder': '请选择参加者',
   'createClass.modal.title': '创建类',
   'createClass.modal.okText': '创建',
   'createClass.modal.cancelText': '取消',
