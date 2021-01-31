@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { find } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 import store from 'store'
 import style from './style.module.scss'
@@ -23,8 +23,7 @@ const mapStateToProps = ({ menu, settings, user }) => ({
 const MenuLeft = ({
   dispatch,
   menuData = [],
-  location: { pathname },
-
+  location,
   isMenuCollapsed,
   isMobileView,
   isMenuUnfixed,
@@ -36,11 +35,12 @@ const MenuLeft = ({
 }) => {
   const [selectedKeys, setSelectedKeys] = useState(store.get('app.menu.selectedKeys') || [])
   const [openedKeys, setOpenedKeys] = useState(store.get('app.menu.openedKeys') || [])
+  const selectedClassId = useSelector(state => state.menu.selectedClassId)
 
   useEffect(() => {
     applySelectedKeys()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, menuData])
+  }, [location.pathname, menuData])
 
   const applySelectedKeys = () => {
     const flattenItems = (items, key) =>
@@ -51,7 +51,7 @@ const MenuLeft = ({
         }
         return flattenedItems
       }, [])
-    const selectedItem = find(flattenItems(menuData, 'children'), ['url', pathname])
+    const selectedItem = find(flattenItems(menuData, 'children'), ['url', location.pathname])
     setSelectedKeys(selectedItem ? [selectedItem.key] : [])
   }
 
@@ -209,7 +209,7 @@ const MenuLeft = ({
             className={style.navigation}
             inlineIndent="15"
           >
-            {generateMenuItems()}
+            {selectedClassId === '' ? null : generateMenuItems()}
           </Menu>
         </PerfectScrollbar>
       </div>

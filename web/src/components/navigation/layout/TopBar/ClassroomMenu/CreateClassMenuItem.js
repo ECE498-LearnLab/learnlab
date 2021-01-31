@@ -1,5 +1,6 @@
 import ACL from 'components/navigation/system/ACL'
 import React from 'react'
+import { FormattedMessage } from 'react-intl'
 import { DropdownItem } from 'reactstrap'
 
 const CreateClassMenuItem = ({ toggleModalVisible }) => {
@@ -10,7 +11,7 @@ const CreateClassMenuItem = ({ toggleModalVisible }) => {
         <div>
           <h6 className="text-success">
             <i className="fe fe-plus mr-1" />
-            Create new class
+            <FormattedMessage id="home.createClass.button" />
           </h6>
         </div>
       </DropdownItem>

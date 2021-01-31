@@ -3,11 +3,11 @@ import style from './style.module.scss'
 
 const styleMap = Object.values(style).slice(1)
 
-const Pattern = ({ patternString, children }) => {
+const Pattern = ({ patternString, children, classnames }) => {
   return (
     <div
       style={{ backgroundColor: uniqueHslColor(patternString) }}
-      className={`card border-0 mb-4 ${uniquePattern(patternString)}`}
+      className={`${classnames} ${uniquePattern(patternString)}`}
     >
       {children}
     </div>

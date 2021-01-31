@@ -1,14 +1,9 @@
-import { Skeleton } from 'antd'
 import React from 'react'
 import style from './style.module.scss'
 
 const ClassBanner = ({ loading, classroom }) => {
   if (loading) {
-    return (
-      <div className={`card-body ${style.banner}`}>
-        <Skeleton active />
-      </div>
-    )
+    return <div className={`card-body ${style.banner}`} />
   }
   return (
     <div className={`card-body ${style.banner}`}>

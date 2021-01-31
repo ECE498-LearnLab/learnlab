@@ -1,20 +1,17 @@
 import { gql, useQuery } from '@apollo/client'
+import { Card } from 'antd'
+import Pattern from 'components/learnlab/Pattern'
+import CreateClassModalForm from 'components/navigation/layout/TopBar/ClassroomMenu/CreateClassModalForm'
 import React, { useCallback, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { FormattedMessage } from 'react-intl'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Spinner,
-  UncontrolledButtonDropdown,
-} from 'reactstrap'
-import CreateClassMenuItem from './CreateClassMenuItem'
-import CreateClassModalForm from './CreateClassModalForm'
-import style from './style.module.scss'
+import { Redirect } from 'react-router-dom'
+import CreateClassButton from './CreateClassButton'
 
-const ClassroomMenu = () => {
-  const selectedClassName = useSelector(state => state.menu.selectedClassName)
+const Dashboard = () => {
+  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+
   const userId = useSelector(state => state.user.id)
   const role = useSelector(state => state.user.role)
   const dispatch = useDispatch()
@@ -38,6 +35,7 @@ const ClassroomMenu = () => {
         classrooms {
           id
           name
+          subject
         }
       }
     }
@@ -48,6 +46,7 @@ const ClassroomMenu = () => {
         classrooms {
           id
           name
+          subject
         }
       }
     }
@@ -73,9 +72,8 @@ const ClassroomMenu = () => {
   const classes = useMemo(() => {
     if (loading) {
       return (
-        <div className="d-flex justify-content-center">
-          <Spinner size="sm" />
-        </div>
+        // todo skeleton loading statttee
+        null
       )
     }
     if (error) {
@@ -85,48 +83,47 @@ const ClassroomMenu = () => {
       const classrooms =
         role === 'INSTRUCTOR' ? data.classroomsTaught.classrooms : data.classroomsTaken.classrooms
       const allClasses = classrooms.map(classroom => (
-        <DropdownItem
-          key={classroom.id}
-          onClick={() => {
-            setSelectedClass(classroom)
-          }}
-        >
-          {classroom.name}
-        </DropdownItem>
+        <div className="col-md-4">
+          <Card
+            hoverable
+            key={classroom.id}
+            className="card border-0 m-2"
+            style={{ width: 350 }}
+            onClick={() => {
+              setSelectedClass(classroom)
+            }}
+            cover={
+              <Pattern patternString={classroom.name}>
+                <div style={{ width: 350, height: 100 }} />
+              </Pattern>
+            }
+          >
+            <h6>{classroom.name}</h6>
+          </Card>
+        </div>
       ))
       return allClasses != null && allClasses.length > 0 ? allClasses : null
     }
     return null
   }, [data, loading, error, role, setSelectedClass])
 
+  if (selectedClassId !== '' && selectedClassId != null) {
+    // empty state
+    return <Redirect to="/dashboard" />
+  }
+
   return (
     <div>
-      <UncontrolledButtonDropdown className="mb-2 mr-2">
-        <DropdownToggle
-          className={`${style.dropdownFixedWidth} ${style.dropdownToggleFlex}`}
-          color="light"
-          caret
-        >
-          <div>
-            <i className="fe fe-bookmark mr-2" />
-            {selectedClassName === '' ? (
-              <FormattedMessage id="classMenu.placeholder.selectClass" />
-            ) : (
-              selectedClassName
-            )}
-          </div>
-        </DropdownToggle>
-        <DropdownMenu className={style.dropdownFixedWidth}>
-          {classes != null ? (
-            classes
-          ) : (
-            <div className="text-center pt-2 pb-1">
-              <h6 className="text-secondary">No Classes</h6>
-            </div>
-          )}
-          <CreateClassMenuItem toggleModalVisible={toggleModalVisible} />
-        </DropdownMenu>
-      </UncontrolledButtonDropdown>
+      <Helmet title="Home | All Classes" />
+      <div className="kit__utils__heading">
+        <h3>
+          <span className="mr-3">
+            <FormattedMessage id="home.title.allClasses" />
+          </span>
+          <CreateClassButton toggleModalVisible={toggleModalVisible} />
+        </h3>
+      </div>
+      <div className="row">{classes}</div>
       <CreateClassModalForm
         isModalVisible={isModalVisible}
         toggleModalVisible={toggleModalVisible}
@@ -136,4 +133,4 @@ const ClassroomMenu = () => {
   )
 }
 
-export default ClassroomMenu
+export default Dashboard

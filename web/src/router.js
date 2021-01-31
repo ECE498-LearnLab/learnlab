@@ -17,6 +17,11 @@ const routes = [
     Component: lazy(() => import('pages/rooms')),
     exact: true,
   },
+  {
+    path: '/home',
+    Component: lazy(() => import('pages/home')),
+    exact: true,
+  },
   // Auth Pages
   {
     path: '/auth/login',
@@ -70,7 +75,7 @@ const Router = ({ history, routerAnimation }) => {
                   timeout={routerAnimation === 'none' ? 0 : 300}
                 >
                   <Switch location={location}>
-                    <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+                    <Route exact path="/" render={() => <Redirect to="/home" />} />
                     {routes.map(({ path, Component, exact }) => (
                       <Route
                         path={path}

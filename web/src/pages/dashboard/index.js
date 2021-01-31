@@ -1,18 +1,17 @@
-import Pattern from 'components/learnlab/Pattern'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import DashboardContent from './DashboardContent'
 
 const Dashboard = () => {
   const selectedClassId = useSelector(state => state.menu.selectedClassId)
-  const selectedClassName = useSelector(state => state.menu.selectedClassName)
 
   if (selectedClassId === '') {
-    // empty state
+    // redirect to home so they choose a damn course
     return (
       <div>
-        <Helmet title="Dashboard" />
+        <Redirect to="/home" />
       </div>
     )
   }
@@ -20,9 +19,7 @@ const Dashboard = () => {
   return (
     <div>
       <Helmet title="Dashboard" />
-      <Pattern patternString={selectedClassName}>
-        <DashboardContent />
-      </Pattern>
+      <DashboardContent />
     </div>
   )
 }

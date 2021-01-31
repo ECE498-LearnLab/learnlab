@@ -50,7 +50,11 @@ const DashboardContent = () => {
     return null
   }, [data, loading, error])
 
-  return <Pattern patternString={selectedClassName}>{classBanner}</Pattern>
+  return (
+    <Pattern classnames="card border-0 mb-4" patternString={selectedClassName}>
+      {classBanner}
+    </Pattern>
+  )
 }
 
 export default DashboardContent

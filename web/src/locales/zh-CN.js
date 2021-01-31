@@ -31,6 +31,17 @@ const messages = {
   'scheduleRoom.form.roomNameMissing': '请输入房间名称',
   'scheduleRoom.form.time': '开始和结束时间',
   'scheduleRoom.form.timeMissing': '请输入时间',
+  'createClass.modal.title': '创建类',
+  'createClass.modal.okText': '创建',
+  'createClass.modal.cancelText': '取消',
+  'createClass.form.className': '类名',
+  'createClass.form.classNameMissing': '请输入类名',
+  'createClass.form.classSubject': '学科',
+  'createClass.form.classSubjectMissing': '请输入主题',
+  'createClass.form.classDescription': '描述',
+  'home.createClass.button': '创建新类',
+  'home.title.allClasses': '所有类',
+  'classMenu.placeholder.selectClass': '选择一个类',
 }
 
 export default {

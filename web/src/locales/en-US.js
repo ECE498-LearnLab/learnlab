@@ -39,6 +39,9 @@ const messages = {
   'createClass.form.classSubject': 'Subject',
   'createClass.form.classSubjectMissing': 'Please input the subject',
   'createClass.form.classDescription': 'Description',
+  'home.createClass.button': 'Create new class',
+  'home.title.allClasses': 'All Classes',
+  'classMenu.placeholder.selectClass': 'Select a class',
 }
 
 export default {
