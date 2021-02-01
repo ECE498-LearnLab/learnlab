@@ -1,4 +1,3 @@
-import { gql, useSubscription } from '@apollo/client'
 import Fab from '@bit/mui-org.material-ui.fab'
 import { Badge } from 'antd'
 import useLocalAudioToggle from 'hooks/useLocalAudioToggle'
@@ -60,31 +59,6 @@ const VideoChat = ({
   screenShareParticipant,
   onLeaveRoomHandler,
 }) => {
-  // engagement score subscription
-  const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
-    subscription onEngagementAdded($student_id: ID!) {
-      engagementStatAdded(student_id: $student_id) {
-        room_id
-        student_id
-        score
-        classification
-        created_at
-      }
-    }
-  `
-
-  function LatestEngagementScores(student_id) {
-    const { data, loading } = useSubscription(ENGAGEMENT_SCORES_SUBSCRIPTION, {
-      variables: { student_id },
-    })
-    if (!loading && data) {
-      return data.engagementStatAdded
-    }
-  }
-
-  const placeholder_stud_id = 1
-  console.log('engagement stat received: ', LatestEngagementScores(placeholder_stud_id))
-
   const [isLocalAudioEnabled, toggleIsLocalAudioEnabled] = useLocalAudioToggle(
     twilioRoom.localParticipant,
   )
