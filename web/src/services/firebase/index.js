@@ -15,20 +15,8 @@ const CREATE_TEACHER = gql`
 `
 
 const CREATE_STUDENT = gql`
-  mutation createStudent(
-    $first_name: String!
-    $last_name: String!
-    $email: String!
-    $created_at: Date
-    $parent_email: String
-  ) {
-    createStudent(
-      first_name: $first_name
-      last_name: $last_name
-      email: $email
-      created_at: $created_at
-      parent_email: $parent_email
-    ) {
+  mutation createStudent($first_name: String!, $last_name: String!, $email: String!) {
+    createStudent(first_name: $first_name, last_name: $last_name, email: $email) {
       user_id
       success
       message
@@ -42,6 +30,8 @@ const GET_USER_BY_EMAIL = gql`
         id
         first_name
         last_name
+        middle_name
+        phone_number
         email
         role
       }
@@ -144,6 +134,8 @@ export async function currentAccount() {
                 id: userByEmail.user.id,
                 first_name: userByEmail.user.first_name,
                 last_name: userByEmail.user.last_name,
+                middle_name: userByEmail.user.middle_name ?? '', // The ?? is basically a check if it's undefined or null, then set the value to ''
+                phone_number: userByEmail.user.middle_name ?? '',
                 role: userByEmail.user.role,
               })
               return mergedUser

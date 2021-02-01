@@ -79,13 +79,15 @@ export function* LOAD_CURRENT_ACCOUNT() {
   })
   const response = yield call(firebase.currentAccount)
   if (response != null && response.id != null) {
-    const { id, email, first_name, last_name, role } = response
+    const { id, email, first_name, last_name, middle_name, phone_number, role } = response
     yield put({
       type: 'user/SET_STATE',
       payload: {
         id,
         first_name,
         last_name,
+        middle_name,
+        phone_number,
         email,
         role,
         authorized: true,
@@ -112,6 +114,8 @@ export function* LOGOUT() {
       id: '',
       first_name: '',
       last_name: '',
+      middle_name: '',
+      phone_number: '',
       role: '',
       email: '',
       authorized: false,
