@@ -2,10 +2,12 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 import { DatePicker, Form, Input, Modal, notification, Radio, Select } from 'antd'
 import ACL from 'components/navigation/system/ACL'
 import moment from 'moment'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { injectIntl } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { Button } from 'reactstrap'
+
+const ParticipantsEnum = Object.freeze({ all: 1, custom: 2 })
 
 const ScheduleRoom = ({ intl, onSuccess }) => {
   const selectedClassId = useSelector(state => state.menu.selectedClassId)
@@ -41,7 +43,6 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       }
     }
   `
-  const ParticipantsEnum = Object.freeze({ all: 1, custom: 2 })
 
   const { RangePicker } = DatePicker
   const { Option } = Select
@@ -51,61 +52,71 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   const [participants, setParticipants] = useState([])
   const [participantsType, setParticipantsType] = useState(ParticipantsEnum.all)
 
-  const toggleShow = () => setShow(!show)
-  const onParticipantsTypeChange = e => setParticipantsType(e.target.value)
-
-  const onCreateRoomSuccess = res => {
-    if (res.createRoom.success) {
-      inviteParticipants({
-        variables: {
-          student_ids: participants,
-          room_id: res.createRoom.id,
-        },
-      })
-      onSuccess()
-      notification.success({
-        message: 'Schedule Success',
-        description: 'Room successfully scheduled',
-      })
-    } else {
-      notification.warning({
-        message: 'Schedule Failure',
-        description: 'An error occurred scheduling the room',
-      })
-    }
-  }
-
-  const onCreateRoomError = err => {
-    notification.warning({
-      message: err.code,
-      description: err.message,
-    })
-  }
-
-  const onInviteParticipantsSuccess = () => {
-    setParticipants([])
-  }
-
-  const onInviteParticipantsError = err => {
-    setParticipants([])
-    notification.warning({
-      message: 'Invite Participants Failure',
-      description: err.message,
-    })
-  }
+  const toggleShow = useCallback(() => setShow(!show), [setShow, show])
+  const onParticipantsTypeChange = useCallback(e => setParticipantsType(e.target.value), [
+    setParticipantsType,
+  ])
 
   const { data, error, loading } = useQuery(GET_CLASSROOM, {
     variables: { id: selectedClassId, role: 'INSTRUCTOR' },
   })
 
-  const [createRoom] = useMutation(CREATE_ROOM, {
-    onCompleted: onCreateRoomSuccess,
-    onError: onCreateRoomError,
-  })
+  /* Invite Participants */
+  const onInviteParticipantsSuccess = useCallback(() => {
+    setParticipants([])
+  }, [setParticipants])
+
+  const onInviteParticipantsError = useCallback(
+    err => {
+      setParticipants([])
+      notification.warning({
+        message: 'Invite Participants Failure',
+        description: err.message,
+      })
+    },
+    [setParticipants],
+  )
 
   const [inviteParticipants] = useMutation(INVITE_PARTICIPANTS, {
     onCompleted: onInviteParticipantsSuccess,
     onError: onInviteParticipantsError,
+  })
+
+  /* Create Room */
+  const onCreateRoomSuccess = useCallback(
+    res => {
+      if (res.createRoom.success) {
+        inviteParticipants({
+          variables: {
+            student_ids: participants,
+            room_id: res.createRoom.id,
+          },
+        })
+        onSuccess()
+        notification.success({
+          message: 'Schedule Success',
+          description: 'Room successfully scheduled',
+        })
+      } else {
+        notification.warning({
+          message: 'Schedule Failure',
+          description: 'An error occurred scheduling the room',
+        })
+      }
+    },
+    [inviteParticipants, onSuccess, participants],
+  )
+
+  const onCreateRoomError = useCallback(err => {
+    return notification.warning({
+      message: err.code,
+      description: err.message,
+    })
+  }, [])
+
+  const [createRoom] = useMutation(CREATE_ROOM, {
+    onCompleted: onCreateRoomSuccess,
+    onError: onCreateRoomError,
   })
 
   const participantOptions = useMemo(() => {
@@ -129,7 +140,35 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
     return []
   }, [data, loading, error])
 
-  const onOk = () => {
+  const onCancel = useCallback(() => {
+    form.resetFields()
+    toggleShow()
+  }, [form, toggleShow])
+
+  const disabledDate = useCallback(current => {
+    // Can not select days before today
+    return current && current < moment().startOf('day')
+  }, [])
+
+  const onSubmit = useCallback(
+    values => {
+      createRoom({
+        variables: {
+          class_id: selectedClassId,
+          name: values.name,
+          start_time: values.time[0],
+          end_time: values.time[1],
+        },
+      })
+    },
+    [createRoom, selectedClassId],
+  )
+
+  const onSubmitFailed = useCallback(errorInfo => {
+    console.log('Submit failed:', errorInfo)
+  }, [])
+
+  const onOk = useCallback(() => {
     form
       .validateFields()
       .then(values => {
@@ -150,32 +189,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       .catch(err => {
         onSubmitFailed(err)
       })
-  }
-
-  const onCancel = () => {
-    form.resetFields()
-    toggleShow()
-  }
-
-  const disabledDate = current => {
-    // Can not select days before today
-    return current && current < moment().startOf('day')
-  }
-
-  const onSubmit = values => {
-    createRoom({
-      variables: {
-        class_id: selectedClassId,
-        name: values.name,
-        start_time: values.time[0],
-        end_time: values.time[1],
-      },
-    })
-  }
-
-  const onSubmitFailed = errorInfo => {
-    console.log('Submit failed:', errorInfo)
-  }
+  }, [data, form, participantsType, setParticipantsType, onSubmit, toggleShow, onSubmitFailed])
 
   return (
     <ACL roles={['INSTRUCTOR']}>
