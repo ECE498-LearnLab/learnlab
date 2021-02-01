@@ -52,6 +52,8 @@ admin.initializeApp(firebaseConfig);
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    playground: true,
+    introspection: true,
     subscriptions: {
         onConnect: async (connectionParams: ConnectionParams, _, __) => {
             if (connectionParams.authToken) {
@@ -73,7 +75,7 @@ const server = new ApolloServer({
         if (token) {
             token = token.replace('Bearer ', '');
             const uid = await uidFromValidToken(token);
-    
+
             if (!uid) throw new AuthenticationError('You must be logged in!');
         } else {
             throw new AuthenticationError('Token missing in request');

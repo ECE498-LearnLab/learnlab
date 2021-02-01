@@ -41,8 +41,10 @@ const GET_USER_BY_EMAIL = gql`
       user {
         id
         first_name
+        middle_name
         last_name
         email
+        phone_number
         role
       }
     }
@@ -141,7 +143,9 @@ export async function currentAccount() {
             const mergedUser = Object.assign(user, {
               id: userByEmail.user.id,
               first_name: userByEmail.user.first_name,
+              middle_name: userByEmail.user.middle_name,
               last_name: userByEmail.user.last_name,
+              phone_number: userByEmail.user.phone_number,
               role: userByEmail.user.role,
             })
             return mergedUser

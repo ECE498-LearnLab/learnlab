@@ -56,7 +56,7 @@ const ProfileMenu = ({ dispatch, user }) => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item>
-        <a href="#" onClick={e => e.preventDefault()}>
+        <a href="#/pages/settings/">
           <i className="fe fe-user mr-2" />
           <FormattedMessage id="topBar.profileMenu.editProfile" />
         </a>

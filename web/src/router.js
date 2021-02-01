@@ -48,6 +48,12 @@ const routes = [
     Component: lazy(() => import('pages/auth/500')),
     exact: true,
   },
+  // Settings
+  {
+    path: '/pages/settings',
+    Component: lazy(() => import('pages/settings')),
+    exact: true,
+  },
 ]
 
 const mapStateToProps = ({ settings }) => ({

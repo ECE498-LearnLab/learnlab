@@ -10,6 +10,3 @@ Please read documentation here https://docs.sellpixels.com
 * Install node modules by running terminal command `yarn install`
 * Run the app `yarn start`
 * Or build production app `yarn build`
-
-### Authentication ###
-When registering on the auth web page, make sure that the user, email, and corresponding role already exists beforehand in the postgres db, else it will fail to fetch data.
