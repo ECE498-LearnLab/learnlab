@@ -58,6 +58,15 @@ const messages = {
   'addStudents.modal.title': 'Add Students',
   'addStudents.modal.okText': 'Add',
   'addStudents.modal.cancelText': 'Cancel',
+  'editProfile.modal.title': 'Edit Profile',
+  'editProfile.modal.okText': 'Save',
+  'editProfile.modal.cancelText': 'Cancel',
+  'editProfile.form.firstName': 'First Name',
+  'editProfile.form.lastName': 'Last Name',
+  'editProfile.form.email': 'Email',
+  'editProfile.form.firstNameMissing': 'First Name cannot be blank',
+  'editProfile.form.lastNameMissing': 'Last Name cannot be blank',
+  'editProfile.form.emailMissing': 'Email cannot be blank',
 }
 
 export default {

@@ -62,7 +62,6 @@ query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]){
   roomsForClassroom(class_id: $class_id, room_states: $room_states){
     id
     room_uuid
-    name
     start_time
     room_status
   }
@@ -102,7 +101,6 @@ query getEngagementHistory($room_id: ID!, $student_id: ID!) {
       score,
       classification,
       created_at,
-      updated_at
   }
 }
 ```
@@ -149,6 +147,49 @@ mutation createTeacher($first_name: String!, $last_name: String!, $email: String
 
 mutation createStudent($first_name: String!, $last_name: String!, $email: String!, $created_at: Date, $parent_email: String) {
   createStudent(first_name: $first_name, last_name: $last_name, email: $email, created_at: $created_at, parent_email: $parent_email) {
+    user_id
+    success
+    message
+  }
+}
+mutation updateUserInfo(
+  $user_id: ID!
+  $first_name: String
+  $middle_name: String
+  $last_name: String
+  $phone_number: String
+  $email: String
+) {
+  updateUserInfo(
+    user_id: $user_id
+    first_name: $first_name
+    middle_name: $middle_name
+    last_name: $last_name
+    email: $email
+    phone_number: $phone_number
+  ) {
+    user_id
+    success
+    message
+  }
+}
+
+mutation updateUserInfo(
+  $user_id: ID!
+  $first_name: String
+  $middle_name: String
+  $last_name: String
+  $phone_number: String
+  $email: String
+) {
+  updateUserInfo(
+    user_id: $user_id
+    first_name: $first_name
+    middle_name: $middle_name
+    last_name: $last_name
+    email: $email
+    phone_number: $phone_number
+  ) {
     user_id
     success
     message

@@ -3,6 +3,7 @@ import UserAvatar from 'components/learnlab/UserAvatar'
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useDispatch, useSelector } from 'react-redux'
+import EditProfile from './EditProfile'
 import styles from './style.module.scss'
 
 const ProfileMenu = () => {
@@ -40,10 +41,7 @@ const ProfileMenu = () => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item>
-        <a href="#" onClick={e => e.preventDefault()}>
-          <i className="fe fe-user mr-2" />
-          <FormattedMessage id="topBar.profileMenu.editProfile" />
-        </a>
+        <EditProfile />
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item>

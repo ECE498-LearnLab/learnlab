@@ -1,7 +1,11 @@
 import Knex from "knex";
 import {
-    CreateAccountResponse, MutationCreateStudentArgs, MutationCreateTeacherArgs,
-    Role, UserResponse
+    CreateAccountResponse,
+    MutationCreateStudentArgs,
+    MutationCreateTeacherArgs, MutationUpdateUserInfoArgs,
+    Response,
+    Role,
+    UserResponse
 } from "../generated/graphql";
 import { isUniqueViolationError } from "./utils";
 
@@ -110,6 +114,24 @@ export default (db: Knex) => {
                     message: `User with this email(${email}) does not exist`
                 };
             }
+        },
+        updateUserInfo: async (userUpdateInfo: MutationUpdateUserInfoArgs): Promise<CreateAccountResponse> => {
+            const { user_id, first_name, middle_name, last_name, phone_number, email } = userUpdateInfo;
+            let success = true, message;
+            const updated_at = db.fn.now();
+            await db('users').where({id: user_id}).update({first_name, middle_name, last_name, phone_number, email, updated_at}).catch((err) => {
+                success = false;
+                message = err.message;
+            });
+
+            if (!success) {
+                return { success, message };
+            }
+
+            return {
+                success,
+                message: `User info for user ${user_id} was successfully updated.`
+            };
         }
     };
 };

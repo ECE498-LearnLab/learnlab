@@ -162,6 +162,8 @@ const typeDefs = gql`
         createTeacher(first_name: String!, last_name: String!, 
                    middle_name: String, prefix: TeacherPrefix, email: String!,
                    phone_number: String, created_at: Date): CreateAccountResponse,
+        updateUserInfo(user_id: ID!, first_name: String, last_name: String,
+            middle_name: String, email: String, phone_number: String): CreateAccountResponse,
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         createClassroom(name: String!, subject: String!, teacher_id: ID!, description: String): CreateClassroomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String): CreateQuestionResponse
