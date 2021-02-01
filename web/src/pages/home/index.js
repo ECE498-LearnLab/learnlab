@@ -83,10 +83,9 @@ const Dashboard = () => {
       const classrooms =
         role === 'INSTRUCTOR' ? data.classroomsTaught.classrooms : data.classroomsTaken.classrooms
       const allClasses = classrooms.map(classroom => (
-        <div className="col-md-4">
+        <div key={classroom.id} className="col-md-4">
           <Card
             hoverable
-            key={classroom.id}
             className="card border-0 m-2"
             style={{ width: 350 }}
             onClick={() => {

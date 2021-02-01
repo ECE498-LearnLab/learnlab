@@ -4,6 +4,8 @@ const initialState = {
   id: '',
   first_name: '',
   last_name: '',
+  middle_name: '',
+  phone_number: '',
   role: '',
   email: '',
   authorized: process.env.REACT_APP_AUTHENTICATED || false, // false is default value
