@@ -1,15 +1,33 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { gql, useMutation } from '@apollo/client'
 import { Form, Input, Modal, notification } from 'antd'
-import ACL from 'components/navigation/system/ACL'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { injectIntl } from 'react-intl'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const EditProfile = ({ intl }) => {
   const user = useSelector(state => state.user)
-  console.log(user)
+  // console.log(user)
+  const dispatch = useDispatch()
+
+  const updateUserState = useCallback(
+    values => {
+      dispatch({
+        type: 'user/SET_STATE',
+        payload: {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          middle_name: values.middle_name,
+          phone_number: values.phone_number,
+          email: values.email,
+        },
+      })
+      console.log('ENTERING UPDATE USER STATE')
+      console.log('UPDATED STATE???')
+      console.log(values)
+    },
+    [dispatch],
+  )
+
   const UPDATE_USER_INFO = gql`
     mutation updateUserInfo(
       $user_id: ID!
@@ -37,28 +55,75 @@ const EditProfile = ({ intl }) => {
   const [form] = Form.useForm()
   const [show, setShow] = useState(false)
 
-  const toggleShow = () => setShow(!show)
+  const toggleShow = useCallback(() => {
+    setShow(!show)
+  }, [setShow, show])
 
-  const onUpdateUserInfoSuccess = () => {
+  const onUpdateUserInfoSuccess = useCallback(() => {
     notification.success({
       message: 'Edit Profile Success',
       description: 'Profile successfully saved',
     })
-  }
+  }, [])
 
-  const onUpdateUserInfoError = err => {
+  const onUpdateUserInfoError = useCallback(err => {
     notification.warning({
       message: 'Edit Profile Failure',
       description: err.message,
     })
-  }
+  }, [])
 
   const [updateUserInfo] = useMutation(UPDATE_USER_INFO, {
     onCompleted: onUpdateUserInfoSuccess,
     onError: onUpdateUserInfoError,
   })
 
-  const onOk = () => {
+  const onCancel = useCallback(() => {
+    form.resetFields()
+    toggleShow()
+  }, [form, toggleShow])
+
+  const onSubmit = useCallback(
+    values => {
+      const valuesToChange = {
+        user_id: user.id,
+        first_name:
+          values.first_name === '' || values.first_name == null
+            ? user.first_name
+            : values.first_name,
+        middle_name:
+          values.middle_name === '' || values.middle_name == null
+            ? user.middle_name
+            : values.middle_name,
+        last_name:
+          values.last_name === '' || values.last_name == null ? user.last_name : values.last_name,
+        phone_number:
+          values.phone_number === '' || values.phone_number == null
+            ? user.phone_number
+            : values.phone_number,
+        email: values.email === '' || values.email == null ? user.email : values.email,
+      }
+      updateUserInfo({
+        variables: valuesToChange,
+      }).then(updateUserState(valuesToChange))
+    },
+    [
+      user.id,
+      user.first_name,
+      user.middle_name,
+      user.last_name,
+      user.phone_number,
+      user.email,
+      updateUserInfo,
+      updateUserState,
+    ],
+  )
+
+  const onSubmitFailed = useCallback(errorInfo => {
+    console.log('Submit failed:', errorInfo)
+  }, [])
+
+  const onOk = useCallback(() => {
     form
       .validateFields()
       .then(values => {
@@ -69,34 +134,22 @@ const EditProfile = ({ intl }) => {
       .catch(err => {
         onSubmitFailed(err)
       })
-  }
+  }, [form, onSubmit, toggleShow, onSubmitFailed])
 
-  const onCancel = () => {
-    form.resetFields()
-    toggleShow()
-  }
-
-  const onSubmit = values => {
-    updateUserInfo({
-      variables: {
-        user_id: user.id,
-        first_name: values.first_name === '' ? user.first_name : values.first_name,
-        last_name: values.last_name === '' ? user.last_name : values.last_name,
-        email: values.email === '' ? user.email : values.email,
-      },
-    })
-  }
-
-  const onSubmitFailed = errorInfo => {
-    console.log('Submit failed:', errorInfo)
-  }
+  const onClickEditProfile = useCallback(
+    e => {
+      e.preventDefault()
+      toggleShow()
+    },
+    [toggleShow],
+  )
 
   return (
-    <ACL roles={['STUDENT', 'INSTRUCTOR']}>
-      <div onClick={toggleShow}>
+    <div>
+      <a role="button" onClick={onClickEditProfile} aria-hidden="true">
         <i className="fe fe-user mr-2" />
         {intl.formatMessage({ id: 'topBar.profileMenu.editProfile' })}
-      </div>
+      </a>
 
       <Modal
         visible={show}
@@ -113,11 +166,21 @@ const EditProfile = ({ intl }) => {
             rules={[
               {
                 required: false,
-                // message: intl.formatMessage({ id: 'editProfile.form.firstNameMissing' }),
               },
             ]}
           >
             <Input placeholder={user.first_name} />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({ id: 'editProfile.form.middleName' })}
+            name="middle_name"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder={user.middle_name} />
           </Form.Item>
           <Form.Item
             label={intl.formatMessage({ id: 'editProfile.form.lastName' })}
@@ -125,11 +188,21 @@ const EditProfile = ({ intl }) => {
             rules={[
               {
                 required: false,
-                // message: intl.formatMessage({ id: 'editProfile.form.lastNameMissing' }),
               },
             ]}
           >
             <Input placeholder={user.last_name} />
+          </Form.Item>
+          <Form.Item
+            label={intl.formatMessage({ id: 'editProfile.form.phoneNumber' })}
+            name="phone_number"
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <Input placeholder={user.phone_number} />
           </Form.Item>
           <Form.Item
             label={intl.formatMessage({ id: 'editProfile.form.email' })}
@@ -137,7 +210,6 @@ const EditProfile = ({ intl }) => {
             rules={[
               {
                 required: false,
-                // message: intl.formatMessage({ id: 'editProfile.form.emailMissing' }),
               },
             ]}
           >
@@ -145,7 +217,7 @@ const EditProfile = ({ intl }) => {
           </Form.Item>
         </Form>
       </Modal>
-    </ACL>
+    </div>
   )
 }
 

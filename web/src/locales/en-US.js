@@ -62,11 +62,10 @@ const messages = {
   'editProfile.modal.okText': 'Save',
   'editProfile.modal.cancelText': 'Cancel',
   'editProfile.form.firstName': 'First Name',
+  'editProfile.form.middleName': 'Middle Name',
   'editProfile.form.lastName': 'Last Name',
+  'editProfile.form.phoneNumber': 'Phone Number',
   'editProfile.form.email': 'Email',
-  'editProfile.form.firstNameMissing': 'First Name cannot be blank',
-  'editProfile.form.lastNameMissing': 'Last Name cannot be blank',
-  'editProfile.form.emailMissing': 'Email cannot be blank',
 }
 
 export default {
