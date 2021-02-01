@@ -1,6 +1,6 @@
 import { notification } from 'antd'
 import { history } from 'index'
-import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { all, call, put, putResolve, takeEvery } from 'redux-saga/effects'
 import * as firebase from 'services/firebase'
 import actions from './actions'
 
@@ -14,14 +14,22 @@ export function* LOGIN({ payload }) {
   })
   const success = yield call(firebase.login, email, password)
   if (success) {
-    yield put({
+    yield putResolve({
       type: 'user/LOAD_CURRENT_ACCOUNT',
     })
-    yield history.push('/')
-    notification.success({
-      message: 'Logged In',
-      description: 'You have successfully logged in!',
-    })
+    const user = yield call(firebase.currentAccount)
+    if (user.id !== '' && user.id != null) {
+      yield history.push('/')
+      notification.success({
+        message: 'Logged In',
+        description: 'You have successfully logged in!',
+      })
+    } else {
+      notification.error({
+        message: 'User not found',
+        description: 'User was not found in the database.',
+      })
+    }
   }
   if (!success) {
     yield put({
@@ -70,7 +78,7 @@ export function* LOAD_CURRENT_ACCOUNT() {
     },
   })
   const response = yield call(firebase.currentAccount)
-  if (response) {
+  if (response != null && response.id != null) {
     const { id, email, first_name, last_name, role } = response
     yield put({
       type: 'user/SET_STATE',
@@ -83,13 +91,17 @@ export function* LOAD_CURRENT_ACCOUNT() {
         authorized: true,
       },
     })
+    yield put({
+      type: 'user/SET_STATE',
+      payload: {
+        loading: false,
+      },
+    })
+  } else {
+    yield put({
+      type: 'user/LOGOUT',
+    })
   }
-  yield put({
-    type: 'user/SET_STATE',
-    payload: {
-      loading: false,
-    },
-  })
 }
 
 export function* LOGOUT() {

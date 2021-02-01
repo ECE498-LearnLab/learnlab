@@ -138,13 +138,16 @@ export async function currentAccount() {
                 email: user.email,
               },
             })
-            const mergedUser = Object.assign(user, {
-              id: userByEmail.user.id,
-              first_name: userByEmail.user.first_name,
-              last_name: userByEmail.user.last_name,
-              role: userByEmail.user.role,
-            })
-            return mergedUser
+
+            if (userByEmail.user != null) {
+              const mergedUser = Object.assign(user, {
+                id: userByEmail.user.id,
+                first_name: userByEmail.user.first_name,
+                last_name: userByEmail.user.last_name,
+                role: userByEmail.user.role,
+              })
+              return mergedUser
+            }
           }
           return user
         }
