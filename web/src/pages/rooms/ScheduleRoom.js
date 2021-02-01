@@ -2,7 +2,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 import { DatePicker, Form, Input, Modal, notification, Radio, Select } from 'antd'
 import ACL from 'components/navigation/system/ACL'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { injectIntl } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { Button } from 'reactstrap'
@@ -94,7 +94,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
     })
   }
 
-  const { data } = useQuery(GET_CLASSROOM, {
+  const { data, error, loading } = useQuery(GET_CLASSROOM, {
     variables: { id: selectedClassId, role: 'INSTRUCTOR' },
   })
 
@@ -108,14 +108,26 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
     onError: onInviteParticipantsError,
   })
 
-  const children = []
-  data.classroomDetails.students.forEach((student) => {
-    children.push(
-      <Option value={student.id} label={student.email}>
-        {student.email}
-      </Option>,
-    )
-  })
+  const participantOptions = useMemo(() => {
+    if (loading) {
+      return []
+    }
+    if (error) {
+      return []
+    }
+    if (data) {
+      const options = []
+      data.classroomDetails.students.forEach(student => {
+        options.push(
+          <Option value={student.id} label={student.email}>
+            {student.email}
+          </Option>,
+        )
+      })
+      return options
+    }
+    return []
+  }, [data, loading, error])
 
   const onOk = () => {
     form
@@ -232,7 +244,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
                 id: 'scheduleRoom.form.selectParticipants.placeholder',
               })}
             >
-              {children}
+              {participantOptions}
             </Select>
           </Form.Item>
         </Form>
