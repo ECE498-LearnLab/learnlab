@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { generateAccessToken } from 'utils/accessToken'
 import Lobby from './Lobby'
 import Room from './Room'
+import EngagementGraph from './EngagementGraph'
 
 const Classroom = () => {
   const selectedClassId = useSelector(state => state.menu.selectedClassId)
@@ -36,12 +37,15 @@ const Classroom = () => {
 
   if (token)
     return (
-      <Room
-        room={selectedRoom}
-        twilioRoomSid={selectedRoom.room_uuid}
-        token={token}
-        onLeaveRoomHandler={onLeaveRoomHandler}
-      />
+      <>
+        <EngagementGraph />
+        <Room
+          room={selectedRoom}
+          twilioRoomSid={selectedRoom.room_uuid}
+          token={token}
+          onLeaveRoomHandler={onLeaveRoomHandler}
+        />
+      </>
     )
   return <Lobby onJoinRoomHandler={onJoinRoomHandler} />
 }
