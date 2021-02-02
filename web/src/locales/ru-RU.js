@@ -44,6 +44,12 @@ const messages = {
   'home.createClass.button': 'Создать новый класс',
   'home.title.allClasses': 'Все классы',
   'classMenu.placeholder.selectClass': 'Выберите класс',
+  'rooms.title.upcomingSessions': 'Предстоящие сеансы',
+  'rooms.title.todaysSessions': 'Сегодняшние сеансы',
+  'rooms.empty.message': 'Нет комнат для показа',
+  'error.message.oops': 'Ой! Что-то пошло не так ...',
+  'home.empty.noClasses': 'Нет классов для отображения',
+  'rooms.title.Rooms': 'Номера',
 }
 
 export default {

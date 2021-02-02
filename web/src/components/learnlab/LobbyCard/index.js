@@ -3,7 +3,7 @@ import { Avatar } from 'antd'
 import UserAvatar from 'components/learnlab/UserAvatar'
 import React, { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Button } from 'reactstrap'
 import style from './style.module.scss'
 
@@ -40,9 +40,8 @@ const TIME_FORMAT_OPTIONS = {
   minute: '2-digit',
 }
 
-const mapStateToProps = ({ settings }) => ({ locale: settings.locale })
-
-const LobbyCard = ({ room, onJoinRoomHandler, locale }) => {
+const LobbyCard = ({ room, onJoinRoomHandler }) => {
+  const locale = useSelector(state => state.settings.locale)
   const GET_PARTICIPANTS = gql`
   query getParticipants { 
     participants(
@@ -121,4 +120,4 @@ const LobbyCard = ({ room, onJoinRoomHandler, locale }) => {
   )
 }
 
-export default connect(mapStateToProps)(LobbyCard)
+export default LobbyCard

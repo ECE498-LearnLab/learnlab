@@ -44,6 +44,12 @@ const messages = {
   'home.createClass.button': 'Créer une nouvelle classe',
   'home.title.allClasses': 'Toutes les classes',
   'classMenu.placeholder.selectClass': 'Sélectionnez une classe',
+  'rooms.title.upcomingSessions': 'Sessions à venir',
+  'rooms.title.todaysSessions': "Sessions d'aujourd'hui",
+  'rooms.empty.message': 'Aucune pièce à afficher',
+  'error.message.oops': "Oups! Une erreur s'est produite ...",
+  'home.empty.noClasses': 'Aucune classe à afficher',
+  'rooms.title.Rooms': 'Pièces',
 }
 
 export default {

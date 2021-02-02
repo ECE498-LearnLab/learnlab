@@ -21,9 +21,16 @@
   align-items: center;
 }
 
+.skeleton {
+  background: $gray-3;
+}
+
 // dark theme
 [data-kit-theme='dark'] {
   .footer {
     background: $dark-gray-4;
+  }
+  .skeleton {
+    background: $dark-gray-3;
   }
 }
