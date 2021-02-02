@@ -44,6 +44,12 @@ const messages = {
   'home.createClass.button': '创建新类',
   'home.title.allClasses': '所有类',
   'classMenu.placeholder.selectClass': '选择一个类',
+  'rooms.title.upcomingSessions': '即将举行的会议',
+  'rooms.title.todaysSessions': '今天的会议',
+  'rooms.empty.message': '没有可显示的房间',
+  'error.message.oops': '糟糕！出了点问题...',
+  'home.empty.noClasses': '没有要显示的类',
+  'rooms.title.Rooms': '房间数',
 }
 
 export default {

@@ -44,6 +44,12 @@ const messages = {
   'home.createClass.button': 'Create new class',
   'home.title.allClasses': 'All Classes',
   'classMenu.placeholder.selectClass': 'Select a class',
+  'rooms.title.upcomingSessions': 'Upcoming Sessions',
+  'rooms.title.todaysSessions': "Today's Sessions",
+  'rooms.empty.message': 'No rooms to show',
+  'error.message.oops': 'Oops! Something went wrong...',
+  'home.empty.noClasses': 'No classes to show',
+  'rooms.title.Rooms': 'Rooms',
 }
 
 export default {

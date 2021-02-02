@@ -1,0 +1,12 @@
+@import 'components/mixins.scss';
+
+.skeleton {
+  background: $gray-3;
+}
+
+// dark theme
+[data-kit-theme='dark'] {
+  .skeleton {
+    background: $dark-gray-3;
+  }
+}

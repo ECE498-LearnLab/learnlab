@@ -1,6 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
-import { Card } from 'antd'
-import Pattern from 'components/learnlab/Pattern'
+import ClassCard from 'components/learnlab/ClassCard'
+import SkeletonClassCard from 'components/learnlab/ClassCard/SkeletonClassCard'
+import EmptyState from 'components/learnlab/EmptyState'
+import ErrorState from 'components/learnlab/ErrorState'
 import CreateClassModalForm from 'components/navigation/layout/TopBar/ClassroomMenu/CreateClassModalForm'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -68,43 +70,35 @@ const Dashboard = () => {
     setIsModalVisible(!isModalVisible)
   }
 
+  // for skeleton loading
+  const [isLoading, setIsLoading] = useState(false)
+
   // memoize so classes don't rerender on each run
   const classes = useMemo(() => {
-    if (loading) {
-      return (
-        // todo skeleton loading statttee
-        null
-      )
+    if (loading || isLoading) {
+      setIsLoading(true)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000)
+      return [...Array(5).keys()].map(key => <SkeletonClassCard id={key} />)
     }
     if (error) {
-      return null
+      return <ErrorState />
     }
     if (data) {
       const classrooms =
         role === 'INSTRUCTOR' ? data.classroomsTaught.classrooms : data.classroomsTaken.classrooms
       const allClasses = classrooms.map(classroom => (
-        <div key={classroom.id} className="col-md-4">
-          <Card
-            hoverable
-            className="card border-0 m-2"
-            style={{ width: 350 }}
-            onClick={() => {
-              setSelectedClass(classroom)
-            }}
-            cover={
-              <Pattern patternString={classroom.name}>
-                <div style={{ width: 350, height: 100 }} />
-              </Pattern>
-            }
-          >
-            <h6>{classroom.name}</h6>
-          </Card>
-        </div>
+        <ClassCard classroom={classroom} setSelectedClass={setSelectedClass} />
       ))
-      return allClasses != null && allClasses.length > 0 ? allClasses : null
+      return allClasses != null && allClasses.length > 0 ? (
+        allClasses
+      ) : (
+        <EmptyState description={<FormattedMessage id="home.empty.noClasses" />} />
+      )
     }
-    return null
-  }, [data, loading, error, role, setSelectedClass])
+    return <EmptyState description={<FormattedMessage id="home.empty.noClasses" />} />
+  }, [data, loading, error, role, setSelectedClass, isLoading, setIsLoading])
 
   if (selectedClassId !== '' && selectedClassId != null) {
     // empty state
