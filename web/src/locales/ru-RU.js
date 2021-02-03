@@ -50,6 +50,12 @@ const messages = {
   'error.message.oops': 'Ой! Что-то пошло не так ...',
   'home.empty.noClasses': 'Нет классов для отображения',
   'rooms.title.Rooms': 'Номера',
+  'classlist.title.Classlist': 'Список классов',
+  'classlist.button.text': 'Добавить студентов',
+  'addStudents.input.add': 'Добавить адрес электронной почты студента',
+  'addStudents.modal.title': 'Добавить студентов',
+  'addStudents.modal.okText': 'Добавить',
+  'addStudents.modal.cancelText': 'Отмена',
 }
 
 export default {

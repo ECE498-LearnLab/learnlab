@@ -50,6 +50,12 @@ const messages = {
   'error.message.oops': 'Oops! Something went wrong...',
   'home.empty.noClasses': 'No classes to show',
   'rooms.title.Rooms': 'Rooms',
+  'classlist.title.Classlist': 'Classlist',
+  'classlist.button.text': 'Add Students',
+  'addStudents.input.add': 'Add Student Email',
+  'addStudents.modal.title': 'Add Students',
+  'addStudents.modal.okText': 'Add',
+  'addStudents.modal.cancelText': 'Cancel',
 }
 
 export default {
