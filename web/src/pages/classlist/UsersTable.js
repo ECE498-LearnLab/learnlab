@@ -63,6 +63,7 @@ const UsersTable = () => {
     query GetClassroomDetails($id: ID!, $role: Role!) {
       classroomDetails(id: $id, role: $role) {
         instructor {
+          id
           first_name
           last_name
           middle_name
@@ -70,6 +71,7 @@ const UsersTable = () => {
           email
         }
         students {
+          id
           first_name
           last_name
           middle_name
@@ -107,8 +109,8 @@ const UsersTable = () => {
     if (data) {
       const { instructor, students } = data.classroomDetails
       const allStudents = _.orderBy(students, 'first_name', 'asc')
-      const allUsers = [instructor, ...allStudents].map((_user, index) => {
-        return { ..._user, key: index }
+      const allUsers = [instructor, ...allStudents].map(_user => {
+        return { ..._user, key: _user.id }
       })
       return (
         <div className={`col ${style.table}`}>

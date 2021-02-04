@@ -127,15 +127,13 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
       return []
     }
     if (data) {
-      const options = []
-      data.classroomDetails.students.forEach(student => {
-        options.push(
-          <Option value={student.id} label={student.email}>
+      return data.classroomDetails.students.map(student => {
+        return (
+          <Option key={student.email} value={student.id} label={student.email}>
             {student.email}
-          </Option>,
+          </Option>
         )
       })
-      return options
     }
     return []
   }, [data, loading, error])

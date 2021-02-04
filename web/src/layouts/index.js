@@ -31,7 +31,10 @@ const Layout = ({ user, children, location: { pathname, search } }) => {
 
   // Layout Rendering
   const getLayout = () => {
-    if (pathname === '/') {
+    if (
+      pathname === '/' ||
+      (user.videoGrantToken !== '' && user.videoGrantToken != null && user.isInRoomSession)
+    ) {
       return 'public'
     }
     if (/^\/auth(?=\/|$)/i.test(pathname)) {
