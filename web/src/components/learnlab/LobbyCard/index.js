@@ -84,9 +84,10 @@ const LobbyCard = ({ room, onJoinRoomHandler }) => {
             <div className="mr-auto">
               <h3>{room.room_name}</h3>
               <h5>
-                <small>
-                  {roomDate} {roomTimeInterval}
-                </small>
+                <small>{roomDate}</small>
+              </h5>
+              <h5>
+                <small>{roomTimeInterval}</small>
               </h5>
             </div>
             <div className={`ml-2 text-${STATUS_MAP[room.room_status].color}`}>
@@ -94,6 +95,7 @@ const LobbyCard = ({ room, onJoinRoomHandler }) => {
                 onClick={onJoinRoomHandler}
                 color={STATUS_MAP[room.room_status].color}
                 outline
+                style={{ minWidth: '120px' }}
                 disabled={room.room_status !== 'ONGOING'}
                 className="mr-2 mb-2"
               >

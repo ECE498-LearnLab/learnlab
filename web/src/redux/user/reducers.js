@@ -10,6 +10,8 @@ const initialState = {
   email: '',
   authorized: process.env.REACT_APP_AUTHENTICATED || false, // false is default value
   loading: false,
+  isInRoomSession: false,
+  videoGrantToken: '',
 }
 
 export default function userReducer(state = initialState, action) {
