@@ -18,6 +18,11 @@ const routes = [
     exact: true,
   },
   {
+    path: '/classlist',
+    Component: lazy(() => import('pages/classlist')),
+    exact: true,
+  },
+  {
     path: '/home',
     Component: lazy(() => import('pages/home')),
     exact: true,

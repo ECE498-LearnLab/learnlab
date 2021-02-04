@@ -8,7 +8,7 @@ const UserAvatar = ({ user, size }) => {
       size={size}
       style={{
         color: '#fff',
-        backgroundColor: uniqueHslColor(user.email),
+        backgroundColor: uniqueHslColor(`${user.first_name} ${user.last_name}`),
       }}
     >
       {user.first_name[0].toUpperCase() ?? 'N'}

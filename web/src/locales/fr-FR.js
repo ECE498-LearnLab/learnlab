@@ -50,6 +50,12 @@ const messages = {
   'error.message.oops': "Oups! Une erreur s'est produite ...",
   'home.empty.noClasses': 'Aucune classe à afficher',
   'rooms.title.Rooms': 'Pièces',
+  'classlist.title.Classlist': 'Liste de classes',
+  'classlist.button.text': 'Ajouter des étudiants',
+  'addStudents.input.add': "Ajouter une adresse e-mail d'étudiant",
+  'addStudents.modal.title': 'Ajouter des étudiants',
+  'addStudents.modal.okText': 'Ajouter',
+  'addStudents.modal.cancelText': 'Annuler',
 }
 
 export default {

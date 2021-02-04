@@ -50,6 +50,12 @@ const messages = {
   'error.message.oops': '糟糕！出了点问题...',
   'home.empty.noClasses': '没有要显示的类',
   'rooms.title.Rooms': '房间数',
+  'classlist.title.Classlist': '会员',
+  'classlist.button.text': '添加学生',
+  'addStudents.input.add': '添加学生电子邮件',
+  'addStudents.modal.title': '添加学生',
+  'addStudents.modal.okText': '添加',
+  'addStudents.modal.cancelText': '取消',
 }
 
 export default {

@@ -1,7 +1,7 @@
-import { split, ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { WebSocketLink } from '@apollo/client/link/ws'
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 import 'antd/lib/style/index.less' // antd core styles
 import { routerMiddleware } from 'connected-react-router'
 import { createHashHistory } from 'history'
@@ -9,6 +9,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { applyMiddleware, compose, createStore } from 'redux'
+import { persistReducer, persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 // import { logger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 import './components/kit/vendors/antd/themes/dark.less' // dark theme antd components
@@ -68,15 +71,26 @@ const middlewares = [sagaMiddleware, routeMiddleware]
 // if (process.env.NODE_ENV === 'development') {
 //   middlewares.push(logger)
 // }
-const store = createStore(reducers(history), compose(applyMiddleware(...middlewares)))
+
+// redux
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['menu'],
+}
+const persistedReducer = persistReducer(persistConfig, reducers(history))
+const store = createStore(persistedReducer, compose(applyMiddleware(...middlewares)))
+const persistor = persistStore(store)
 sagaMiddleware.run(sagas)
 
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
     <Provider store={store}>
-      <Localization>
-        <Router history={history} />
-      </Localization>
+      <PersistGate loading={null} persistor={persistor}>
+        <Localization>
+          <Router history={history} />
+        </Localization>
+      </PersistGate>
     </Provider>
   </ApolloProvider>,
   document.getElementById('root'),
@@ -87,4 +101,4 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister()
 
-export { apolloClient, store, history }
+export { apolloClient, store, history, persistor }

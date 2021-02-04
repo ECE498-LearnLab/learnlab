@@ -1,29 +1,44 @@
 import React, { useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { generateAccessToken } from 'utils/accessToken'
+import EngagementGraph from './EngagementGraph'
 import Lobby from './Lobby'
 import Room from './Room'
-import EngagementGraph from './EngagementGraph'
 
 const Classroom = () => {
   const selectedClassId = useSelector(state => state.menu.selectedClassId)
   const user = useSelector(state => state.user)
-
   const [selectedRoom, setSelectedRoom] = useState('')
-  const [token, setToken] = useState(null)
+  const dispatch = useDispatch()
 
   const onLeaveRoomHandler = useCallback(() => {
-    setToken(null)
     setSelectedRoom(null)
-  }, [])
+    dispatch({
+      type: 'user/SET_STATE',
+      payload: {
+        videoGrantToken: '',
+        isInRoomSession: false,
+      },
+    })
+  }, [setSelectedRoom, dispatch])
 
   const onJoinRoomHandler = useCallback(
     _selectedRoom => {
       setSelectedRoom(_selectedRoom)
-      setToken(generateAccessToken(`${user.first_name} ${user.last_name}`, _selectedRoom.room_uuid))
+      const videoToken = generateAccessToken(
+        `${user.first_name} ${user.last_name}`,
+        _selectedRoom.room_uuid,
+      )
+      dispatch({
+        type: 'user/SET_STATE',
+        payload: {
+          videoGrantToken: videoToken,
+          isInRoomSession: true,
+        },
+      })
     },
-    [user.first_name, user.last_name],
+    [user.first_name, user.last_name, setSelectedRoom, dispatch],
   )
 
   if (selectedClassId === '') {
@@ -35,18 +50,20 @@ const Classroom = () => {
     )
   }
 
-  if (token)
+  if (user.videoGrantToken !== '' && user.videoGrantToken != null && user.isInRoomSession) {
     return (
       <>
         <EngagementGraph />
         <Room
           room={selectedRoom}
           twilioRoomSid={selectedRoom.room_uuid}
-          token={token}
+          token={user.videoGrantToken}
           onLeaveRoomHandler={onLeaveRoomHandler}
         />
       </>
     )
+  }
+
   return <Lobby onJoinRoomHandler={onJoinRoomHandler} />
 }
 

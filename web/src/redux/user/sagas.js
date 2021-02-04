@@ -91,6 +91,8 @@ export function* LOAD_CURRENT_ACCOUNT() {
         email,
         role,
         authorized: true,
+        isInRoomSession: false,
+        videoGrantToken: '',
       },
     })
     yield put({
@@ -120,6 +122,8 @@ export function* LOGOUT() {
       email: '',
       authorized: false,
       loading: false,
+      isInRoomSession: false,
+      videoGrantToken: '',
     },
   })
   yield put({
