@@ -12,7 +12,7 @@ const messages = {
   'topBar.profileMenu.role': 'Rôle',
   'topBar.profileMenu.email': 'Email',
   'topBar.profileMenu.phone': 'Téléphone',
-  'topBar.profileMenu.editProfile': 'Editer le profil',
+  'topBar.profileMenu.editProfile': 'Editer le Profil',
   'topBar.profileMenu.logout': 'Connectez - Out',
   'lobbyCard.start': 'Début',
   'lobbyCard.end': 'Fin',
@@ -58,6 +58,14 @@ const messages = {
   'addStudents.modal.title': 'Ajouter des étudiants',
   'addStudents.modal.okText': 'Ajouter',
   'addStudents.modal.cancelText': 'Annuler',
+  'editProfile.modal.title': 'Editer le Profil',
+  'editProfile.modal.okText': 'Sauver',
+  'editProfile.modal.cancelText': 'Annuler',
+  'editProfile.form.firstName': 'Prénom',
+  'editProfile.form.middleName': 'Deuxième Nom',
+  'editProfile.form.lastName': 'Nom de Famille',
+  'editProfile.form.phoneNumber': 'Téléphone',
+  'editProfile.form.email': 'Email',
 }
 
 export default {

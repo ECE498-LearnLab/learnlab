@@ -37,7 +37,7 @@ const messages = {
   'scheduleRoom.form.selectParticipants.placeholder': 'Пожалуйста, выберите участников',
   'createClass.modal.title': 'Создать класс',
   'createClass.modal.okText': 'Создать',
-  'createClass.modal.cancelText': 'Отмена',
+  'createClass.modal.cancelText': 'отменить',
   'createClass.form.className': 'Имя класса',
   'createClass.form.classNameMissing': 'Пожалуйста, введите имя класса',
   'createClass.form.classSubject': 'Тема',
@@ -58,6 +58,14 @@ const messages = {
   'addStudents.modal.title': 'Добавить студентов',
   'addStudents.modal.okText': 'Добавить',
   'addStudents.modal.cancelText': 'Отмена',
+  'editProfile.modal.title': 'Редактировать профиль',
+  'editProfile.modal.okText': 'Сохранить',
+  'editProfile.modal.cancelText': 'отменить',
+  'editProfile.form.firstName': 'Имя',
+  'editProfile.form.middleName': 'Второе имя',
+  'editProfile.form.lastName': 'Фамилия',
+  'editProfile.form.phoneNumber': 'телефон',
+  'editProfile.form.email': 'Емайл',
 }
 
 export default {

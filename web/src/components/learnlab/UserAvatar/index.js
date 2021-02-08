@@ -2,6 +2,7 @@ import { Avatar } from 'antd'
 import React from 'react'
 
 const UserAvatar = ({ user, size }) => {
+  console.log('INSIDE USER AVATAR HAHAH', user)
   return (
     <Avatar
       shape="circle"

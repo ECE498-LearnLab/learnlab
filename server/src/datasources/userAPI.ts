@@ -90,20 +90,22 @@ export default (db: Knex) => {
         };
     };
 
+    const getUser = async (id: string): Promise<UserResponse> => {
+        const res = await db.select('*').from('users').where({ id }).catch((err) => { throw err; });
+        if (res && res[0]) {
+            return { success: true, user: { ...res[0] } };
+        } else {
+            return {
+                success: false,
+                message: `User ${id} does not exist`
+            };
+        }
+    };
+
     return {
         createStudent,
         createTeacher,
-        getUser: async (id: string): Promise<UserResponse> => {
-            const res = await db.select('*').from('users').where({ id }).catch((err) => { throw err; });
-            if (res && res[0]) {
-                return { success: true, user: { ...res[0] } };
-            } else {
-                return {
-                    success: false,
-                    message: `User ${id} does not exist`
-                };
-            }
-        },
+        getUser,
         getUserByEmail: async (email: string): Promise<UserResponse> => {
             const res = await db.select('*').from('users').where({ email }).catch((err) => { throw err; });
             if (res && res[0]) {
@@ -116,13 +118,28 @@ export default (db: Knex) => {
             }
         },
         updateUserInfo: async (userUpdateInfo: MutationUpdateUserInfoArgs): Promise<CreateAccountResponse> => {
-            const { user_id, first_name, middle_name, last_name, phone_number, email } = userUpdateInfo;
+            const { user_id, first_name, middle_name, last_name, phone_number, email, parent_email, prefix} = userUpdateInfo;
             let success = true, message;
             const updated_at = db.fn.now();
+            const user_role = (await getUser(user_id)).user.role;
+
             await db('users').where({id: user_id}).update({first_name, middle_name, last_name, phone_number, email, updated_at}).catch((err) => {
                 success = false;
                 message = err.message;
             });
+
+            if (user_role === 'STUDENT') {
+                await db('students').where({id: user_id}).update({parent_email}).catch((err) => {
+                    success = false;
+                    message = err.message;
+                });
+            }
+            else {
+                await db('teachers').where({id: user_id}).update({prefix}).catch((err) => {
+                    success = false;
+                    message = err.message;
+                });
+            }
 
             if (!success) {
                 return { success, message };

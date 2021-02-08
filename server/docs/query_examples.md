@@ -58,7 +58,7 @@ query getUserByEmail($email: String!) {
   }
 }
 
-query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]){
+    query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]){
   roomsForClassroom(class_id: $class_id, room_states: $room_states){
     id
     room_uuid

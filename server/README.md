@@ -10,7 +10,7 @@
 ## Generating Types
 Run `npm run typegen` to watch modifications to the GraphQL schema and regenerate types.
 
-## Auth Token for Local GraphQL Testing
+## Auth Token for Local GraphQL Testingf
 To get an auth token to use for local testing, use the following cURL:
 ```bash
 curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDqWf-FmQC1aQU3SMRT6Z2i7--6l_ltmW0' \

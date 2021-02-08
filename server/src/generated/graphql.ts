@@ -283,6 +283,8 @@ export type MutationUpdateUserInfoArgs = {
   middle_name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   phone_number?: Maybe<Scalars['String']>;
+  parent_email?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
 };
 
 

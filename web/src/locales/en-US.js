@@ -66,6 +66,17 @@ const messages = {
   'editProfile.form.lastName': 'Last Name',
   'editProfile.form.phoneNumber': 'Phone Number',
   'editProfile.form.email': 'Email',
+<<<<<<< HEAD
+=======
+  'home.empty.noClasses': 'No classes to show',
+  'rooms.title.Rooms': 'Rooms',
+  'classlist.title.Classlist': 'Classlist',
+  'classlist.button.text': 'Add Students',
+  'addStudents.input.add': 'Add Student Email',
+  'addStudents.modal.title': 'Add Students',
+  'addStudents.modal.okText': 'Add',
+  'addStudents.modal.cancelText': 'Cancel',
+>>>>>>> d5e1354 (Added phone and middle name to save profile, updated locales)
 }
 
 export default {
