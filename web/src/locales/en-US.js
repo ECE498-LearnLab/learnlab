@@ -14,6 +14,8 @@ const messages = {
   'topBar.profileMenu.phone': 'Phone',
   'topBar.profileMenu.editProfile': 'Edit Profile',
   'topBar.profileMenu.logout': 'Logout',
+  'lobbyCard.start': 'Start',
+  'lobbyCard.end': 'End',
   'lobbyCard.joinRoom': 'Join',
   'lobbyCard.scheduled': 'Scheduled',
   'lobbyCard.ended': 'Ended',

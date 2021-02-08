@@ -1,7 +1,7 @@
-import { gql, useQuery } from '@apollo/client'
-import { Avatar } from 'antd'
+import { gql, useQuery, useMutation } from '@apollo/client'
+import { Avatar, notification } from 'antd'
 import UserAvatar from 'components/learnlab/UserAvatar'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { Button } from 'reactstrap'
@@ -40,7 +40,7 @@ const TIME_FORMAT_OPTIONS = {
   minute: '2-digit',
 }
 
-const LobbyCard = ({ room, onJoinRoomHandler }) => {
+const LobbyCard = ({ room, canStart, onJoinRoomHandler, onRoomUpdate }) => {
   const locale = useSelector(state => state.settings.locale)
   const GET_PARTICIPANTS = gql`
   query getParticipants { 
@@ -55,7 +55,56 @@ const LobbyCard = ({ room, onJoinRoomHandler }) => {
     }
   }
 `
+
+  const UPDATE_ROOM_STATUS = gql`
+    mutation updateRoomStatus($room_id: ID!, $room_status: RoomState!) {
+      updateRoomStatus(room_id: $room_id, room_status: $room_status) {
+        success
+        message
+      }
+    }
+  `
+
+  const JOIN_ROOM = gql`
+    mutation joinRoom($student_id: ID!, $room_id: ID!) {
+      joinRoom(student_id: $student_id, room_id: $room_id) {
+        success
+        message
+      }
+    }
+  `
+
   const { data } = useQuery(GET_PARTICIPANTS)
+
+  const [updateRoomStatus] = useMutation(UPDATE_ROOM_STATUS, {
+    onCompleted: onRoomUpdate,
+    onError: err => {
+      notification.warning({
+        message: 'Update Room Status Failure',
+        description: err.message,
+      })
+    },
+  })
+
+  const [joinRoom] = useMutation(JOIN_ROOM, {
+    refetchQueries: [
+      {
+        query: GET_PARTICIPANTS,
+      },
+    ],
+    awaitRefetchQueries: true,
+    onCompleted: onJoinRoomHandler,
+    onError: err => {
+      notification.warning({
+        message: 'Join Room Failure',
+        description: err.message,
+      })
+    },
+  })
+
+  const currentUser = useSelector(state => state.user)
+  const canStartRoom =
+    room.room_status === 'SCHEDULED' && canStart && currentUser.role === 'INSTRUCTOR'
 
   const [roomDate, roomTimeInterval, participants] = useMemo(() => {
     // we are assuming the start date and end date are the same here for simplicity
@@ -75,6 +124,37 @@ const LobbyCard = ({ room, onJoinRoomHandler }) => {
     return [date, timeInterval, []]
   }, [room, data, locale])
 
+  const onJoinRoom = useCallback(() => {
+    if (canStartRoom) {
+      updateRoomStatus({
+        variables: {
+          room_id: room.id,
+          room_status: 'ONGOING',
+        },
+      })
+    } else if (room.room_status === 'ONGOING') {
+      if (currentUser.role === 'STUDENT') {
+        joinRoom({
+          variables: {
+            student_id: currentUser.id,
+            room_id: room.id,
+          },
+        })
+      } else {
+        onJoinRoomHandler()
+      }
+    }
+  }, [canStartRoom, currentUser, room, updateRoomStatus, joinRoom, onJoinRoomHandler])
+
+  const onEndRoom = useCallback(() => {
+    updateRoomStatus({
+      variables: {
+        room_id: room.id,
+        room_status: 'ENDED',
+      },
+    })
+  }, [room, updateRoomStatus])
+
   return (
     <div className="col-md-4">
       <div className="card">
@@ -90,17 +170,36 @@ const LobbyCard = ({ room, onJoinRoomHandler }) => {
                 <small>{roomTimeInterval}</small>
               </h5>
             </div>
-            <div className={`ml-2 text-${STATUS_MAP[room.room_status].color}`}>
-              <Button
-                onClick={onJoinRoomHandler}
-                color={STATUS_MAP[room.room_status].color}
-                outline
-                style={{ minWidth: '120px' }}
-                disabled={room.room_status !== 'ONGOING'}
-                className="mr-2 mb-2"
-              >
-                <FormattedMessage id={STATUS_MAP[room.room_status].statusMessage} />
-              </Button>
+            <div>
+              <div className={`ml-2 text-${STATUS_MAP[room.room_status].color}`}>
+                <Button
+                  onClick={onJoinRoom}
+                  color={STATUS_MAP[room.room_status].color}
+                  outline
+                  style={{ minWidth: '120px' }}
+                  disabled={room.room_status !== 'ONGOING' && !canStartRoom}
+                  className="mr-2 mb-2"
+                >
+                  <FormattedMessage
+                    id={
+                      canStartRoom ? 'lobbyCard.start' : STATUS_MAP[room.room_status].statusMessage
+                    }
+                  />
+                </Button>
+              </div>
+              {currentUser.role === 'INSTRUCTOR' && room.room_status === 'ONGOING' && (
+                <div className="ml-2 text-danger">
+                  <Button
+                    onClick={onEndRoom}
+                    color="danger"
+                    outline
+                    style={{ minWidth: '120px' }}
+                    className="mr-2 mb-2"
+                  >
+                    <FormattedMessage id="lobbyCard.end" />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           <div className={`${style.footer} py-3 pl-4`}>
