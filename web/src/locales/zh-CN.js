@@ -15,6 +15,8 @@ const messages = {
   'topBar.profileMenu.editProfile': '编辑个人资料',
   'topBar.profileMenu.logout': '登出',
   'lobbyCard.joinRoom': '会合',
+  'lobbyCard.start': '开始',
+  'lobbyCard.end': '结束',
   'lobbyCard.scheduled': '预定的',
   'lobbyCard.ended': '已结束',
   'lobbyCard.participantsInvited':

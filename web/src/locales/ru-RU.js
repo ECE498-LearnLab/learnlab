@@ -14,6 +14,8 @@ const messages = {
   'topBar.profileMenu.phone': 'Телефон',
   'topBar.profileMenu.editProfile': 'Редактировать профиль',
   'topBar.profileMenu.logout': 'Выйти',
+  'lobbyCard.start': 'Начните',
+  'lobbyCard.end': 'Конец',
   'lobbyCard.joinRoom': 'вступать',
   'lobbyCard.scheduled': 'Запланированное',
   'lobbyCard.ended': 'оконченный',

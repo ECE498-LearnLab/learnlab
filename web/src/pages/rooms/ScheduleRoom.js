@@ -1,6 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { DatePicker, Form, Input, Modal, notification, Radio, Select } from 'antd'
-import ACL from 'components/navigation/system/ACL'
 import moment from 'moment'
 import React, { useCallback, useMemo, useState } from 'react'
 import { injectIntl } from 'react-intl'
@@ -190,7 +189,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   }, [data, form, participantsType, setParticipantsType, onSubmit, toggleShow, onSubmitFailed])
 
   return (
-    <ACL roles={['INSTRUCTOR']}>
+    <div>
       <Button color="success" className="mr-3" onClick={toggleShow}>
         {intl.formatMessage({ id: 'scheduleRoom.button' })}
       </Button>
@@ -203,7 +202,12 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
         onCancel={onCancel}
         onOk={onOk}
       >
-        <Form form={form} layout="vertical" hideRequiredMark>
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={{ participantsType: ParticipantsEnum.all }}
+          hideRequiredMark
+        >
           <Form.Item
             label={intl.formatMessage({ id: 'scheduleRoom.form.roomName' })}
             name="name"
@@ -261,7 +265,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
           </Form.Item>
         </Form>
       </Modal>
-    </ACL>
+    </div>
   )
 }
 

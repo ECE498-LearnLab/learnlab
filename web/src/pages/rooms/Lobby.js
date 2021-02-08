@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
+import ACL from 'components/navigation/system/ACL'
 import EmptyState from 'components/learnlab/EmptyState'
 import ErrorState from 'components/learnlab/ErrorState'
 import LobbyCard from 'components/learnlab/LobbyCard'
@@ -14,7 +15,7 @@ const emptySessionsState = () => {
   return <EmptyState description={<FormattedMessage id="rooms.empty.message" />} />
 }
 
-const Sessions = ({ title, rooms, onJoinRoomHandler }) => {
+const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) => {
   return (
     <div>
       <div className="cui__utils__heading">
@@ -25,9 +26,11 @@ const Sessions = ({ title, rooms, onJoinRoomHandler }) => {
           <LobbyCard
             key={room.room_uuid}
             room={room}
+            canStart={canStart}
             onJoinRoomHandler={() => {
               onJoinRoomHandler(room)
             }}
+            onRoomUpdate={onRoomUpdate}
           />
         ))}
       </div>
@@ -55,6 +58,10 @@ const Lobby = ({ onJoinRoomHandler }) => {
     variables: { class_id: selectedClassId, room_states: ['ONGOING', 'SCHEDULED'] },
   })
 
+  const onRoomUpdate = useCallback(() => {
+    refetch()
+  }, [refetch])
+
   const sessions = useMemo(() => {
     if (loading || isLoading) {
       setIsLoading(true)
@@ -69,16 +76,20 @@ const Lobby = ({ onJoinRoomHandler }) => {
     }
 
     if (data) {
-      const todaysDate = new Date().getDate()
+      const todaysDate = new Date().setHours(0, 0, 0, 0)
 
       const todaysRooms = _.orderBy(
-        data.roomsForClassroom.filter(room => new Date(room.start_time).getDate() === todaysDate),
+        data.roomsForClassroom.filter(
+          room => new Date(room.start_time).setHours(0, 0, 0, 0) === todaysDate,
+        ),
         'start_time',
         'asc',
       )
 
       const upcomingRooms = _.orderBy(
-        data.roomsForClassroom.filter(room => new Date(room.start_time).getDate() > todaysDate),
+        data.roomsForClassroom.filter(
+          room => new Date(room.start_time).setHours(0, 0, 0, 0) > todaysDate,
+        ),
         'start_time',
         'asc',
       )
@@ -87,16 +98,20 @@ const Lobby = ({ onJoinRoomHandler }) => {
         todaysRooms.length > 0 ? (
           <Sessions
             title={<FormattedMessage id="rooms.title.todaysSessions" />}
+            canStart={true}
             rooms={todaysRooms}
             onJoinRoomHandler={onJoinRoomHandler}
+            onRoomUpdate={onRoomUpdate}
           />
         ) : null
       const upcoming =
         upcomingRooms.length > 0 ? (
           <Sessions
             title={<FormattedMessage id="rooms.title.upcomingSessions" />}
+            canStart={false}
             rooms={upcomingRooms}
             onJoinRoomHandler={onJoinRoomHandler}
+            onRoomUpdate={onRoomUpdate}
           />
         ) : null
 
@@ -113,11 +128,7 @@ const Lobby = ({ onJoinRoomHandler }) => {
       return allSessions
     }
     return emptySessionsState()
-  }, [data, loading, error, onJoinRoomHandler, isLoading, setIsLoading])
-
-  const onRoomScheduled = useCallback(() => {
-    refetch()
-  }, [refetch])
+  }, [data, loading, error, onJoinRoomHandler, onRoomUpdate, isLoading, setIsLoading])
 
   return (
     <div>
@@ -127,7 +138,9 @@ const Lobby = ({ onJoinRoomHandler }) => {
           <span className="mr-3">
             <FormattedMessage id="rooms.title.Rooms" />
           </span>
-          <ScheduleRoom onSuccess={onRoomScheduled} />
+          <ACL roles={['INSTRUCTOR']}>
+            <ScheduleRoom onSuccess={onRoomUpdate} />
+          </ACL>
         </h3>
       </div>
       {sessions}
