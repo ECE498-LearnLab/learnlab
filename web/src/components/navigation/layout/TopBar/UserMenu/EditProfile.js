@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const EditProfile = ({ intl }) => {
   const user = useSelector(state => state.user)
-  // console.log(user)
   const dispatch = useDispatch()
 
   const updateUserState = useCallback(
