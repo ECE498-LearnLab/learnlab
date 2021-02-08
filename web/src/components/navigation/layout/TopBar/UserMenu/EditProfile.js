@@ -17,12 +17,8 @@ const EditProfile = ({ intl }) => {
           last_name: values.last_name,
           middle_name: values.middle_name,
           phone_number: values.phone_number,
-          email: values.email,
         },
       })
-      console.log('ENTERING UPDATE USER STATE')
-      console.log('UPDATED STATE???')
-      console.log(values)
     },
     [dispatch],
   )
@@ -100,7 +96,6 @@ const EditProfile = ({ intl }) => {
           values.phone_number === '' || values.phone_number == null
             ? user.phone_number
             : values.phone_number,
-        email: values.email === '' || values.email == null ? user.email : values.email,
       }
       updateUserInfo({
         variables: valuesToChange,
@@ -112,7 +107,6 @@ const EditProfile = ({ intl }) => {
       user.middle_name,
       user.last_name,
       user.phone_number,
-      user.email,
       updateUserInfo,
       updateUserState,
     ],
@@ -203,16 +197,8 @@ const EditProfile = ({ intl }) => {
           >
             <Input placeholder={user.phone_number} />
           </Form.Item>
-          <Form.Item
-            label={intl.formatMessage({ id: 'editProfile.form.email' })}
-            name="email"
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Input placeholder={user.email} />
+          <Form.Item label={intl.formatMessage({ id: 'editProfile.form.email' })}>
+            {user.email}
           </Form.Item>
         </Form>
       </Modal>
