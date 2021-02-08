@@ -174,27 +174,6 @@ mutation updateUserInfo(
   }
 }
 
-mutation updateUserInfo(
-  $user_id: ID!
-  $first_name: String
-  $middle_name: String
-  $last_name: String
-  $phone_number: String
-  $email: String
-) {
-  updateUserInfo(
-    user_id: $user_id
-    first_name: $first_name
-    middle_name: $middle_name
-    last_name: $last_name
-    email: $email
-    phone_number: $phone_number
-  ) {
-    user_id
-    success
-    message
-  }
-}
 
 mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time: Date) {
   createRoom(class_id: $class_id, name: $name, start_time: $start_time, end_time: $end_time) {
