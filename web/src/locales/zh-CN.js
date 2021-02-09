@@ -10,9 +10,9 @@ const messages = {
   'topBar.profileMenu.hello': '你好',
   'topBar.profileMenu.billingPlan': '结算计划',
   'topBar.profileMenu.role': '角色',
-  'topBar.profileMenu.email': '电子邮件',
+  'topBar.profileMenu.email': '电邮',
   'topBar.profileMenu.phone': '电话',
-  'topBar.profileMenu.editProfile': '编辑个人资料',
+  'topBar.profileMenu.editProfile': '编辑简档',
   'topBar.profileMenu.logout': '登出',
   'lobbyCard.joinRoom': '会合',
   'lobbyCard.start': '开始',
@@ -58,6 +58,14 @@ const messages = {
   'addStudents.modal.title': '添加学生',
   'addStudents.modal.okText': '添加',
   'addStudents.modal.cancelText': '取消',
+  'editProfile.modal.title': '编辑简档',
+  'editProfile.modal.okText': '保存',
+  'editProfile.modal.cancelText': '取消',
+  'editProfile.form.firstName': '首名',
+  'editProfile.form.middleName': '中名',
+  'editProfile.form.lastName': '姓',
+  'editProfile.form.phoneNumber': '电话',
+  'editProfile.form.email': '电邮',
 }
 
 export default {

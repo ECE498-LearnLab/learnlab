@@ -135,7 +135,7 @@ export async function currentAccount() {
                 first_name: userByEmail.user.first_name,
                 last_name: userByEmail.user.last_name,
                 middle_name: userByEmail.user.middle_name ?? '', // The ?? is basically a check if it's undefined or null, then set the value to ''
-                phone_number: userByEmail.user.middle_name ?? '',
+                phone_number: userByEmail.user.phone_number ?? '',
                 role: userByEmail.user.role,
               })
               return mergedUser

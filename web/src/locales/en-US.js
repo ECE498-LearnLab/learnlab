@@ -58,6 +58,14 @@ const messages = {
   'addStudents.modal.title': 'Add Students',
   'addStudents.modal.okText': 'Add',
   'addStudents.modal.cancelText': 'Cancel',
+  'editProfile.modal.title': 'Edit Profile',
+  'editProfile.modal.okText': 'Save',
+  'editProfile.modal.cancelText': 'Cancel',
+  'editProfile.form.firstName': 'First Name',
+  'editProfile.form.middleName': 'Middle Name',
+  'editProfile.form.lastName': 'Last Name',
+  'editProfile.form.phoneNumber': 'Phone Number',
+  'editProfile.form.email': 'Email',
 }
 
 export default {

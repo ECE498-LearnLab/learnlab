@@ -240,6 +240,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createStudent?: Maybe<CreateAccountResponse>;
   createTeacher?: Maybe<CreateAccountResponse>;
+  updateUserInfo?: Maybe<CreateAccountResponse>;
   createRoom?: Maybe<CreateRoomResponse>;
   createClassroom?: Maybe<CreateClassroomResponse>;
   submitQuestion?: Maybe<CreateQuestionResponse>;
@@ -272,6 +273,18 @@ export type MutationCreateTeacherArgs = {
   email: Scalars['String'];
   phone_number?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['Date']>;
+};
+
+
+export type MutationUpdateUserInfoArgs = {
+  user_id: Scalars['ID'];
+  first_name?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  middle_name?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone_number?: Maybe<Scalars['String']>;
+  parent_email?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
 };
 
 
@@ -621,6 +634,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createStudent?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateStudentArgs, 'first_name' | 'last_name' | 'email'>>;
   createTeacher?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationCreateTeacherArgs, 'first_name' | 'last_name' | 'email'>>;
+  updateUserInfo?: Resolver<Maybe<ResolversTypes['CreateAccountResponse']>, ParentType, ContextType, RequireFields<MutationUpdateUserInfoArgs, 'user_id'>>;
   createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id' | 'name'>>;
   createClassroom?: Resolver<Maybe<ResolversTypes['CreateClassroomResponse']>, ParentType, ContextType, RequireFields<MutationCreateClassroomArgs, 'name' | 'subject' | 'teacher_id'>>;
   submitQuestion?: Resolver<Maybe<ResolversTypes['CreateQuestionResponse']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;

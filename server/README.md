@@ -10,14 +10,17 @@
 ## Generating Types
 Run `npm run typegen` to watch modifications to the GraphQL schema and regenerate types.
 
-## Auth Token for Local Testing
+## Auth Token for Local GraphQL Testingf
 To get an auth token to use for local testing, use the following cURL:
 ```bash
 curl 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDqWf-FmQC1aQU3SMRT6Z2i7--6l_ltmW0' \
          -H 'Content-Type: application/json' \
          --data-binary '{"email":"kimpope@yahoo.ca","password":"test123","returnSecureToken":true}'
 ```
-You will need to add the token to `authorization: Bearer <>` in the HTTP headers section in the graphql playground if you're using that.
+If this command gives you `Protocol "'https" not supported or disabled in libcurl` errors, copy and paste the entire cURL in git bash.
+You will need to add the token to `{
+                                     "authorization": "Bearer eyJasldfkjgktokenthatyoucopied"
+                                   }` in the HTTP headers section in the graphql playground if you're using that.
 ### Subscriptions Testing (Local)
 You will need to set another parameter `authToken` that is the same as the auth token above in the HTTP headers (GraphQL Playground)
 
