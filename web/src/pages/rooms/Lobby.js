@@ -39,7 +39,7 @@ const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) =
 }
 
 const Lobby = ({ onJoinRoomHandler }) => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const GET_ROOMS_FOR_CLASSROOM = gql`
     query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]) {
       roomsForClassroom(class_id: $class_id, room_states: $room_states) {

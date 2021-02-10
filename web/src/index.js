@@ -3,6 +3,7 @@ import { setContext } from '@apollo/client/link/context'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import 'antd/lib/style/index.less' // antd core styles
+import { createUploadLink } from 'apollo-upload-client'
 import { routerMiddleware } from 'connected-react-router'
 import { createHashHistory } from 'history'
 import React from 'react'
@@ -27,7 +28,6 @@ import * as serviceWorker from './serviceWorker'
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
 })
-
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:4000/graphql`,
   options: {
@@ -37,8 +37,11 @@ const wsLink = new WebSocketLink({
     },
   },
 })
+const uploadLink = createUploadLink({
+  uri: 'http://localhost:4000/graphql',
+})
 
-const splitLink = split(
+const requestLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
     return definition.kind === `OperationDefinition` && definition.operation === `subscription`
@@ -46,6 +49,14 @@ const splitLink = split(
   wsLink,
   httpLink,
 )
+
+// helper functions for determining if uploadLink is needed
+const isFile = value =>
+  (typeof File !== 'undefined' && value instanceof File) ||
+  (typeof Blob !== 'undefined' && value instanceof Blob)
+const isUpload = ({ variables }) => Object.values(variables).some(isFile)
+
+const terminalLink = split(isUpload, uploadLink, requestLink)
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -59,7 +70,7 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 const apolloClient = new ApolloClient({
-  link: authLink.concat(splitLink),
+  link: authLink.concat(terminalLink),
   cache: new InMemoryCache(),
 })
 
@@ -76,7 +87,7 @@ const middlewares = [sagaMiddleware, routeMiddleware]
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['menu'],
+  whitelist: ['selectedClass'],
 }
 const persistedReducer = persistReducer(persistConfig, reducers(history))
 const store = createStore(persistedReducer, compose(applyMiddleware(...middlewares)))

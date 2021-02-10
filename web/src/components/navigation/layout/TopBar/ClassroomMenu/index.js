@@ -14,7 +14,8 @@ import CreateClassModalForm from './CreateClassModalForm'
 import style from './style.module.scss'
 
 const ClassroomMenu = () => {
-  const selectedClassName = useSelector(state => state.menu.selectedClassName)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
+  const selectedClassName = useSelector(state => state.selectedClass.className)
   const userId = useSelector(state => state.user.id)
   const role = useSelector(state => state.user.role)
   const dispatch = useDispatch()
@@ -22,10 +23,10 @@ const ClassroomMenu = () => {
   const setSelectedClass = useCallback(
     classroom => {
       dispatch({
-        type: 'menu/SET_STATE',
+        type: 'selectedClass/SET_STATE',
         payload: {
-          selectedClassId: classroom.id,
-          selectedClassName: classroom.name,
+          classId: classroom.id,
+          className: classroom.name,
         },
       })
     },
@@ -109,7 +110,7 @@ const ClassroomMenu = () => {
         >
           <div>
             <i className="fe fe-bookmark mr-2" />
-            {selectedClassName === '' ? (
+            {selectedClassId === '' || selectedClassId === '' || selectedClassId == null ? (
               <FormattedMessage id="classMenu.placeholder.selectClass" />
             ) : (
               selectedClassName

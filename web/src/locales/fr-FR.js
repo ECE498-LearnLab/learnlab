@@ -66,6 +66,23 @@ const messages = {
   'editProfile.form.lastName': 'Nom de Famille',
   'editProfile.form.phoneNumber': 'Téléphone',
   'editProfile.form.email': 'Email',
+  'resources.title.Resources': 'Des dossiers',
+  'resources.button.uploadFile': 'Télécharger le fichier',
+  'resources.button.download': 'Télécharger',
+  'resources.empty.noResources': 'Aucun fichier',
+  'uploadFile.modal.title': 'Télécharger le fichier',
+  'uploadFile.modal.okText': 'Télécharger',
+  'uploadFile.modal.cancelText': 'Annuler',
+  'uploadFile.modal.message':
+    'Cliquez ou faites glisser le fichier dans cette zone pour le télécharger',
+  'uploadFile.form.tags': 'Sélectionnez les balises de fichier',
+  'uploadFile.form.file': 'Sélectionnez un fichier',
+  'uploadFile.form.createTag': 'Créer une nouvelle balise',
+  'createTag.modal.title': 'Créer une balise',
+  'createTag.modal.okText': 'Créer',
+  'createTag.modal.cancelText': 'Annuler',
+  'createTag.form.name': 'Nom',
+  'createTag.form.color': 'Couleur',
 }
 
 export default {

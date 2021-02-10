@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom'
 import DashboardContent from './DashboardContent'
 
 const Dashboard = () => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
 
   if (selectedClassId === '') {
     // redirect to home so they choose a damn course

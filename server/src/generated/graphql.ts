@@ -10,7 +10,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  FileUpload: any;
 };
+
 
 
 export enum Role {
@@ -34,6 +36,24 @@ export enum TeacherPrefix {
   Mrs = 'Mrs',
   Ms = 'Ms'
 }
+
+export type File = {
+  __typename?: 'File';
+  id: Scalars['ID'];
+  filename: Scalars['String'];
+  class_id: Scalars['ID'];
+  created_at: Scalars['Date'];
+  storage_link: Scalars['String'];
+  tags?: Maybe<Array<Maybe<Tag>>>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID'];
+  tag: Scalars['String'];
+  class_id: Scalars['ID'];
+  color: Scalars['String'];
+};
 
 export type User = {
   __typename?: 'User';
@@ -180,6 +200,8 @@ export type Query = {
   roomsForClassroom: Array<Maybe<Room>>;
   participants: Array<Maybe<User>>;
   engagementHistory: Array<Maybe<EngagementHistory>>;
+  filesForClassroom?: Maybe<Array<Maybe<File>>>;
+  fileTagsForClassroom?: Maybe<Array<Maybe<Tag>>>;
 };
 
 
@@ -236,6 +258,16 @@ export type QueryEngagementHistoryArgs = {
   student_id: Scalars['ID'];
 };
 
+
+export type QueryFilesForClassroomArgs = {
+  class_id: Scalars['ID'];
+};
+
+
+export type QueryFileTagsForClassroomArgs = {
+  class_id: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createStudent?: Maybe<CreateAccountResponse>;
@@ -251,6 +283,8 @@ export type Mutation = {
   invite?: Maybe<Response>;
   joinRoom?: Maybe<Response>;
   upsertEngagementCurrent?: Maybe<Response>;
+  uploadFile?: Maybe<Response>;
+  createTag?: Maybe<Response>;
 };
 
 
@@ -354,6 +388,20 @@ export type MutationUpsertEngagementCurrentArgs = {
 };
 
 
+export type MutationUploadFileArgs = {
+  class_id: Scalars['ID'];
+  file: Scalars['FileUpload'];
+  tags?: Maybe<Array<Scalars['ID']>>;
+};
+
+
+export type MutationCreateTagArgs = {
+  class_id: Scalars['ID'];
+  tag: Scalars['String'];
+  color: Scalars['String'];
+};
+
+
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -432,13 +480,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
+  FileUpload: ResolverTypeWrapper<Scalars['FileUpload']>;
   Role: Role;
   RoomState: RoomState;
   ParticipantStatus: ParticipantStatus;
   TeacherPrefix: TeacherPrefix;
-  User: ResolverTypeWrapper<User>;
+  File: ResolverTypeWrapper<File>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Tag: ResolverTypeWrapper<Tag>;
+  User: ResolverTypeWrapper<User>;
   Classroom: ResolverTypeWrapper<Classroom>;
   ClassroomDetails: ResolverTypeWrapper<ClassroomDetails>;
   ClassroomsTaught: ResolverTypeWrapper<ClassroomsTaught>;
@@ -463,9 +514,12 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Date: Scalars['Date'];
-  User: User;
+  FileUpload: Scalars['FileUpload'];
+  File: File;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  Tag: Tag;
+  User: User;
   Classroom: Classroom;
   ClassroomDetails: ClassroomDetails;
   ClassroomsTaught: ClassroomsTaught;
@@ -490,6 +544,28 @@ export type ResolversParentTypes = {
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
+
+export interface FileUploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['FileUpload'], any> {
+  name: 'FileUpload';
+}
+
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  class_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  storage_link?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  tag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  class_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  color?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -629,6 +705,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id'>>;
   participants?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'room_id'>>;
   engagementHistory?: Resolver<Array<Maybe<ResolversTypes['EngagementHistory']>>, ParentType, ContextType, RequireFields<QueryEngagementHistoryArgs, 'room_id' | 'student_id'>>;
+  filesForClassroom?: Resolver<Maybe<Array<Maybe<ResolversTypes['File']>>>, ParentType, ContextType, RequireFields<QueryFilesForClassroomArgs, 'class_id'>>;
+  fileTagsForClassroom?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType, RequireFields<QueryFileTagsForClassroomArgs, 'class_id'>>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -645,10 +723,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   invite?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationInviteArgs, 'room_id'>>;
   joinRoom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationJoinRoomArgs, 'student_id' | 'room_id'>>;
   upsertEngagementCurrent?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpsertEngagementCurrentArgs, 'room_id' | 'student_id' | 'score' | 'classification' | 'created_at'>>;
+  uploadFile?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'class_id' | 'file'>>;
+  createTag?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationCreateTagArgs, 'class_id' | 'tag' | 'color'>>;
 };
 
 export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
+  FileUpload?: GraphQLScalarType;
+  File?: FileResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Classroom?: ClassroomResolvers<ContextType>;
   ClassroomDetails?: ClassroomDetailsResolvers<ContextType>;

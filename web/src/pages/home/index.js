@@ -12,7 +12,7 @@ import { Redirect } from 'react-router-dom'
 import CreateClassButton from './CreateClassButton'
 
 const Dashboard = () => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
 
   const userId = useSelector(state => state.user.id)
   const role = useSelector(state => state.user.role)
@@ -21,10 +21,10 @@ const Dashboard = () => {
   const setSelectedClass = useCallback(
     classroom => {
       dispatch({
-        type: 'menu/SET_STATE',
+        type: 'selectedClass/SET_STATE',
         payload: {
-          selectedClassId: classroom.id,
-          selectedClassName: classroom.name,
+          classId: classroom.id,
+          cassName: classroom.name,
         },
       })
     },

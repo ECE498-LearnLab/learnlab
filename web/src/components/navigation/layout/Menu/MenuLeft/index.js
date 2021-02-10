@@ -35,7 +35,7 @@ const MenuLeft = ({
 }) => {
   const [selectedKeys, setSelectedKeys] = useState(store.get('app.menu.selectedKeys') || [])
   const [openedKeys, setOpenedKeys] = useState(store.get('app.menu.openedKeys') || [])
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
 
   useEffect(() => {
     applySelectedKeys()
@@ -209,7 +209,9 @@ const MenuLeft = ({
             className={style.navigation}
             inlineIndent="15"
           >
-            {selectedClassId === '' ? null : generateMenuItems()}
+            {selectedClassId === '' || selectedClassId === '' || selectedClassId == null
+              ? null
+              : generateMenuItems()}
           </Menu>
         </PerfectScrollbar>
       </div>

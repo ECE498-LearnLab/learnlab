@@ -9,7 +9,7 @@ import { Button } from 'reactstrap'
 const ParticipantsEnum = Object.freeze({ all: 1, custom: 2 })
 
 const ScheduleRoom = ({ intl, onSuccess }) => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const CREATE_ROOM = gql`
     mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time: Date) {
       createRoom(class_id: $class_id, name: $name, start_time: $start_time, end_time: $end_time) {

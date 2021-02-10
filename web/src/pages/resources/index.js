@@ -1,13 +1,13 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import UsersTable from './UsersTable'
+import ResourceList from './ResourceList'
 
-const Dashboard = () => {
+const Resources = () => {
   const selectedClassId = useSelector(state => state.selectedClass.classId)
 
   if (selectedClassId === '') {
+    // redirect to home so they choose a damn course
     return (
       <div>
         <Redirect to="/home" />
@@ -15,12 +15,7 @@ const Dashboard = () => {
     )
   }
 
-  return (
-    <div>
-      <Helmet title="Classlist" />
-      <UsersTable />
-    </div>
-  )
+  return <ResourceList />
 }
 
-export default Dashboard
+export default Resources

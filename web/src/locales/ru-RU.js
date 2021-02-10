@@ -66,6 +66,22 @@ const messages = {
   'editProfile.form.lastName': 'Фамилия',
   'editProfile.form.phoneNumber': 'телефон',
   'editProfile.form.email': 'Емайл',
+  'resources.title.Resources': 'Файлы',
+  'resources.button.uploadFile': 'Загрузить файл',
+  'resources.button.download': 'Загрузить',
+  'resources.empty.noResources': 'Нет файлов для отображения',
+  'uploadFile.modal.title': 'Загрузить файл',
+  'uploadFile.modal.okText': 'Загрузить',
+  'uploadFile.modal.cancelText': 'Отмена',
+  'uploadFile.modal.message': 'Щелкните или перетащите файл в эту область для загрузки',
+  'uploadFile.form.tags': 'Выбрать теги файла',
+  'uploadFile.form.file': 'Выбрать файл',
+  'uploadFile.form.createTag': 'Создать новый тег',
+  'createTag.modal.title': 'Создать тег',
+  'createTag.modal.okText': 'Создать',
+  'createTag.modal.cancelText': 'Отмена',
+  'createTag.form.name': 'Имя',
+  'createTag.form.color': 'Цвет',
 }
 
 export default {
