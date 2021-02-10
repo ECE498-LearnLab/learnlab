@@ -25,6 +25,7 @@ const CreateFileTagModal = ({ intl, isModalVisible, toggleModalVisible, refetchT
     data => {
       setCreateLoading(false)
       if (data.createTag.success) {
+        form.resetFields()
         toggleModalVisible()
         message.success('Tag was successfully created')
         refetchTags()
@@ -32,7 +33,7 @@ const CreateFileTagModal = ({ intl, isModalVisible, toggleModalVisible, refetchT
         message.error('An error occurred when creating new tag')
       }
     },
-    [setCreateLoading, toggleModalVisible, refetchTags],
+    [form, setCreateLoading, toggleModalVisible, refetchTags],
   )
   const onCreateError = useCallback(
     err => {

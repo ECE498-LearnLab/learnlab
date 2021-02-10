@@ -55,6 +55,10 @@ I find `migrate:up` and `migrate:down` the most useful.
 ## Setting up your db for the first time
 After successfully running the migrations, you should initially seed your database with data. This can be done inside the docker container by running `npx knex seed:run`. This will run ALL the seeds. Make sure your tables are EMPTY before running the seeds!
 
+If you want to empty the tables and reset the auto-increment, use `TRUNCATE` command inside the db docker container:
+
+`TRUNCATE classrooms, engagement_current, engagement_history, files, files_tags, participants, questions, rooms, students, tags, takes, teachers, teaches, users RESTART IDENTITY;`
+
 ## Production Database Migration
 After merging a migration file, you need to update the production database with the new schema changes. Currently this needs to be done locally (in the server directory) by running the following command:
 

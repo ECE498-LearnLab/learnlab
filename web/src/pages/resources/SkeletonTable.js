@@ -1,41 +1,49 @@
 import { Skeleton, Table } from 'antd'
 import React from 'react'
+import { FileIcon } from 'react-file-icon'
 import style from './style.module.scss'
 
 const columns = [
   {
-    key: 'AVATAR',
+    key: 'file_icon',
     className: 'bg-transparent width-50',
     render: () => {
       return (
-        <div>
-          <Skeleton.Avatar size="default" active />
+        <div className="p-1" style={{ minWidth: '3rem' }}>
+          <FileIcon />
         </div>
       )
     },
   },
   {
     title: 'NAME',
-    key: 'name',
+    key: 'filename',
+    dataIndex: 'filename',
     className: 'bg-transparent',
     render: () => {
       return <Skeleton.Input style={{ width: 120 }} active />
     },
   },
   {
-    title: 'EMAIL',
-    dataIndex: 'email',
-    key: 'email',
+    title: 'TAGS',
+    key: 'tags',
+    dataIndex: 'tags',
     className: 'bg-transparent',
+    render: () => {
+      return <Skeleton.Input style={{ width: 90 }} active />
+    },
+  },
+  {
+    title: 'POSTED',
+    key: 'created_at',
+    className: 'bg-transparent width-50',
     render: () => {
       return <Skeleton.Input style={{ width: 160 }} active />
     },
   },
   {
-    title: 'ROLE',
-    dataIndex: 'role',
-    key: 'role',
-    className: 'bg-transparent',
+    key: 'download_file',
+    className: 'bg-transparent width-50',
     render: () => {
       return <Skeleton.Input style={{ width: 90 }} active />
     },
@@ -43,10 +51,10 @@ const columns = [
 ]
 
 const data = [
-  { key: 1, first_name: '', last_name: '', email: '', role: '' },
-  { key: 2, first_name: '', last_name: '', email: '', role: '' },
-  { key: 3, first_name: '', last_name: '', email: '', role: '' },
-  { key: 4, first_name: '', last_name: '', email: '', role: '' },
+  { key: 1, filename: '', tags: [], created_at: '' },
+  { key: 2, filename: '', tags: [], created_at: '' },
+  { key: 3, filename: '', tags: [], created_at: '' },
+  { key: 4, filename: '', tags: [], created_at: '' },
 ]
 
 const SkeletonTable = () => {

@@ -24,7 +24,7 @@ const Dashboard = () => {
         type: 'selectedClass/SET_STATE',
         payload: {
           classId: classroom.id,
-          cassName: classroom.name,
+          className: classroom.name,
         },
       })
     },
