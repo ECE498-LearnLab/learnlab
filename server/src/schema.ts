@@ -5,6 +5,7 @@ import { gql } from 'apollo-server';
  */
 const typeDefs = gql`
     scalar Date
+    scalar FileUpload
 
     enum Role {
         STUDENT
@@ -26,6 +27,22 @@ const typeDefs = gql`
         Mr
         Mrs
         Ms
+    }
+
+    type File {
+        id: ID!
+        filename: String!
+        class_id: ID!
+        created_at: Date!
+        storage_link: String!
+        tags: [Tag]
+    }
+
+    type Tag {
+        id: ID!
+        tag: String!
+        class_id: ID!
+        color: String!
     }
 
     type User {
@@ -152,7 +169,8 @@ const typeDefs = gql`
         roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!, statuses: [ParticipantStatus]): [User]!
         engagementHistory(room_id: ID!, student_id: ID!): [EngagementHistory]!
-        
+        filesForClassroom(class_id: ID!): [File]
+        fileTagsForClassroom(class_id: ID!): [Tag]
     }
 
     type Mutation {
@@ -175,6 +193,8 @@ const typeDefs = gql`
         joinRoom(student_id: ID!, room_id: ID!): Response
         upsertEngagementCurrent(room_id: ID!, student_id: ID!, score: Int!, classification: String!, created_at: Date!):
                     Response
+        uploadFile(class_id: ID!, file: FileUpload!, tags: [ID!]): Response
+        createTag(class_id: ID!, tag: String!, color: String!): Response
     }
 `;
 

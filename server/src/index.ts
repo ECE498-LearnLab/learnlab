@@ -4,6 +4,7 @@ import * as admin from 'firebase-admin';
 import { firebaseConfig } from './auth/verification';
 import LearnlabDB from './datasources/learnlab';
 import { resolvers } from './resolvers';
+import { AWSS3Uploader } from './s3/s3';
 import typeDefs from './schema';
 
 const useLocalDb = true;
@@ -49,6 +50,12 @@ const uidFromValidToken = async (token: string) => {
   
 admin.initializeApp(firebaseConfig);
 
+const s3Uploader = new AWSS3Uploader({ 
+  accessKeyId: 'AKIAYPXW62UVVNPK7HJK',
+  secretAccessKey: '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',
+  destinationBucketName: 'learnlab'
+});
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -87,3 +94,5 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
     console.log(`Server ready at ${url}`);
 });
+
+export { s3Uploader };

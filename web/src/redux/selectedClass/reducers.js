@@ -1,10 +1,11 @@
 import actions from './actions'
 
 const initialState = {
-  menuData: [],
+  selectedClassId: '',
+  selectedClassName: '',
 }
 
-export default function menuReducer(state = initialState, action) {
+export default function classReducer(state = initialState, action) {
   switch (action.type) {
     case actions.SET_STATE:
       return { ...state, ...action.payload }

@@ -14,7 +14,7 @@ import style from './style.module.scss'
 const columns = [
   {
     key: 'avatar',
-    className: 'bg-transparent text-gray-6 width-50',
+    className: 'bg-transparent width-50',
     render: record => {
       return (
         <div>
@@ -24,9 +24,9 @@ const columns = [
     },
   },
   {
-    title: 'Name',
+    title: 'NAME',
     key: 'name',
-    className: 'bg-transparent text-gray-6',
+    className: 'bg-transparent',
     render: record => {
       return (
         <div>
@@ -36,19 +36,19 @@ const columns = [
     },
   },
   {
-    title: 'Email',
+    title: 'EMAIL',
     dataIndex: 'email',
     key: 'email',
-    className: 'bg-transparent text-gray-6',
+    className: 'bg-transparent',
     render: text => {
       return <a className="text-blue">{text}</a>
     },
   },
   {
-    title: 'Role',
+    title: 'ROLE',
     dataIndex: 'role',
     key: 'role',
-    className: 'bg-transparent text-gray-6',
+    className: 'bg-transparent',
     render: text => {
       return <Tag>{text}</Tag>
     },
@@ -56,7 +56,7 @@ const columns = [
 ]
 
 const UsersTable = () => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const user = useSelector(state => state.user)
 
   const GET_CLASSROOM_USERS = gql`

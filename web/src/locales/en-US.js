@@ -66,6 +66,22 @@ const messages = {
   'editProfile.form.lastName': 'Last Name',
   'editProfile.form.phoneNumber': 'Phone Number',
   'editProfile.form.email': 'Email',
+  'resources.title.Resources': 'Resources',
+  'resources.button.uploadFile': 'Upload File',
+  'resources.button.download': ' Download',
+  'resources.empty.noResources': 'No resources to show',
+  'uploadFile.modal.title': 'Upload File',
+  'uploadFile.modal.okText': 'Upload',
+  'uploadFile.modal.cancelText': 'Cancel',
+  'uploadFile.modal.message': 'Click or drag file to this area to upload',
+  'uploadFile.form.tags': 'Select file tags',
+  'uploadFile.form.file': 'Select a file',
+  'uploadFile.form.createTag': 'Create new tag',
+  'createTag.modal.title': 'Create Tag',
+  'createTag.modal.okText': 'Create',
+  'createTag.modal.cancelText': 'Cancel',
+  'createTag.form.name': 'Name',
+  'createTag.form.color': 'Color',
 }
 
 export default {

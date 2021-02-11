@@ -5,8 +5,8 @@ import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 const DashboardContent = () => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
-  const selectedClassName = useSelector(state => state.menu.selectedClassName)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
+  const selectedClassName = useSelector(state => state.selectedClass.className)
   const user = useSelector(state => state.user)
 
   const GET_CLASSROOM_DETAILS = gql`

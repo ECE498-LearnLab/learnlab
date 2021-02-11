@@ -9,7 +9,7 @@ import EmailTagGroup from './EmailTagGroup'
 const AddStudentsModal = ({ intl, isModalVisible, toggleModalVisible, refetchUsers }) => {
   const [addLoading, setAddLoading] = useState(false)
   const [tags, setTags] = useState([])
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const ADD_STUDENTS = gql`
     mutation addStudents($class_id: ID!, $students_emails: [String!]) {
       addStudentsToClassroom(class_id: $class_id, student_emails: $students_emails) {

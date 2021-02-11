@@ -1,14 +1,15 @@
 import { gql, useQuery } from '@apollo/client'
-import ACL from 'components/navigation/system/ACL'
 import EmptyState from 'components/learnlab/EmptyState'
 import ErrorState from 'components/learnlab/ErrorState'
 import LobbyCard from 'components/learnlab/LobbyCard'
 import SkeletonLobbyCard from 'components/learnlab/LobbyCard/SkeletonLobbyCard'
+import ACL from 'components/navigation/system/ACL'
 import _ from 'lodash'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { FormattedMessage } from 'react-intl'
 import { useSelector } from 'react-redux'
+import { Button } from 'reactstrap'
 import ScheduleRoom from './ScheduleRoom'
 
 const emptySessionsState = () => {
@@ -39,7 +40,10 @@ const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) =
 }
 
 const Lobby = ({ onJoinRoomHandler }) => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
+  const [show, setShow] = useState(false)
+  const toggleShow = useCallback(() => setShow(!show), [setShow, show])
+
   const GET_ROOMS_FOR_CLASSROOM = gql`
     query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]) {
       roomsForClassroom(class_id: $class_id, room_states: $room_states) {
@@ -139,11 +143,14 @@ const Lobby = ({ onJoinRoomHandler }) => {
             <FormattedMessage id="rooms.title.Rooms" />
           </span>
           <ACL roles={['INSTRUCTOR']}>
-            <ScheduleRoom onSuccess={onRoomUpdate} />
+            <Button color="success" className="mr-3" onClick={toggleShow}>
+              <FormattedMessage id="scheduleRoom.button" />
+            </Button>
           </ACL>
         </h3>
       </div>
       {sessions}
+      <ScheduleRoom onSuccess={onRoomUpdate} show={show} toggleShow={toggleShow} />
     </div>
   )
 }

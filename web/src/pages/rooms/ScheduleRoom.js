@@ -1,15 +1,15 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { DatePicker, Form, Input, Modal, notification, Radio, Select } from 'antd'
+import ACL from 'components/navigation/system/ACL'
 import moment from 'moment'
 import React, { useCallback, useMemo, useState } from 'react'
 import { injectIntl } from 'react-intl'
 import { useSelector } from 'react-redux'
-import { Button } from 'reactstrap'
 
 const ParticipantsEnum = Object.freeze({ all: 1, custom: 2 })
 
-const ScheduleRoom = ({ intl, onSuccess }) => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+const ScheduleRoom = ({ intl, onSuccess, show, toggleShow }) => {
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const CREATE_ROOM = gql`
     mutation createRoom($class_id: ID!, $name: String!, $start_time: Date, $end_time: Date) {
       createRoom(class_id: $class_id, name: $name, start_time: $start_time, end_time: $end_time) {
@@ -47,11 +47,9 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   const { Option } = Select
 
   const [form] = Form.useForm()
-  const [show, setShow] = useState(false)
   const [participants, setParticipants] = useState([])
   const [participantsType, setParticipantsType] = useState(ParticipantsEnum.all)
 
-  const toggleShow = useCallback(() => setShow(!show), [setShow, show])
   const onParticipantsTypeChange = useCallback(e => setParticipantsType(e.target.value), [
     setParticipantsType,
   ])
@@ -189,11 +187,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
   }, [data, form, participantsType, setParticipantsType, onSubmit, toggleShow, onSubmitFailed])
 
   return (
-    <div>
-      <Button color="success" className="mr-3" onClick={toggleShow}>
-        {intl.formatMessage({ id: 'scheduleRoom.button' })}
-      </Button>
-
+    <ACL roles={['INSTRUCTOR']}>
       <Modal
         visible={show}
         title={intl.formatMessage({ id: 'scheduleRoom.modal.title' })}
@@ -265,7 +259,7 @@ const ScheduleRoom = ({ intl, onSuccess }) => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </ACL>
   )
 }
 

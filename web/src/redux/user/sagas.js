@@ -127,10 +127,10 @@ export function* LOGOUT() {
     },
   })
   yield put({
-    type: 'menu/SET_STATE',
+    type: 'selectedClass/SET_STATE',
     payload: {
-      selectedClassId: '',
-      selectedClassName: '',
+      classId: '',
+      className: '',
     },
   })
 }

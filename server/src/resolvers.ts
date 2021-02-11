@@ -1,11 +1,12 @@
-import { GraphQLScalarType, Kind } from 'graphql';
 import { mergeResolvers } from '@graphql-tools/merge';
+import { GraphQLScalarType, Kind } from 'graphql';
 import { Resolvers } from "./generated/graphql";
-import userResolver from './resolvers/users';
 import classroomResolver from './resolvers/classrooms';
-import roomResolver from './resolvers/rooms';
-import questionResolver from './resolvers/questions';
 import engagementStatsResolver from './resolvers/engagementStats';
+import filesResolver from './resolvers/files';
+import questionResolver from './resolvers/questions';
+import roomResolver from './resolvers/rooms';
+import userResolver from './resolvers/users';
 
 // the 4 positional arguments for a resolver are: (parent, args, context, info)
 export const resolvers: Resolvers = mergeResolvers([
@@ -14,6 +15,7 @@ export const resolvers: Resolvers = mergeResolvers([
     roomResolver,
     questionResolver,
     engagementStatsResolver,
+    filesResolver,
     {
         Date: new GraphQLScalarType({
             name: 'Date',

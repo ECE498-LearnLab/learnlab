@@ -66,6 +66,22 @@ const messages = {
   'editProfile.form.lastName': '姓',
   'editProfile.form.phoneNumber': '电话',
   'editProfile.form.email': '电邮',
+  'resources.title.Resources': '案卷',
+  'resources.button.uploadFile': '上传文件',
+  'resources.button.download': '下载',
+  'resources.empty.noResources': '无文件',
+  'uploadFile.modal.title': '上传文件',
+  'uploadFile.modal.okText': '上传',
+  'uploadFile.modal.cancelText': '取消',
+  'uploadFile.modal.message': '单击或拖动文件到该区域进行上传',
+  'uploadFile.form.tags': '选择文件标签',
+  'uploadFile.form.file': '选择一个文件',
+  'uploadFile.form.createTag': '创建新标签',
+  'createTag.modal.title': '创建标签',
+  'createTag.modal.okText': '创建',
+  'createTag.modal.cancelText': '取消',
+  'createTag.form.name': '名称',
+  'createTag.form.color': '颜色',
 }
 
 export default {

@@ -6,8 +6,8 @@ const styleMap = Object.values(style).slice(1)
 const Pattern = ({ patternString, children, classnames }) => {
   return (
     <div
-      style={{ backgroundColor: uniqueHslColor(patternString) }}
-      className={`${classnames} ${uniquePattern(patternString)}`}
+      style={{ backgroundColor: uniqueHslColor(patternString ?? 'null') }}
+      className={`${classnames} ${uniquePattern(patternString ?? 'null')}`}
     >
       {children}
     </div>

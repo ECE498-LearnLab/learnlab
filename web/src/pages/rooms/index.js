@@ -7,7 +7,7 @@ import Lobby from './Lobby'
 import Room from './Room'
 
 const Classroom = () => {
-  const selectedClassId = useSelector(state => state.menu.selectedClassId)
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const user = useSelector(state => state.user)
   const [selectedRoom, setSelectedRoom] = useState('')
   const dispatch = useDispatch()
