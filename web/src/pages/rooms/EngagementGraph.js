@@ -3,7 +3,8 @@ import { gql, useSubscription } from '@apollo/client'
 import ApexCharts from 'apexcharts'
 import ReactApexChart from 'react-apexcharts'
 
-const graph_data = []
+let graph_data = []
+let curr_score = 0
 
 const EngagementGraph = () => {
   // engagement score subscription
@@ -24,14 +25,31 @@ const EngagementGraph = () => {
       variables: { student_id },
     })
     if (!loading && data) {
-      appendData(data.engagementStatAdded.score)
+      curr_score = data.engagementStatAdded.score
       return data.engagementStatAdded
     }
   }
 
   function appendData(curr_data) {
     const time = parseInt(new Date().getTime() / 1000, 10)
-    graph_data.push([time, curr_data])
+    // TODO: remove inverted calculation after engagement backend is configured
+    const curr = curr_data > 50 ? 100 - curr_data : 100 - curr_data * 2
+    graph_data.push([time, curr])
+    // prevents data array from getting too large
+    if (graph_data.length > 100) resizeData()
+  }
+
+  function resizeData() {
+    graph_data = graph_data.slice(graph_data.length - 50, graph_data.length)
+  }
+
+  function updateData() {
+    appendData(curr_score)
+    ApexCharts.exec('realtime', 'updateSeries', [
+      {
+        data: graph_data,
+      },
+    ])
   }
 
   const series = [
@@ -47,7 +65,7 @@ const EngagementGraph = () => {
         easing: 'linear',
         dynamicAnimation: {
           enabled: true,
-          speed: 1000,
+          speed: 400,
         },
       },
       toolbar: {
@@ -79,6 +97,8 @@ const EngagementGraph = () => {
         title: {
           text: 'engagement',
         },
+        max: 100,
+        min: 0,
       },
     ],
     legend: {
@@ -87,13 +107,11 @@ const EngagementGraph = () => {
   }
 
   useEffect(() => {
-    ApexCharts.exec('realtime', 'updateSeries', [
-      {
-        data: graph_data,
-      },
-    ])
-  })
+    const engagementUpdateTimer = setInterval(() => updateData(), 400)
+    return () => clearInterval(engagementUpdateTimer)
+  }, [])
 
+  // TODO: replace with student ID
   LatestEngagementScores(1)
   return (
     <div id="chart">
