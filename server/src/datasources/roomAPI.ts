@@ -41,10 +41,18 @@ export default (db: Knex) => {
     };
 
     return {
-        getRoomsByClassroom: async (class_id: string, room_states: RoomState[]): Promise<Room[]> => {
-            return await db.select('*').from('rooms')
-            .where({ class_id })
-            .andWhere('room_status', 'in', room_states);
+        getRoomsByClassroom: async (class_id: string, user_id: string, room_states: RoomState[]): Promise<Room[]> => {
+            const user = (await db.select('*').from('users').where({ id: user_id }))[0];
+            if (user && user.role === 'STUDENT') {
+                return await db.select('*').from('rooms')
+                .join('participants', {'rooms.id':'participants.room_id'})
+                .where({ class_id, student_id: user_id })
+                .andWhere('room_status', 'in', room_states);
+            } else {
+                return await db.select('*').from('rooms')
+                .where({ class_id })
+                .andWhere('room_status', 'in', room_states);
+            }
         },
         getParticipantsInRoom: async (args: QueryParticipantsArgs): Promise<User[]> => {
             const {room_id, statuses = [ParticipantStatus.Invited, ParticipantStatus.Joined]} = args;
