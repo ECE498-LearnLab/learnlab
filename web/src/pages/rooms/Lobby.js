@@ -41,12 +41,13 @@ const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) =
 
 const Lobby = ({ onJoinRoomHandler }) => {
   const selectedClassId = useSelector(state => state.selectedClass.classId)
+  const currentUser = useSelector(state => state.user)
   const [show, setShow] = useState(false)
   const toggleShow = useCallback(() => setShow(!show), [setShow, show])
 
   const GET_ROOMS_FOR_CLASSROOM = gql`
-    query getRoomsForClassroom($class_id: ID!, $room_states: [RoomState]) {
-      roomsForClassroom(class_id: $class_id, room_states: $room_states) {
+    query getRoomsForClassroom($class_id: ID!, $user_id: ID!, $room_states: [RoomState]) {
+      roomsForClassroom(class_id: $class_id, user_id: $user_id, room_states: $room_states) {
         id
         room_uuid
         room_name
@@ -59,7 +60,11 @@ const Lobby = ({ onJoinRoomHandler }) => {
   // for skeleton loading
   const [isLoading, setIsLoading] = useState(false)
   const { data, loading, error, refetch } = useQuery(GET_ROOMS_FOR_CLASSROOM, {
-    variables: { class_id: selectedClassId, room_states: ['ONGOING', 'SCHEDULED'] },
+    variables: {
+      class_id: selectedClassId,
+      user_id: currentUser.id,
+      room_states: ['ONGOING', 'SCHEDULED'],
+    },
   })
 
   const onRoomUpdate = useCallback(() => {

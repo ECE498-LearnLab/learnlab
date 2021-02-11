@@ -1686,6 +1686,20 @@
                 "defaultValue": null
               },
               {
+                "name": "user_id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "room_states",
                 "description": null,
                 "type": {

@@ -166,7 +166,7 @@ const typeDefs = gql`
         classroomsTaken(student_id: ID!): ClassroomsTaken
         classroomsTaught(teacher_id: ID!): ClassroomsTaught
         questions(room_id: ID!): [Question]!
-        roomsForClassroom(class_id: ID!, room_states: [RoomState]): [Room]!
+        roomsForClassroom(class_id: ID!, user_id: ID!, room_states: [RoomState]): [Room]!
         participants(room_id: ID!, statuses: [ParticipantStatus]): [User]!
         engagementHistory(room_id: ID!, student_id: ID!): [EngagementHistory]!
         filesForClassroom(class_id: ID!): [File]
