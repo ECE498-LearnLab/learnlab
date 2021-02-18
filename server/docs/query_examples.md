@@ -266,7 +266,7 @@ subscription onEngagementAverageAdded($room_id: ID!) {
   engagementAverageAdded(room_id: $room_id) {
     room_id
     score
-		taken_at
+    taken_at
   }
 }
 ```
