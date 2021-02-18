@@ -5,6 +5,12 @@ import {
     MutationUpdateRoomStatusArgs, ParticipantStatus, QueryParticipantsArgs,
     Response, Room, RoomState, User
 } from "../generated/graphql";
+import { pool } from "../workers/worker-pool";
+import { Promise } from 'workerpool';
+import pubsub, { ENGAGEMENT_AVERAGE_ADDED } from "../subscriptions/pubsub";
+
+
+const roomWorkers = {};
 
 /**
  * Room API.
@@ -45,7 +51,7 @@ export default (db: Knex) => {
             const user = (await db.select('*').from('users').where({ id: user_id }))[0];
             if (user && user.role === 'STUDENT') {
                 return await db.select('*').from('rooms')
-                .join('participants', {'rooms.id':'participants.room_id'})
+                .join('participants', {'rooms.id': 'participants.room_id'})
                 .where({ class_id, student_id: user_id })
                 .andWhere('room_status', 'in', room_states);
             } else {
@@ -98,6 +104,14 @@ export default (db: Knex) => {
             const { room_id, room_status } = roomUpdateInfo;
             let success = true, message;
 
+            const room = (await db.select('room_status').from('rooms').where({id: room_id}))[0];
+            if (room.room_status === room_status) { // only change room status if it's actually a change
+                return {
+                    success: true,
+                    message: `No changes done; status for room ${room_id} was already ${room_status}`
+                };
+            }
+
             await db('rooms').where({id: room_id}).update({room_status}).catch((err) => {
                 success = false;
                 message = err.message;
@@ -105,6 +119,53 @@ export default (db: Knex) => {
     
             if (!success) {
                 return { success, message };
+            }
+
+            switch (room_status) {
+                case RoomState.Ongoing: {
+                    // room was started, assign worker pool to it
+                    const workerPromise = pool.exec('roomStats', [room_id], {
+                        on: (payload) => {
+                            if (payload.status === 'starting') {
+                                console.log(`Worker ${room_id} started...`);
+                            } else if (payload.status === 'published_stat') {
+                                const { score, taken_at } = payload.publishedStat;
+                                pubsub.publish(ENGAGEMENT_AVERAGE_ADDED, {
+                                    engagementAverageAdded: {
+                                        room_id,
+                                        score,
+                                        taken_at
+                                    }
+                                });
+                            }
+                        }
+                    })
+                    .timeout(1000*60*10) // 10-min
+                    .then(() => {
+                        // no use for the result, since this worker either times out or gets cancelled
+                    })
+                    .catch((err) => { 
+                        if (err instanceof Promise.CancellationError) {
+                            console.log(`Worker ${room_id} was cancelled`);
+                        } else if (err instanceof Promise.TimeoutError) {
+                            console.log(`Worker ${room_id} timed out.`);
+                        } else {
+                            console.log(err); 
+                        }
+                    });
+
+                    roomWorkers[room_id] = workerPromise;
+                    break;
+                }
+                case RoomState.Ended: {
+                    if (room_id in roomWorkers) {
+                        roomWorkers[room_id].cancel();
+                        delete roomWorkers[room_id];
+                        console.log(pool.stats());
+                    }
+                    break;
+                }
+                case RoomState.Scheduled: break;
             }
     
             return {

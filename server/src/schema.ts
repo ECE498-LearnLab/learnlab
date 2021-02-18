@@ -153,8 +153,16 @@ const typeDefs = gql`
         created_at: Date
     }
 
+    type EngagementAverage {
+        id: ID
+        room_id: ID!
+        score: Int!
+        taken_at: Date!
+    }
+
     type Subscription {
         engagementStatAdded(student_id: ID!): EngagementHistory
+        engagementAverageAdded(room_id: ID!): EngagementAverage
     }
 
     # Query type is special; it lists all the available queries that the client can execute
@@ -181,7 +189,8 @@ const typeDefs = gql`
                    middle_name: String, prefix: TeacherPrefix, email: String!,
                    phone_number: String, created_at: Date): CreateAccountResponse,
         updateUserInfo(user_id: ID!, first_name: String, last_name: String,
-            middle_name: String, email: String, phone_number: String, parent_email: String, prefix: String): CreateAccountResponse,
+            middle_name: String, email: String, phone_number: String, parent_email: String, prefix: String):
+             CreateAccountResponse,
         createRoom(class_id: ID!, name: String!, start_time: Date, end_time: Date): CreateRoomResponse
         createClassroom(name: String!, subject: String!, teacher_id: ID!, description: String): CreateClassroomResponse
         submitQuestion(room_id: ID!, student_id: ID!, text: String): CreateQuestionResponse

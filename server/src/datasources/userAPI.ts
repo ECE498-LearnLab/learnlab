@@ -123,7 +123,8 @@ export default (db: Knex) => {
             const updated_at = db.fn.now();
             const user_role = (await getUser(user_id)).user.role;
 
-            await db('users').where({id: user_id}).update({first_name, middle_name, last_name, phone_number, email, updated_at}).catch((err) => {
+            await db('users').where({id: user_id})
+            .update({first_name, middle_name, last_name, phone_number, email, updated_at}).catch((err) => {
                 success = false;
                 message = err.message;
             });

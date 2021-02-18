@@ -6,7 +6,7 @@ import {
     Resolvers,
     Response
 } from "../generated/graphql";
-import pubsub, { ENGAGEMENT_STAT_ADDED } from '../subscriptions/pubsub';
+import pubsub, { ENGAGEMENT_AVERAGE_ADDED, ENGAGEMENT_STAT_ADDED } from '../subscriptions/pubsub';
 
 const engagementStatsResolver: Resolvers = {
     Subscription: {
@@ -17,6 +17,14 @@ const engagementStatsResolver: Resolvers = {
                     return payload.engagementStatAdded.student_id === variables.student_id;
                 }
             ),
+        },
+        engagementAverageAdded: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator([ENGAGEMENT_AVERAGE_ADDED]),
+                (payload, variables) => {
+                    return payload.engagementAverageAdded.room_id === variables.room_id;
+                }
+            )
         }
     },
     Query: {
