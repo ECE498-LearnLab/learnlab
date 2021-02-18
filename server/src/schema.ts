@@ -153,8 +153,16 @@ const typeDefs = gql`
         created_at: Date
     }
 
+    type EngagementAverage {
+        id: ID
+        room_id: ID!
+        score: Int!
+        taken_at: Date!
+    }
+
     type Subscription {
         engagementStatAdded(student_id: ID!): EngagementHistory
+        engagementAverageAdded(room_id: ID!): EngagementAverage
     }
 
     # Query type is special; it lists all the available queries that the client can execute

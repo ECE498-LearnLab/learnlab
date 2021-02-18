@@ -2,6 +2,7 @@ import Knex from 'knex';
 import workerpool from 'workerpool';
 import dbConfig from '../datasources/dbConfig.js';
 
+
 const db = Knex(dbConfig);
 const AVERAGING_INTERVAL = 5000;
 
@@ -39,7 +40,6 @@ const writeAverage = async (room_id, stats) => {
     const avgTimestamp = new Date((stats.map((d) => new Date(d.updated_at).getTime())
                             .reduce((sum, d) => (sum + d)) / stats.length));
 
-    // TODO: Figure out how subscriptions will work with this
     await db('engagement_average')
         .insert({ room_id, score: avgScore, taken_at: avgTimestamp})
         .catch((err) => {
@@ -48,6 +48,13 @@ const writeAverage = async (room_id, stats) => {
 
     console.log("Avg. score is " + avgScore);
     console.log("Taken at " + avgTimestamp);
+    workerpool.workerEmit({
+        status: 'published_stat',
+        publishedStat: {
+            score: avgScore,
+            taken_at: avgTimestamp
+        }
+    });
 };
 
 const timeout = (ms) => {

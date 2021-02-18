@@ -7,6 +7,7 @@ import {
 } from "../generated/graphql";
 import { pool } from "../workers/worker-pool";
 import { Promise } from 'workerpool';
+import pubsub, { ENGAGEMENT_AVERAGE_ADDED } from "../subscriptions/pubsub";
 
 
 const roomWorkers = {};
@@ -127,6 +128,15 @@ export default (db: Knex) => {
                         on: (payload) => {
                             if (payload.status === 'starting') {
                                 console.log(`Worker ${room_id} started...`);
+                            } else if (payload.status === 'published_stat') {
+                                const { score, taken_at } = payload.publishedStat;
+                                pubsub.publish(ENGAGEMENT_AVERAGE_ADDED, {
+                                    engagementAverageAdded: {
+                                        room_id,
+                                        score,
+                                        taken_at
+                                    }
+                                });
                             }
                         }
                     })

@@ -178,14 +178,28 @@ export type EngagementHistory = {
   created_at?: Maybe<Scalars['Date']>;
 };
 
+export type EngagementAverage = {
+  __typename?: 'EngagementAverage';
+  id?: Maybe<Scalars['ID']>;
+  room_id: Scalars['ID'];
+  score: Scalars['Int'];
+  taken_at: Scalars['Date'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   engagementStatAdded?: Maybe<EngagementHistory>;
+  engagementAverageAdded?: Maybe<EngagementAverage>;
 };
 
 
 export type SubscriptionEngagementStatAddedArgs = {
   student_id: Scalars['ID'];
+};
+
+
+export type SubscriptionEngagementAverageAddedArgs = {
+  room_id: Scalars['ID'];
 };
 
 export type Query = {
@@ -507,6 +521,7 @@ export type ResolversTypes = {
   CreateQuestionResponse: ResolverTypeWrapper<CreateQuestionResponse>;
   Upvotes: ResolverTypeWrapper<Upvotes>;
   EngagementHistory: ResolverTypeWrapper<EngagementHistory>;
+  EngagementAverage: ResolverTypeWrapper<EngagementAverage>;
   Subscription: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -537,6 +552,7 @@ export type ResolversParentTypes = {
   CreateQuestionResponse: CreateQuestionResponse;
   Upvotes: Upvotes;
   EngagementHistory: EngagementHistory;
+  EngagementAverage: EngagementAverage;
   Subscription: {};
   Query: {};
   Mutation: {};
@@ -691,8 +707,17 @@ export type EngagementHistoryResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type EngagementAverageResolvers<ContextType = any, ParentType extends ResolversParentTypes['EngagementAverage'] = ResolversParentTypes['EngagementAverage']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  score?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  taken_at?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   engagementStatAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementHistory']>, "engagementStatAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementStatAddedArgs, 'student_id'>>;
+  engagementAverageAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementAverage']>, "engagementAverageAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementAverageAddedArgs, 'room_id'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -748,6 +773,7 @@ export type Resolvers<ContextType = any> = {
   CreateQuestionResponse?: CreateQuestionResponseResolvers<ContextType>;
   Upvotes?: UpvotesResolvers<ContextType>;
   EngagementHistory?: EngagementHistoryResolvers<ContextType>;
+  EngagementAverage?: EngagementAverageResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
