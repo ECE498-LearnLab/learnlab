@@ -2,31 +2,12 @@ import { ApolloServer, AuthenticationError } from 'apollo-server';
 import { DataSources } from 'apollo-server-core/dist/graphqlOptions';
 import * as admin from 'firebase-admin';
 import { firebaseConfig } from './auth/verification';
+import dbConfig from './datasources/dbConfig';
 import LearnlabDB from './datasources/learnlab';
 import { resolvers } from './resolvers';
 import { AWSS3Uploader } from './s3/s3';
 import typeDefs from './schema';
 
-const useLocalDb = true;
-const connectionConfig = useLocalDb
-    ? {        
-        host: 'db',
-        user: 'postgres',
-        port: 5432,
-        password: 'postgres',
-        database: 'learnlab_local'
-    }
-    : {
-        host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
-        user: 'root',
-        password: '<PWD>',
-        database: 'learnlab_1'
-};
-
-const dbConfig = {
-    client: 'pg',
-    connection: connectionConfig
-};
 
 export interface IDataSource {
     db: LearnlabDB
