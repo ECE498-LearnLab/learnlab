@@ -60,6 +60,21 @@ export default (db: Knex) => {
                 .andWhere('room_status', 'in', room_states);
             }
         },
+        // returns a list of all ENDED rooms before a selected time in which the student/teacher is a part of
+        getEndedRoomsByDate: async (user_id: string, end_time: Date): Promise<Room[]> => {
+            const user = (await db.select('*').from('users').where({ id: user_id }))[0];
+            if (user && user.role === 'STUDENT') {
+                return await db.select('*').from('rooms')
+                .where('rooms.end_time', '<', end_time)
+                .join('participants', {'rooms.id': 'participants.room_id'})
+                .where({ student_id: user_id });
+            } else if (user && user.role === 'TEACHER') {
+                return await db.select('*').from('rooms')
+                .where('rooms.end_time', '<', end_time)
+                .join('teaches', {'rooms.class_id': 'teaches.class_id'})
+                .where({ teacher_id: user_id });
+            }
+        },
         getParticipantsInRoom: async (args: QueryParticipantsArgs): Promise<User[]> => {
             const {room_id, statuses = [ParticipantStatus.Invited, ParticipantStatus.Joined]} = args;
             const res = (await db.select(db.ref('*').withSchema('users')).from<User>('participants')

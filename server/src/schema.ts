@@ -175,8 +175,11 @@ const typeDefs = gql`
         classroomsTaught(teacher_id: ID!): ClassroomsTaught
         questions(room_id: ID!): [Question]!
         roomsForClassroom(class_id: ID!, user_id: ID!, room_states: [RoomState]): [Room]!
+        endedRoomsByDate(user_id: ID!, end_time: Date!): [Room]!
         participants(room_id: ID!, statuses: [ParticipantStatus]): [User]!
-        engagementHistory(room_id: ID!, student_id: ID!): [EngagementHistory]!
+        studentRoomEngagementHistory(room_id: ID!, student_id: ID!): [EngagementHistory]!
+        studentAllEngagementHistory(student_id: ID!): [EngagementHistory]! 
+        roomEngagementAverage(room_id: ID!): [EngagementAverage]!
         filesForClassroom(class_id: ID!): [File]
         fileTagsForClassroom(class_id: ID!): [Tag]
     }

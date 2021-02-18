@@ -2,9 +2,13 @@ import { withFilter } from 'apollo-server';
 import { IDataSource } from "..";
 import {
     EngagementHistory,
-    MutationUpsertEngagementCurrentArgs, QueryEngagementHistoryArgs,
+    MutationUpsertEngagementCurrentArgs,
+    QueryRoomEngagementAverageArgs,
+    EngagementAverage,
     Resolvers,
-    Response
+    Response,
+    QueryStudentRoomEngagementHistoryArgs,
+    QueryStudentAllEngagementHistoryArgs
 } from "../generated/graphql";
 import pubsub, { ENGAGEMENT_AVERAGE_ADDED, ENGAGEMENT_STAT_ADDED } from '../subscriptions/pubsub';
 
@@ -28,10 +32,20 @@ const engagementStatsResolver: Resolvers = {
         }
     },
     Query: {
-        engagementHistory: async (_, { room_id, student_id }: QueryEngagementHistoryArgs,
+        studentRoomEngagementHistory: async (_, { room_id, student_id }: QueryStudentRoomEngagementHistoryArgs,
             { dataSources }: { dataSources: IDataSource })
             : Promise<EngagementHistory[]> => {
-            return await dataSources.db.engagementAPI().getEngagementHistory(room_id, student_id);
+            return await dataSources.db.engagementAPI().getStudentRoomEngagementHistory(room_id, student_id);
+        },
+        studentAllEngagementHistory: async (_, { student_id }: QueryStudentAllEngagementHistoryArgs, 
+            { dataSources }: { dataSources: IDataSource })
+            : Promise<EngagementHistory[]> => {
+            return await dataSources.db.engagementAPI().getStudentAllEngagementHistory(student_id);
+        },
+        roomEngagementAverage: async (_, { room_id }: QueryRoomEngagementAverageArgs, 
+            { dataSources }: { dataSources: IDataSource })
+            : Promise<EngagementAverage[]> => {
+            return await dataSources.db.engagementAPI().getRoomEngagementAverage(room_id);
         },
     },
     Mutation: {

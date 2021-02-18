@@ -67,6 +67,17 @@ query getRoomsForClassroom($class_id: ID!, $user_id: ID!, $room_states: [RoomSta
   }
 }
 
+query getEndedRoomsByDate($user_id: ID!, $end_time: Date!){
+  endedRoomsByDate(user_id: $user_id, end_time: $end_time){
+    id
+    room_uuid
+    room_name
+    start_time
+    end_time
+    room_status
+  }
+}
+
 query getClassroom($id: ID!) {
   classroom(id: $id) {
     id
@@ -93,14 +104,34 @@ query getClassroomDetails($class_id: ID!, $role: Role!) {
   }
 }
 
-query getEngagementHistory($room_id: ID!, $student_id: ID!) {
-  engagementHistory(room_id: $room_id, student_id: $student_id) {
-      id,
-      room_id,
-      student_id,
-      score,
-      classification,
-      created_at,
+query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
+  studentRoomEngagementHistory(room_id: $room_id, student_id: $student_id) {
+    id
+    room_id
+    student_id
+    score
+    classification
+    created_at
+  }
+}
+
+query getStudentAllEngagementHistory($student_id: ID!) {
+  studentAllEngagementHistory(student_id: $student_id) {
+    id
+    room_id
+    student_id
+    score
+    classification
+    created_at
+  }
+}
+
+query getRoomEngagementAverage($room_id: ID!) {
+  roomEngagementAverage(room_id: $room_id) {
+    id
+    room_id
+    score
+    taken_at
   }
 }
 ```
