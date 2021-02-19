@@ -127,7 +127,7 @@ const LiveEngagementInstructor = () => {
           options={CHART_OPTIONS}
           series={[engagementScore]}
           type="radialBar"
-          height="350"
+          height="200"
         />
       </div>
       <h4 className="text-secondary">{engagementText}</h4>
