@@ -1,13 +1,14 @@
 import useAudioTrack from 'hooks/useAudioTrack'
-import useVideoTrack from 'hooks/useVideoTrack'
 import useParticipant from 'hooks/useParticipant'
+import useVideoTrack from 'hooks/useVideoTrack'
 import React, { useRef } from 'react'
 import { MicOff } from 'react-feather'
 import Participant from './Participant'
 
 const styles = {
   remoteParticipantWrapper: {
-    width: '100%',
+    maxWidth: '25%',
+    minWidth: '25%',
     position: 'relative',
   },
   identityWrapper: {
@@ -44,10 +45,15 @@ const RemoteParticipant = ({ participant, isLocalParticipant }) => {
   const [isAudioTrackEnabled] = useAudioTrack(audioRef, audioTracks, isLocalParticipant)
   const [isVideoTrackEnabled, isScreen] = useVideoTrack(videoRef, videoTracks, false, false)
 
+  const participantName = `${participant.identity.split(' ')[0]} ${
+    participant.identity.split(' ')[1]
+  }`
+
   return (
     <div className="py-1" style={styles.remoteParticipantWrapper}>
       <Participant
         key={participant.sid}
+        identity={participant.identity}
         audioRef={audioRef}
         videoRef={videoRef}
         isVideoTrackEnabled={isVideoTrackEnabled}
@@ -56,8 +62,12 @@ const RemoteParticipant = ({ participant, isLocalParticipant }) => {
       />
       <div style={styles.identityWrapper} className="m-2">
         <h5 className="text-white">
-          {participant.identity}
-          {isLocalParticipant ? <small className="text-default"> (You) </small> : null}
+          {participantName}
+          {isLocalParticipant ? (
+            <small className="text-default"> (You) </small>
+          ) : (
+            <small className="text-default"> {participant.identity.split(' ')[2]} </small>
+          )}
         </h5>
       </div>
       {!isAudioTrackEnabled ? (

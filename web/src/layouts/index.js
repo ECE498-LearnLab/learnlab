@@ -33,7 +33,10 @@ const Layout = ({ user, children, location: { pathname, search } }) => {
   const getLayout = () => {
     if (
       pathname === '/' ||
-      (user.videoGrantToken !== '' && user.videoGrantToken != null && user.isInRoomSession)
+      (user.videoGrantToken !== '' &&
+        user.videoGrantToken != null &&
+        user.isInRoomSession &&
+        user.selectedRoom != null)
     ) {
       return 'public'
     }

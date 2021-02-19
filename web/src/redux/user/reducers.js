@@ -12,6 +12,7 @@ const initialState = {
   loading: false,
   isInRoomSession: false,
   videoGrantToken: '',
+  selectedRoom: null,
 }
 
 export default function userReducer(state = initialState, action) {

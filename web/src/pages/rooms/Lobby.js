@@ -16,7 +16,7 @@ const emptySessionsState = () => {
   return <EmptyState description={<FormattedMessage id="rooms.empty.message" />} />
 }
 
-const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) => {
+const Sessions = ({ title, canStart, rooms, onJoinHandler, onRoomUpdate }) => {
   return (
     <div>
       <div className="cui__utils__heading">
@@ -29,7 +29,7 @@ const Sessions = ({ title, canStart, rooms, onJoinRoomHandler, onRoomUpdate }) =
             room={room}
             canStart={canStart}
             onJoinRoomHandler={() => {
-              onJoinRoomHandler(room)
+              onJoinHandler(room)
             }}
             onRoomUpdate={onRoomUpdate}
           />
@@ -109,7 +109,7 @@ const Lobby = ({ onJoinRoomHandler }) => {
             title={<FormattedMessage id="rooms.title.todaysSessions" />}
             canStart={true}
             rooms={todaysRooms}
-            onJoinRoomHandler={onJoinRoomHandler}
+            onJoinHandler={onJoinRoomHandler}
             onRoomUpdate={onRoomUpdate}
           />
         ) : null
@@ -119,7 +119,7 @@ const Lobby = ({ onJoinRoomHandler }) => {
             title={<FormattedMessage id="rooms.title.upcomingSessions" />}
             canStart={false}
             rooms={upcomingRooms}
-            onJoinRoomHandler={onJoinRoomHandler}
+            onJoinHandler={onJoinRoomHandler}
             onRoomUpdate={onRoomUpdate}
           />
         ) : null

@@ -18,7 +18,7 @@ const UserAvatar = ({ user, size }) => {
 }
 
 // generates a unique color based on the user's id, it's the same everytime
-function uniqueHslColor(str) {
+export function uniqueHslColor(str) {
   const s = 30
   const l = 60
   let hash = 0

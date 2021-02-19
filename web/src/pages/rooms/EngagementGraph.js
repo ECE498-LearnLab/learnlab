@@ -109,7 +109,7 @@ const EngagementGraph = () => {
   useEffect(() => {
     const engagementUpdateTimer = setInterval(() => updateData(), 400)
     return () => clearInterval(engagementUpdateTimer)
-  }, [])
+  }, [updateData])
 
   // TODO: replace with student ID
   LatestEngagementScores(1)

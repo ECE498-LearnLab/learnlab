@@ -29,7 +29,7 @@ export default function useTwilioRoom({ twilioRoomSid, token, setFrameCapture })
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: { height: 480, frameRate: 24, width: 720 },
+        video: { height: 720, frameRate: 24, width: 1280 },
       })
       .then(mediaStream => {
         setFrameCapture(new ImageCapture(mediaStream.getVideoTracks()[0]))
