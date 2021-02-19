@@ -18,10 +18,10 @@ const roomResolver: Resolvers = {
                 class_id, user_id, room_states
             );
         },
-        endedRoomsByDate: async (_, { user_id, end_time }:    
+        endedRoomsOnDate: async (_, { user_id, end_time }:    
             { user_id: string, end_time: Date},
             { dataSources }: { dataSources: IDataSource }): Promise<Room[]> => {           
-            return await dataSources.db.roomAPI().getEndedRoomsByDate(
+            return await dataSources.db.roomAPI().getEndedRoomsOnDate(
                 user_id, end_time
             );
         },

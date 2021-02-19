@@ -1829,7 +1829,7 @@
             "deprecationReason": null
           },
           {
-            "name": "endedRoomsByDate",
+            "name": "endedRoomsOnDate",
             "description": null,
             "args": [
               {
@@ -2011,7 +2011,7 @@
             "deprecationReason": null
           },
           {
-            "name": "roomEngagementAverage",
+            "name": "roomEngagementAverages",
             "description": null,
             "args": [
               {

@@ -67,8 +67,8 @@ query getRoomsForClassroom($class_id: ID!, $user_id: ID!, $room_states: [RoomSta
   }
 }
 
-query getEndedRoomsByDate($user_id: ID!, $end_time: Date!){
-  endedRoomsByDate(user_id: $user_id, end_time: $end_time){
+query getEndedRoomsOnDate($user_id: ID!, $end_time: Date!){
+  endedRoomsOnDate(user_id: $user_id, end_time: $end_time){
     id
     room_uuid
     room_name
@@ -127,7 +127,7 @@ query getStudentAllEngagementHistory($student_id: ID!) {
 }
 
 query getRoomEngagementAverage($room_id: ID!) {
-  roomEngagementAverage(room_id: $room_id) {
+  roomEngagementAverages(room_id: $room_id) {
     id
     room_id
     score

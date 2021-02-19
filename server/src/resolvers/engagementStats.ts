@@ -42,7 +42,7 @@ const engagementStatsResolver: Resolvers = {
             : Promise<EngagementHistory[]> => {
             return await dataSources.db.engagementAPI().getStudentAllEngagementHistory(student_id);
         },
-        roomEngagementAverage: async (_, { room_id }: QueryRoomEngagementAverageArgs, 
+        roomEngagementAverages: async (_, { room_id }: QueryRoomEngagementAverageArgs, 
             { dataSources }: { dataSources: IDataSource })
             : Promise<EngagementAverage[]> => {
             return await dataSources.db.engagementAPI().getRoomEngagementAverage(room_id);
