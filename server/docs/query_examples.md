@@ -126,7 +126,7 @@ query getStudentAllEngagementHistory($student_id: ID!) {
   }
 }
 
-query getRoomEngagementAverage($room_id: ID!) {
+query getRoomEngagementAverages($room_id: ID!) {
   roomEngagementAverages(room_id: $room_id) {
     id
     room_id

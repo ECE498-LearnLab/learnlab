@@ -39,7 +39,7 @@ export default (db: Knex) => {
             const res = await db.select('*').from('engagement_history').where({ student_id }) as EngagementHistory[];
             return res;
         },
-        getRoomEngagementAverage: async (room_id: string): Promise<EngagementAverage[]> => {
+        getRoomEngagementAverages: async (room_id: string): Promise<EngagementAverage[]> => {
             const res = await db.select('*').from('engagement_average').where({ room_id }) as EngagementAverage[];
             return res;
         },

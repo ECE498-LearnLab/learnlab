@@ -45,7 +45,7 @@ const engagementStatsResolver: Resolvers = {
         roomEngagementAverages: async (_, { room_id }: QueryRoomEngagementAveragesArgs, 
             { dataSources }: { dataSources: IDataSource })
             : Promise<EngagementAverage[]> => {
-            return await dataSources.db.engagementAPI().getRoomEngagementAverage(room_id);
+            return await dataSources.db.engagementAPI().getRoomEngagementAverages(room_id);
         },
     },
     Mutation: {
