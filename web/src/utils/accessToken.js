@@ -12,14 +12,14 @@ const twilioConfig = {
 /**
  * Generating access token on the client
  */
-export function generateAccessToken(userName, roomName) {
+export function generateAccessToken(user, roomName) {
   const token = new AccessToken(
     twilioConfig.accountSid,
     twilioConfig.apiKey,
     twilioConfig.apiSecret,
   )
   const videoGrant = new VideoGrant({ room: roomName })
-  token.identity = userName
+  token.identity = `${user.first_name} ${user.last_name} (${user.role})`
   token.addGrant(videoGrant)
   return token.toJwt()
 }

@@ -8,7 +8,7 @@ export default function useScreenShareToggle(room) {
     navigator.mediaDevices
       .getDisplayMedia({
         audio: false,
-        video: { height: 480, frameRate: 24, width: 720 },
+        video: { height: 720, frameRate: 24, width: 1280 },
       })
       .then(stream => {
         const track = stream.getTracks()[0]

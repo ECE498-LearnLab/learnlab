@@ -1,36 +1,43 @@
-import { Tabs } from 'antd'
 import { addToBatch } from 'engagement/publishFramesToQueue'
 import useTwilioRoom from 'hooks/useTwilioRoom'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { useSelector } from 'react-redux'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 import VideoChat from './VideoChat'
-
-const { TabPane } = Tabs
+import LiveEngagementStudent from './LiveEngagementStudent'
 
 const styles = {
   roomWrapper: {
-    minHeight: 'calc(100vh - 124px)',
+    minHeight: '100vh',
+    minWidth: '100vw',
     width: '100%',
     flexGrow: 1,
     display: 'flex',
-    backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  infoContainerWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '30vw',
+    maxHeight: '100vh',
+  },
   infoWrapper: {
-    overflow: 'auto',
-    flexGrow: 1,
+    maxWidth: '30vw',
+    maxHeight: '50vh',
+    minHeight: '50vh',
+    marginBottom: '0px',
   },
   videoWrapper: {
+    maxWidth: '70vw',
     overflow: 'hidden',
-    flexGrow: 2,
-    maxWidth: '60%',
   },
 }
 
 const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   const [frameCapture, setFrameCapture] = useState(null)
+  const user = useSelector(state => state.user)
   const [twilioRoom, participants, dominantSpeaker, screenShareParticipant] = useTwilioRoom({
     twilioRoomSid,
     token,
@@ -44,20 +51,22 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
       .grabFrame()
       .then(imageBitmap => {
         const base64String = drawCanvas(canvasRef.current, imageBitmap)
-        addToBatch(base64String)
-      }, [])
+        addToBatch(base64String, user.id, 1)
+      })
       .catch(error => console.log(error))
-  }, [frameCapture])
+  }, [frameCapture, user.id])
 
   // disabling because this useEffect should only run once when frameCapture gets defined
   /* eslint-disable */
   useEffect(() => {
-    const grabFrameTimer = setInterval(() => {
-      if (frameCapture != null) {
-        onGrabFrame()
-      }
-    }, 400)
-    return () => clearInterval(grabFrameTimer)
+    if (user.role !== 'INSTRUCTOR') {
+      const grabFrameTimer = setInterval(() => {
+        if (frameCapture != null) {
+          onGrabFrame()
+        }
+      }, 2000)
+      return () => clearInterval(grabFrameTimer)
+    }
   }, [frameCapture])
   /* eslint-enable */
 
@@ -75,18 +84,31 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
             screenShareParticipant={screenShareParticipant}
             onLeaveRoomHandler={onLeaveRoomHandler}
           />
-          <Card style={styles.infoWrapper}>
-            <CardHeader className="card-header-borderless">
-              <Tabs defaultActiveKey="1" className="kit-tabs">
-                <TabPane tab="Questions" key="1" />
-                <TabPane tab="Engagement" key="2" />
-              </Tabs>
-            </CardHeader>
-            <CardBody>
-              <div style={{ width: '200px', height: '300px' }}>
-                <canvas ref={canvasRef} width={360} height={240} />
-              </div>
-            </CardBody>
+          <Card style={styles.infoContainerWrapper}>
+            <Card style={styles.infoWrapper}>
+              <CardHeader className="card-header-borderless">
+                <h5 className="mb-0 mr-2">
+                  <i className="fa fa-circle mr-2 font-size-18 text-red" />
+                  Live Engagement
+                </h5>
+              </CardHeader>
+              <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
+                <LiveEngagementStudent />
+              </CardBody>
+            </Card>
+            <Card style={styles.infoWrapper}>
+              <CardHeader className="card-header-borderless">
+                <h5 className="mb-0 mr-2">
+                  <i className="fe fe-help-circle mr-2 font-size-18 text-muted" />
+                  Questions
+                </h5>
+              </CardHeader>
+              <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
+                <div style={{ width: '200px', height: '200px' }}>
+                  <canvas ref={canvasRef} width={200} height={200} />
+                </div>
+              </CardBody>
+            </Card>
           </Card>
         </>
       ) : null}
@@ -95,7 +117,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
 }
 
 function drawCanvas(canvas, img) {
-  canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+  canvas.getContext('2d').drawImage(img, 0, 0, 200, 200)
   return canvas.toDataURL()
 }
 
