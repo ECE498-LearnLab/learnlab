@@ -3,7 +3,7 @@ import {
     CreateRoomResponse, MutationCreateRoomArgs,
     MutationInviteArgs, MutationJoinRoomArgs,
     MutationUpdateRoomStatusArgs, ParticipantStatus, QueryParticipantsArgs,
-    Response, Room, RoomState, User
+    Response, Role, Room, RoomState, User
 } from "../generated/graphql";
 import { pool } from "../workers/worker-pool";
 import { Promise } from 'workerpool';
@@ -67,13 +67,13 @@ export default (db: Knex) => {
             const prev_midnight = new Date(end_time.setHours(0, 0, 0, 0));
             const next_midnight = new Date(end_time.setHours(24, 0, 0, 0));    
 
-            if (user && user.role === 'STUDENT') {
+            if (user && user.role === Role.Student) {
                 return await db.select('*').from('rooms')
                 .where('rooms.end_time', '>=', prev_midnight)
                 .where('rooms.end_time', '<', next_midnight)
                 .join('participants', {'rooms.id': 'participants.room_id'})
                 .where({ student_id: user_id });
-            } else if (user && user.role === 'INSTRUCTOR') {   
+            } else if (user && user.role === Role.Instructor) {   
                 return await db.select('*').from('rooms')
                 .where('rooms.end_time', '>=', prev_midnight)
                 .where('rooms.end_time', '<', next_midnight)
