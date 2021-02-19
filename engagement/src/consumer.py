@@ -6,11 +6,11 @@ import ddd_analysis
 import json
 import base64
 
-def main():
+def run_batch_process():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
     channel = connection.channel()
-    global x
-    x = 0
+    analyzer = ddd_analysis.DddAnalysis() # init the distraction analyzer
+
     # we need to make sure the queue exists, if it doesn't exist create it
     # durable means the queue will survive a broker restart
     channel.queue_declare(queue='frames', durable=True)
@@ -18,15 +18,11 @@ def main():
     # Subscribe to queue, whenever message is appended to the queue, 
     # this callback function will be called
     def callback(ch, method, properties, body):
-        print(" [x] Received Frame")
-        global x
-
+        print(" [x] Received batch")
         batchedData = json.loads(body)
         base64Frames = []
 
         for frame in batchedData['frames']:
-            x += 1
-
             # strip the MIME message from frame string
             base64EncodedString = frame.encode('utf-8').partition(b",")[2]
 
@@ -41,10 +37,11 @@ def main():
             # with open('./frame-(%d).jpg' % x,'wb') as f:
             #     # save image to frame.jpg in current directory
             #     f.write(frameImage)
-        
-        analyze = ddd_analysis.DddAnalysis(base64Frames,
-                                           batchedData["studentID"], batchedData["roomID"], batchedData["token"])
-        analyze.run()
+        analyzer.feed_batch(b64_frames=base64Frames,
+                            studentID=batchedData["studentID"],
+                            roomID=batchedData["roomID"],
+                            token=batchedData["token"])
+        analyzer.run()
 
     channel.basic_consume(queue='frames', on_message_callback=callback, auto_ack=True)
 
@@ -53,7 +50,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        main()
+        run_batch_process()
     except KeyboardInterrupt:
         print('Interrupted')
         try:

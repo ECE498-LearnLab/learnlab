@@ -11,10 +11,11 @@ import pandas as pd
 from scipy.optimize import curve_fit
 from lmfit.models import GaussianModel
 
+EXTRA_TS = 400
+
 class ddestimator:
 
 	#JAY RODGE ===============================================
-
 	TRAINED_MODEL_PATH = './shape_predictor_68_face_landmarks.dat'
 
 	def __init__(self, weights=[1.25,0.5,3,1], purge=True):
@@ -180,7 +181,7 @@ class ddestimator:
 		return euler, rotvec, transvec
 
 	def get_med_eulers(self, ts_threshold=2000):
-		ts = self.get_current_ts() - ts_threshold
+		ts = self.get_current_ts() - ts_threshold - EXTRA_TS
 		count = self.log[(self.log.ts > ts) & (self.log.key == 'euler_c')]['value'].count()
 		if count > round(ts_threshold/200):
 			med_x = self.log[(self.log.ts < ts) & (self.log.key == 'euler_x')]['value'].median()
@@ -317,13 +318,16 @@ class ddestimator:
 		return frame
 
 	def calc_kss(self, ts_threshold=10000):
-		ts = self.get_current_ts() - ts_threshold
+		now = self.get_current_ts()
+		ts = now - ts_threshold - EXTRA_TS
+
 		count = self.log[(self.log.ts > ts) & ((self.log.key == 'distracted') | (self.log.key == 'drowsiness'))]['value'].count()
 		if count > round(ts_threshold/200):
 			sum_distracted = self.log[(self.log.ts > ts) & (self.log.key == 'distracted')]['value'].sum()
 			sum_drowsy = self.log[(self.log.ts > ts) & (self.log.key == 'drowsiness')]['value'].sum()
 			sum = sum_distracted + sum_drowsy
-			#print("\t%.2f = %.2f + %.2f" % (sum, sum_distracted, sum_drowsy))
+			print("\t%.2f = %.2f + %.2f" % (sum, sum_distracted, sum_drowsy))
+			print(f"         --count = {count}")
 			if not math.isnan(sum):
 				kss = sum / count
 				self.push_to_log('kss', kss)
@@ -424,7 +428,7 @@ class ddestimator:
 		return frame
 
 	def get_eye_closedness_over_time(self, ts_threshold=1000, ear_threshold=0.25):
-		ts = self.get_current_ts() - ts_threshold
+		ts = self.get_current_ts() - ts_threshold - EXTRA_TS
 		df_ear_b = self.log[(self.log.ts > ts) & (self.log.key == 'ear_B')]
 		count = df_ear_b['value'].count()
 		if count > round(ts_threshold/200):
@@ -467,7 +471,7 @@ class ddestimator:
 		return frame
 
 	def get_mouth_openess_over_time(self, ts_threshold=4750, mar_threshold=0.6):
-		ts = self.get_current_ts() - ts_threshold
+		ts = self.get_current_ts() - ts_threshold - EXTRA_TS
 		df_mar = self.log[(self.log.ts > ts) & (self.log.key == 'mar')]
 		count = df_mar['value'].count()
 		if count > round(ts_threshold/200):
