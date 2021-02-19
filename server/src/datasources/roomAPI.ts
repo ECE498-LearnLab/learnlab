@@ -64,9 +64,8 @@ export default (db: Knex) => {
         // works if we pass in a Date with timestamp, or just a Date
         getEndedRoomsOnDate: async (user_id: string, end_time: Date): Promise<Room[]> => {
             const user = (await db.select('*').from('users').where({ id: user_id }))[0];
-            const date = new Date(end_time);
-            const prev_midnight = date.setHours(0, 0, 0, 0);
-            const next_midnight = date.setHours(24, 0, 0, 0);
+            const prev_midnight = new Date(end_time.setHours(0, 0, 0, 0));
+            const next_midnight = new Date(end_time.setHours(24, 0, 0, 0));    
 
             if (user && user.role === 'STUDENT') {
                 return await db.select('*').from('rooms')
@@ -74,7 +73,7 @@ export default (db: Knex) => {
                 .where('rooms.end_time', '<', next_midnight)
                 .join('participants', {'rooms.id': 'participants.room_id'})
                 .where({ student_id: user_id });
-            } else if (user && user.role === 'TEACHER') {
+            } else if (user && user.role === 'INSTRUCTOR') {   
                 return await db.select('*').from('rooms')
                 .where('rooms.end_time', '>=', prev_midnight)
                 .where('rooms.end_time', '<', next_midnight)
