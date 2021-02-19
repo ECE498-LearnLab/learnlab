@@ -5,10 +5,17 @@ Make sure you are using Python3.8
 When using Docker with the rest of the project, may need to add the `build` flag to register changes made to script:
 `docker-compose up --build`
 
+## Development
+To see your changes, you must run the following two commands:
+```bash
+docker-compose build engagement
+docker-compose up
+```
+
 
 ## Engagement Evaluation Script
 ### To Run:
-Run `consumer.py` to start consuming from front end**
+Run `consumer.py` to start consuming from front end
 Run `demo.pyx` and observe changes in Jimmy Kimmel's drowsiness with each photo. 
 
 

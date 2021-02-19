@@ -3,7 +3,7 @@ import {
     CreateRoomResponse, MutationCreateRoomArgs,
     MutationInviteArgs, MutationJoinRoomArgs,
     MutationUpdateRoomStatusArgs, ParticipantStatus, QueryParticipantsArgs,
-    Response, Room, RoomState, User
+    Response, Role, Room, RoomState, User
 } from "../generated/graphql";
 import { pool } from "../workers/worker-pool";
 import { Promise } from 'workerpool';
@@ -58,6 +58,27 @@ export default (db: Knex) => {
                 return await db.select('*').from('rooms')
                 .where({ class_id })
                 .andWhere('room_status', 'in', room_states);
+            }
+        },
+        // returns a list of all ENDED rooms on a selected date in which the student/teacher is a part of
+        // works if we pass in a Date with timestamp, or just a Date
+        getEndedRoomsOnDate: async (user_id: string, end_time: Date): Promise<Room[]> => {
+            const user = (await db.select('*').from('users').where({ id: user_id }))[0];
+            const prev_midnight = new Date(end_time.setHours(0, 0, 0, 0));
+            const next_midnight = new Date(end_time.setHours(24, 0, 0, 0));    
+
+            if (user && user.role === Role.Student) {
+                return await db.select('*').from('rooms')
+                .where('rooms.end_time', '>=', prev_midnight)
+                .where('rooms.end_time', '<', next_midnight)
+                .join('participants', {'rooms.id': 'participants.room_id'})
+                .where({ student_id: user_id });
+            } else if (user && user.role === Role.Instructor) {   
+                return await db.select('*').from('rooms')
+                .where('rooms.end_time', '>=', prev_midnight)
+                .where('rooms.end_time', '<', next_midnight)
+                .join('teaches', {'rooms.class_id': 'teaches.class_id'})
+                .where({ teacher_id: user_id });
             }
         },
         getParticipantsInRoom: async (args: QueryParticipantsArgs): Promise<User[]> => {

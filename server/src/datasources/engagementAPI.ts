@@ -1,5 +1,6 @@
 import Knex from "knex";
 import {
+    EngagementAverage,
     EngagementHistory,
     MutationUpsertEngagementCurrentArgs,
     Response
@@ -30,8 +31,16 @@ export default (db: Knex) => {
     };
 
     return {
-        getEngagementHistory: async (room_id: string, student_id: string): Promise<EngagementHistory[]> => {
+        getStudentRoomEngagementHistory: async (room_id: string, student_id: string): Promise<EngagementHistory[]> => {
             const res = await db.select('*').from('engagement_history').where({ room_id, student_id}) as EngagementHistory[];
+            return res;
+        },
+        getStudentAllEngagementHistory: async (student_id: string): Promise<EngagementHistory[]> => {
+            const res = await db.select('*').from('engagement_history').where({ student_id }) as EngagementHistory[];
+            return res;
+        },
+        getRoomEngagementAverages: async (room_id: string): Promise<EngagementAverage[]> => {
+            const res = await db.select('*').from('engagement_average').where({ room_id }) as EngagementAverage[];
             return res;
         },
         upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<Response> => {

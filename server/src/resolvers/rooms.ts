@@ -11,11 +11,18 @@ import {
 
 const roomResolver: Resolvers = {
     Query: {
-        roomsForClassroom: async (_, { class_id, user_id, room_states }: 
+        roomsForClassroom: async (_, { class_id, user_id, room_states }:    
             { class_id: string, user_id: string, room_states: RoomState[]},
             { dataSources }: { dataSources: IDataSource }): Promise<Room[]> => {           
             return await dataSources.db.roomAPI().getRoomsByClassroom(
                 class_id, user_id, room_states
+            );
+        },
+        endedRoomsOnDate: async (_, { user_id, end_time }:    
+            { user_id: string, end_time: Date},
+            { dataSources }: { dataSources: IDataSource }): Promise<Room[]> => {           
+            return await dataSources.db.roomAPI().getEndedRoomsOnDate(
+                user_id, end_time
             );
         },
         participants: async (_, args: QueryParticipantsArgs, { dataSources }: { dataSources: IDataSource })

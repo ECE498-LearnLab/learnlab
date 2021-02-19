@@ -212,8 +212,11 @@ export type Query = {
   classroomsTaught?: Maybe<ClassroomsTaught>;
   questions: Array<Maybe<Question>>;
   roomsForClassroom: Array<Maybe<Room>>;
+  endedRoomsOnDate: Array<Maybe<Room>>;
   participants: Array<Maybe<User>>;
-  engagementHistory: Array<Maybe<EngagementHistory>>;
+  studentRoomEngagementHistory: Array<Maybe<EngagementHistory>>;
+  studentAllEngagementHistory: Array<Maybe<EngagementHistory>>;
+  roomEngagementAverages: Array<Maybe<EngagementAverage>>;
   filesForClassroom?: Maybe<Array<Maybe<File>>>;
   fileTagsForClassroom?: Maybe<Array<Maybe<Tag>>>;
 };
@@ -262,15 +265,31 @@ export type QueryRoomsForClassroomArgs = {
 };
 
 
+export type QueryEndedRoomsOnDateArgs = {
+  user_id: Scalars['ID'];
+  end_time: Scalars['Date'];
+};
+
+
 export type QueryParticipantsArgs = {
   room_id: Scalars['ID'];
   statuses?: Maybe<Array<Maybe<ParticipantStatus>>>;
 };
 
 
-export type QueryEngagementHistoryArgs = {
+export type QueryStudentRoomEngagementHistoryArgs = {
   room_id: Scalars['ID'];
   student_id: Scalars['ID'];
+};
+
+
+export type QueryStudentAllEngagementHistoryArgs = {
+  student_id: Scalars['ID'];
+};
+
+
+export type QueryRoomEngagementAveragesArgs = {
+  room_id: Scalars['ID'];
 };
 
 
@@ -729,8 +748,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   classroomsTaught?: Resolver<Maybe<ResolversTypes['ClassroomsTaught']>, ParentType, ContextType, RequireFields<QueryClassroomsTaughtArgs, 'teacher_id'>>;
   questions?: Resolver<Array<Maybe<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'room_id'>>;
   roomsForClassroom?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryRoomsForClassroomArgs, 'class_id' | 'user_id'>>;
+  endedRoomsOnDate?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType, RequireFields<QueryEndedRoomsOnDateArgs, 'user_id' | 'end_time'>>;
   participants?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QueryParticipantsArgs, 'room_id'>>;
-  engagementHistory?: Resolver<Array<Maybe<ResolversTypes['EngagementHistory']>>, ParentType, ContextType, RequireFields<QueryEngagementHistoryArgs, 'room_id' | 'student_id'>>;
+  studentRoomEngagementHistory?: Resolver<Array<Maybe<ResolversTypes['EngagementHistory']>>, ParentType, ContextType, RequireFields<QueryStudentRoomEngagementHistoryArgs, 'room_id' | 'student_id'>>;
+  studentAllEngagementHistory?: Resolver<Array<Maybe<ResolversTypes['EngagementHistory']>>, ParentType, ContextType, RequireFields<QueryStudentAllEngagementHistoryArgs, 'student_id'>>;
+  roomEngagementAverages?: Resolver<Array<Maybe<ResolversTypes['EngagementAverage']>>, ParentType, ContextType, RequireFields<QueryRoomEngagementAveragesArgs, 'room_id'>>;
   filesForClassroom?: Resolver<Maybe<Array<Maybe<ResolversTypes['File']>>>, ParentType, ContextType, RequireFields<QueryFilesForClassroomArgs, 'class_id'>>;
   fileTagsForClassroom?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType, RequireFields<QueryFileTagsForClassroomArgs, 'class_id'>>;
 };
