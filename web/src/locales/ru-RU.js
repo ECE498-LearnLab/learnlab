@@ -82,6 +82,7 @@ const messages = {
   'createTag.modal.cancelText': 'Отмена',
   'createTag.form.name': 'Имя',
   'createTag.form.color': 'Цвет',
+  'statistics.title.EngagementStatistics': 'Статистика вовлеченности',
 }
 
 export default {
