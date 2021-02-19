@@ -82,6 +82,7 @@ const messages = {
   'createTag.modal.cancelText': 'Cancel',
   'createTag.form.name': 'Name',
   'createTag.form.color': 'Color',
+  'statistics.title.EngagementStatistics': 'Engagement Statistics',
 }
 
 export default {

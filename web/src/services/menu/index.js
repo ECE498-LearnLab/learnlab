@@ -28,5 +28,12 @@ export default async function getMenuData() {
       url: '/classlist/',
       // roles: ['admin'], // set user roles with access to this route
     },
+    {
+      title: 'Statistics',
+      key: 'statistics',
+      icon: 'fe fe-activity',
+      url: '/statistics/',
+      // roles: ['admin'], // set user roles with access to this route
+    },
   ]
 }

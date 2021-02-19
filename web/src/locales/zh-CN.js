@@ -82,6 +82,7 @@ const messages = {
   'createTag.modal.cancelText': '取消',
   'createTag.form.name': '名称',
   'createTag.form.color': '颜色',
+  'statistics.title.EngagementStatistics': '参与度统计',
 }
 
 export default {
