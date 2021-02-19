@@ -75,14 +75,12 @@ const CHART_OPTIONS = {
 }
 
 // engagement score subscription
-const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
-  subscription onEngagementAdded($student_id: ID!) {
-    engagementStatAdded(student_id: $student_id) {
+const ENGAGEMENT_AVERAGE_SUBSCRIPTION = gql`
+  subscription onEngagementAverageAdded($room_id: ID!) {
+    engagementAverageAdded(room_id: $room_id) {
       room_id
-      student_id
       score
-      classification
-      created_at
+      taken_at
     }
   }
 `
@@ -102,10 +100,10 @@ const styles = {
   },
 }
 
-const LiveEngagementStudent = () => {
+const LiveEngagementInstructor = () => {
   const user = useSelector(state => state.user)
-  const { data, loading, error } = useSubscription(ENGAGEMENT_SCORES_SUBSCRIPTION, {
-    variables: { student_id: user.id },
+  const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
+    variables: { room_id: user.selectedRoom.id },
   })
 
   const [engagementScore, engagementText] = useMemo(() => {
@@ -113,10 +111,11 @@ const LiveEngagementStudent = () => {
       return [0, 'Loading...']
     }
     if (error) {
+      console.log(error)
       return [0, 'Oops! Error.']
     }
     if (data) {
-      return [Number(data.engagementStatAdded.score), data.engagementStatAdded.classification]
+      return [Number(data.engagementAverageAdded.score), data.engagementAverageAdded.classification]
     }
     return [0, 'Oops! Error.']
   }, [data, loading, error])
@@ -136,4 +135,4 @@ const LiveEngagementStudent = () => {
   )
 }
 
-export default LiveEngagementStudent
+export default LiveEngagementInstructor

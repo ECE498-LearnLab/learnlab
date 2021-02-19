@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 import VideoChat from './VideoChat'
 import LiveEngagementStudent from './LiveEngagementStudent'
+import LiveEngagementInstructor from './LiveEngagementInstructor'
 
 const styles = {
   roomWrapper: {
@@ -93,7 +94,11 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
                 </h5>
               </CardHeader>
               <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
-                <LiveEngagementStudent />
+                {user.role === 'INSTRUCTOR' ? (
+                  <LiveEngagementInstructor />
+                ) : (
+                  <LiveEngagementStudent />
+                )}
               </CardBody>
             </Card>
             <Card style={styles.infoWrapper}>
