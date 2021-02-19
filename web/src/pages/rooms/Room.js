@@ -51,10 +51,10 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
       .grabFrame()
       .then(imageBitmap => {
         const base64String = drawCanvas(canvasRef.current, imageBitmap)
-        addToBatch(base64String, user.id, 1)
+        addToBatch(base64String, user.id, room.id)
       })
       .catch(error => console.log(error))
-  }, [frameCapture, user.id])
+  }, [frameCapture, user.id, room.id])
 
   // disabling because this useEffect should only run once when frameCapture gets defined
   /* eslint-disable */
