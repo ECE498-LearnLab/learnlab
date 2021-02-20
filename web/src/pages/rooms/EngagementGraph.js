@@ -24,7 +24,6 @@ const EngagementGraph = ({ room_id }) => {
     })
     if (!loading && data) {
       curr_score = data.engagementAverageAdded.score
-      console.log(data.engagementAverageAdded.score)
       return data.engagementAverageAdded
     }
   }
@@ -54,6 +53,7 @@ const EngagementGraph = ({ room_id }) => {
   const series = [
     {
       graph_data: graph_data.slice(),
+      data: graph_data,
     },
   ]
   const options = {
