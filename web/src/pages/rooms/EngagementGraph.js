@@ -31,8 +31,7 @@ const EngagementGraph = ({ room_id }) => {
   function appendData(curr_data) {
     const time = parseInt(new Date().getTime() / 1000, 10)
     // TODO: remove inverted calculation after engagement backend is configured
-    const curr = curr_data
-    graph_data.push([time, curr])
+    graph_data.push([time, curr_data])
     // prevents data array from getting too large
     if (graph_data.length > 100) resizeData()
   }
