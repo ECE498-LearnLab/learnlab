@@ -43,7 +43,6 @@ def send_to_graphql(logger, studentID, roomID, token, score, classification):
                 }
             }'''
 
-        #TODO: unhardcode created_at date
         variables = {
             "room_id":roomID,
             "student_id":studentID,

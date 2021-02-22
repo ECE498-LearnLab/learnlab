@@ -300,6 +300,23 @@ subscription onEngagementAverageAdded($room_id: ID!) {
     taken_at
   }
 }
+
+subscription onQuestionAdded($room_id: ID!) {
+  questionAdded(room_id: $room_id) {
+    id
+    student_id
+    upvotes
+    created_at
+  } 
+}
+
+subscription onQuestionChanged($question_id: ID!) {
+  questionStateChanged(question_id: $question_id) {
+    id,
+    upvotes,
+    deleted
+  }
+}
 ```
 Example of data received from subscription:
 ```json

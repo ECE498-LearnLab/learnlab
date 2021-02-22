@@ -107,6 +107,13 @@ export type Question = {
   deleted_at?: Maybe<Scalars['Date']>;
 };
 
+export type QuestionState = {
+  __typename?: 'QuestionState';
+  id: Scalars['ID'];
+  upvotes?: Maybe<Scalars['Int']>;
+  deleted?: Maybe<Scalars['Boolean']>;
+};
+
 export type Room = {
   __typename?: 'Room';
   id: Scalars['ID'];
@@ -190,6 +197,8 @@ export type Subscription = {
   __typename?: 'Subscription';
   engagementStatAdded?: Maybe<EngagementHistory>;
   engagementAverageAdded?: Maybe<EngagementAverage>;
+  questionAdded?: Maybe<Question>;
+  questionStateChanged?: Maybe<QuestionState>;
 };
 
 
@@ -200,6 +209,16 @@ export type SubscriptionEngagementStatAddedArgs = {
 
 export type SubscriptionEngagementAverageAddedArgs = {
   room_id: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionAddedArgs = {
+  room_id: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionStateChangedArgs = {
+  question_id: Scalars['ID'];
 };
 
 export type Query = {
@@ -530,9 +549,10 @@ export type ResolversTypes = {
   ClassroomsTaken: ResolverTypeWrapper<ClassroomsTaken>;
   Question: ResolverTypeWrapper<Question>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  QuestionState: ResolverTypeWrapper<QuestionState>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Room: ResolverTypeWrapper<Room>;
   Response: ResolverTypeWrapper<Response>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   UserResponse: ResolverTypeWrapper<UserResponse>;
   CreateRoomResponse: ResolverTypeWrapper<CreateRoomResponse>;
   CreateAccountResponse: ResolverTypeWrapper<CreateAccountResponse>;
@@ -561,9 +581,10 @@ export type ResolversParentTypes = {
   ClassroomsTaken: ClassroomsTaken;
   Question: Question;
   Int: Scalars['Int'];
+  QuestionState: QuestionState;
+  Boolean: Scalars['Boolean'];
   Room: Room;
   Response: Response;
-  Boolean: Scalars['Boolean'];
   UserResponse: UserResponse;
   CreateRoomResponse: CreateRoomResponse;
   CreateAccountResponse: CreateAccountResponse;
@@ -655,6 +676,13 @@ export type QuestionResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type QuestionStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['QuestionState'] = ResolversParentTypes['QuestionState']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  upvotes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   room_uuid?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -737,6 +765,8 @@ export type EngagementAverageResolvers<ContextType = any, ParentType extends Res
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   engagementStatAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementHistory']>, "engagementStatAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementStatAddedArgs, 'student_id'>>;
   engagementAverageAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementAverage']>, "engagementAverageAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementAverageAddedArgs, 'room_id'>>;
+  questionAdded?: SubscriptionResolver<Maybe<ResolversTypes['Question']>, "questionAdded", ParentType, ContextType, RequireFields<SubscriptionQuestionAddedArgs, 'room_id'>>;
+  questionStateChanged?: SubscriptionResolver<Maybe<ResolversTypes['QuestionState']>, "questionStateChanged", ParentType, ContextType, RequireFields<SubscriptionQuestionStateChangedArgs, 'question_id'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -786,6 +816,7 @@ export type Resolvers<ContextType = any> = {
   ClassroomsTaught?: ClassroomsTaughtResolvers<ContextType>;
   ClassroomsTaken?: ClassroomsTakenResolvers<ContextType>;
   Question?: QuestionResolvers<ContextType>;
+  QuestionState?: QuestionStateResolvers<ContextType>;
   Room?: RoomResolvers<ContextType>;
   Response?: ResponseResolvers<ContextType>;
   UserResponse?: UserResponseResolvers<ContextType>;
