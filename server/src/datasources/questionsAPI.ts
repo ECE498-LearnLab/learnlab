@@ -3,6 +3,7 @@ import {
     CreateQuestionResponse, MutationAnswerQuestionArgs,
     MutationSubmitQuestionArgs, MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Response, Upvotes
 } from "../generated/graphql";
+import pubsub, { QUESTION_ADDED } from "../subscriptions/pubsub";
 
 
 export default (db: Knex) => ({
@@ -26,8 +27,9 @@ export default (db: Knex) => ({
             return { success, message };
         }
 
+        const {id, created_at} = res[0];
         return {
-            id: res[0].id, created_at: res[0].created_at,
+            id, created_at,
             success,
             message: `Question "${text}" submitted successfully`
         };

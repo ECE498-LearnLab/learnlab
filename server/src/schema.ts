@@ -91,6 +91,12 @@ const typeDefs = gql`
         deleted_at: Date
     }
 
+    type QuestionState {
+        id: ID!
+        upvotes: Int
+        deleted: Boolean
+    }
+
     type Room {
         id: ID!
         room_uuid: ID!
@@ -135,7 +141,7 @@ const typeDefs = gql`
 
     type CreateQuestionResponse {
         id: ID
-        created_at: Date,
+        created_at: Date
         success: Boolean!
         message: String
     }
@@ -163,6 +169,8 @@ const typeDefs = gql`
     type Subscription {
         engagementStatAdded(student_id: ID!): EngagementHistory
         engagementAverageAdded(room_id: ID!): EngagementAverage
+        questionAdded(room_id: ID!): Question
+        questionStateChanged(question_id: ID!): QuestionState
     }
 
     # Query type is special; it lists all the available queries that the client can execute
