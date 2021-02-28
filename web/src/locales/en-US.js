@@ -83,6 +83,9 @@ const messages = {
   'createTag.form.name': 'Name',
   'createTag.form.color': 'Color',
   'statistics.title.EngagementStatistics': 'Engagement Statistics',
+  'statistics.title.students': 'Students',
+  'statistics.table.show': 'Show',
+  'statistics.table.remove': 'Remove',
 }
 
 export default {

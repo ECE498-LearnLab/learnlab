@@ -83,6 +83,9 @@ const messages = {
   'createTag.form.name': 'Имя',
   'createTag.form.color': 'Цвет',
   'statistics.title.EngagementStatistics': 'Статистика вовлеченности',
+  'statistics.title.students': 'Студенты',
+  'statistics.table.show': 'Показать',
+  'statistics.table.remove': 'Удалять',
 }
 
 export default {
