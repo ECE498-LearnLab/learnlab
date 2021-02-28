@@ -83,6 +83,9 @@ const messages = {
   'createTag.form.name': '名称',
   'createTag.form.color': '颜色',
   'statistics.title.EngagementStatistics': '参与度统计',
+  'statistics.title.students': '学生',
+  'statistics.table.show': '展示',
+  'statistics.table.remove': '消除',
 }
 
 export default {
