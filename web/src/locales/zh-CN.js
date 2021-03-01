@@ -89,6 +89,12 @@ const messages = {
   'statistics.title.students': '学生',
   'statistics.table.show': '展示',
   'statistics.table.remove': '消除',
+  'classInfo.classroom.title': '教室',
+  'classInfo.classroom.instructor': '讲师',
+  'classInfo.classroom.started': '开始',
+  'classInfo.classroom.students': '学生',
+  'recentFiles.title.name': '最近的文件',
+  'upcomingRooms.title.name': '即将到来的房间',
 }
 
 export default {

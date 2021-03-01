@@ -68,6 +68,7 @@ const typeDefs = gql`
     }
 
     type ClassroomDetails {
+        id: ID!
         classroom: Classroom!
         instructor: User
         students: [User]

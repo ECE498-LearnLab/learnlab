@@ -7,3 +7,14 @@
 .desc {
   max-width: rem(800);
 }
+
+.skeleton {
+  background: $white;
+}
+
+// dark theme
+[data-kit-theme='dark'] {
+  .skeleton {
+    background: $dark-gray-4;
+  }
+}
