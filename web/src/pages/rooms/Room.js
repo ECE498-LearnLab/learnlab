@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { Card, CardBody, CardHeader } from 'reactstrap'
-import VideoChat from './VideoChat'
-import LiveEngagementStudent from './LiveEngagementStudent'
 import LiveEngagementInstructor from './LiveEngagementInstructor'
+import LiveEngagementStudent from './LiveEngagementStudent'
 import Questions from './Questions'
+import VideoChat from './VideoChat'
 
 const styles = {
   roomWrapper: {
@@ -25,10 +25,17 @@ const styles = {
     maxWidth: '30vw',
     maxHeight: '100vh',
   },
+  questionWrapper: {
+    maxWidth: '30vw',
+    maxHeight: '75vh',
+    minHeight: '75vh',
+    marginBottom: '0px',
+    borderRadius: '0px',
+  },
   infoWrapper: {
     maxWidth: '30vw',
-    maxHeight: '50vh',
-    minHeight: '50vh',
+    maxHeight: '25vh',
+    minHeight: '25vh',
     marginBottom: '0px',
     borderRadius: '0px',
   },
@@ -103,12 +110,15 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
                 )}
               </CardBody>
             </Card>
-            <Card style={styles.infoWrapper}>
+            <Card style={styles.questionWrapper}>
               <Questions />
             </Card>
           </Card>
         </>
       ) : null}
+      <div style={{ position: 'absolute', top: 0, left: 0, visibility: 'hidden' }}>
+        <canvas ref={canvasRef} width={200} height={200} />
+      </div>
     </Card>
   )
 }

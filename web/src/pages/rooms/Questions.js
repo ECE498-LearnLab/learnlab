@@ -1,11 +1,11 @@
 import { gql, useMutation, useQuery, useSubscription } from '@apollo/client'
 import { Button, Form, Input, List, message } from 'antd'
 import QuestionCard from 'components/learnlab/QuestionCard'
+import ACL from 'components/navigation/system/ACL'
 import React, { useCallback, useEffect, useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { CardBody, CardHeader } from 'reactstrap'
-import { FormattedMessage } from 'react-intl'
-import ACL from 'components/navigation/system/ACL'
 
 const GET_QUESTIONS = gql`
   query getQuestionsForRoom($room_id: ID!) {
@@ -207,12 +207,14 @@ const Questions = () => {
       <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
         <div style={styles.questionsContainer}>
           <QuestionList questions={questions} />
-          <Editor
-            onChange={handleQuestionChange}
-            onSubmit={handleQuestionSubmit}
-            submitting={isQuestionSubmitting}
-            value={askedQuestion}
-          />
+          <div>
+            <Editor
+              onChange={handleQuestionChange}
+              onSubmit={handleQuestionSubmit}
+              submitting={isQuestionSubmitting}
+              value={askedQuestion}
+            />
+          </div>
         </div>
       </CardBody>
     </>
