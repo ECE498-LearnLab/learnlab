@@ -1,6 +1,6 @@
 import Knex from "knex";
 import {
-    CreateQuestionResponse, MutationAnswerQuestionArgs,
+    CreateQuestionResponse, AnswerQuestionResponse, MutationAnswerQuestionArgs,
     MutationSubmitQuestionArgs, MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Response, Upvotes
 } from "../generated/graphql";
 import pubsub, { QUESTION_ADDED } from "../subscriptions/pubsub";
@@ -34,7 +34,7 @@ export default (db: Knex) => ({
             message: `Question "${text}" submitted successfully`
         };
     },
-    answerQuestion: async ({id}: MutationAnswerQuestionArgs): Promise<Response> => {
+    answerQuestion: async ({id, room_id}: MutationAnswerQuestionArgs): Promise<AnswerQuestionResponse> => {
         /**
          * Answering a question is implemented as a soft delete of the row.
          */
@@ -44,6 +44,7 @@ export default (db: Knex) => ({
 
         return {
             success,
+            room_id,
             message: success ? `Successfully marked question ${id} as answered` 
             : `Failed to mark question ${id} as answered`
         };

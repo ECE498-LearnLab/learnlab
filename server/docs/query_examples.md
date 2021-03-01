@@ -2,10 +2,11 @@
 
 ----
 - [GraphQL Query Example Usages](#graphql-query-example-usages)
-  - [- Mutation Usage Examples](#--mutation-usage-examples)
+  - [- Subscriptions](#--subscriptions)
   - [Query Usage Examples](#query-usage-examples)
     - [Sample Execution](#sample-execution)
   - [Mutation Usage Examples](#mutation-usage-examples)
+- [Subscriptions](#subscriptions)
 ---
 
 
@@ -259,8 +260,8 @@ mutation upvoteQuestion {
   }
 }
 
-mutation answerQuestion($id: ID!) {
-  answerQuestion(id: $id) {
+mutation answerQuestion($id: ID!, $room_id: ID!) {
+  answerQuestion(id: $id, room_id: $room_id) {
     success
     message
   }
@@ -310,11 +311,16 @@ subscription onQuestionAdded($room_id: ID!) {
   } 
 }
 
-subscription onQuestionChanged($question_id: ID!) {
-  questionStateChanged(question_id: $question_id) {
+subscription onQuestionUpvoted($question_id: ID!) {
+  questionUpvoteChanged(question_id: $question_id) {
     id,
     upvotes,
-    deleted
+  }
+}
+
+subscription onQuestionAnswered(room_id: $room_id) {
+  questionAnswered(room_id: $room_id) {
+    id,
   }
 }
 ```

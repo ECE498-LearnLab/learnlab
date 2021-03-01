@@ -78,7 +78,7 @@ const VideoChat = ({
 
   return (
     <>
-      <Card style={styles.videoWrapper}>
+      <Card style={{ borderRadius: '0px' }}>
         <CardHeader className="card-header-borderless">
           <h5 className="mb-0 mr-2">
             <i className="fe fe-book-open mr-2 font-size-18 text-muted" />
