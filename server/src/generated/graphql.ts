@@ -107,11 +107,15 @@ export type Question = {
   deleted_at?: Maybe<Scalars['Date']>;
 };
 
-export type QuestionState = {
-  __typename?: 'QuestionState';
+export type QuestionUpvoteState = {
+  __typename?: 'QuestionUpvoteState';
   id: Scalars['ID'];
   upvotes?: Maybe<Scalars['Int']>;
-  deleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QuestionAnsweredState = {
+  __typename?: 'QuestionAnsweredState';
+  id: Scalars['ID'];
 };
 
 export type Room = {
@@ -170,6 +174,13 @@ export type CreateQuestionResponse = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type AnswerQuestionResponse = {
+  __typename?: 'AnswerQuestionResponse';
+  room_id: Scalars['ID'];
+  success: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Upvotes = {
   __typename?: 'Upvotes';
   upvotes: Scalars['Int'];
@@ -198,7 +209,8 @@ export type Subscription = {
   engagementStatAdded?: Maybe<EngagementHistory>;
   engagementAverageAdded?: Maybe<EngagementAverage>;
   questionAdded?: Maybe<Question>;
-  questionStateChanged?: Maybe<QuestionState>;
+  questionAnswered?: Maybe<QuestionAnsweredState>;
+  questionUpvoteChanged?: Maybe<QuestionUpvoteState>;
 };
 
 
@@ -217,7 +229,12 @@ export type SubscriptionQuestionAddedArgs = {
 };
 
 
-export type SubscriptionQuestionStateChangedArgs = {
+export type SubscriptionQuestionAnsweredArgs = {
+  room_id: Scalars['ID'];
+};
+
+
+export type SubscriptionQuestionUpvoteChangedArgs = {
   question_id: Scalars['ID'];
 };
 
@@ -329,7 +346,7 @@ export type Mutation = {
   createRoom?: Maybe<CreateRoomResponse>;
   createClassroom?: Maybe<CreateClassroomResponse>;
   submitQuestion?: Maybe<CreateQuestionResponse>;
-  answerQuestion?: Maybe<Response>;
+  answerQuestion?: Maybe<AnswerQuestionResponse>;
   upvoteQuestion?: Maybe<Upvotes>;
   updateRoomStatus?: Maybe<Response>;
   addStudentsToClassroom?: Maybe<Response>;
@@ -400,6 +417,7 @@ export type MutationSubmitQuestionArgs = {
 
 export type MutationAnswerQuestionArgs = {
   id: Scalars['ID'];
+  room_id: Scalars['ID'];
 };
 
 
@@ -549,15 +567,17 @@ export type ResolversTypes = {
   ClassroomsTaken: ResolverTypeWrapper<ClassroomsTaken>;
   Question: ResolverTypeWrapper<Question>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  QuestionState: ResolverTypeWrapper<QuestionState>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  QuestionUpvoteState: ResolverTypeWrapper<QuestionUpvoteState>;
+  QuestionAnsweredState: ResolverTypeWrapper<QuestionAnsweredState>;
   Room: ResolverTypeWrapper<Room>;
   Response: ResolverTypeWrapper<Response>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   UserResponse: ResolverTypeWrapper<UserResponse>;
   CreateRoomResponse: ResolverTypeWrapper<CreateRoomResponse>;
   CreateAccountResponse: ResolverTypeWrapper<CreateAccountResponse>;
   CreateClassroomResponse: ResolverTypeWrapper<CreateClassroomResponse>;
   CreateQuestionResponse: ResolverTypeWrapper<CreateQuestionResponse>;
+  AnswerQuestionResponse: ResolverTypeWrapper<AnswerQuestionResponse>;
   Upvotes: ResolverTypeWrapper<Upvotes>;
   EngagementHistory: ResolverTypeWrapper<EngagementHistory>;
   EngagementAverage: ResolverTypeWrapper<EngagementAverage>;
@@ -581,15 +601,17 @@ export type ResolversParentTypes = {
   ClassroomsTaken: ClassroomsTaken;
   Question: Question;
   Int: Scalars['Int'];
-  QuestionState: QuestionState;
-  Boolean: Scalars['Boolean'];
+  QuestionUpvoteState: QuestionUpvoteState;
+  QuestionAnsweredState: QuestionAnsweredState;
   Room: Room;
   Response: Response;
+  Boolean: Scalars['Boolean'];
   UserResponse: UserResponse;
   CreateRoomResponse: CreateRoomResponse;
   CreateAccountResponse: CreateAccountResponse;
   CreateClassroomResponse: CreateClassroomResponse;
   CreateQuestionResponse: CreateQuestionResponse;
+  AnswerQuestionResponse: AnswerQuestionResponse;
   Upvotes: Upvotes;
   EngagementHistory: EngagementHistory;
   EngagementAverage: EngagementAverage;
@@ -676,10 +698,14 @@ export type QuestionResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QuestionStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['QuestionState'] = ResolversParentTypes['QuestionState']> = {
+export type QuestionUpvoteStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['QuestionUpvoteState'] = ResolversParentTypes['QuestionUpvoteState']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   upvotes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type QuestionAnsweredStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['QuestionAnsweredState'] = ResolversParentTypes['QuestionAnsweredState']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -739,6 +765,13 @@ export type CreateQuestionResponseResolvers<ContextType = any, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AnswerQuestionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AnswerQuestionResponse'] = ResolversParentTypes['AnswerQuestionResponse']> = {
+  room_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UpvotesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Upvotes'] = ResolversParentTypes['Upvotes']> = {
   upvotes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -766,7 +799,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   engagementStatAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementHistory']>, "engagementStatAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementStatAddedArgs, 'student_id'>>;
   engagementAverageAdded?: SubscriptionResolver<Maybe<ResolversTypes['EngagementAverage']>, "engagementAverageAdded", ParentType, ContextType, RequireFields<SubscriptionEngagementAverageAddedArgs, 'room_id'>>;
   questionAdded?: SubscriptionResolver<Maybe<ResolversTypes['Question']>, "questionAdded", ParentType, ContextType, RequireFields<SubscriptionQuestionAddedArgs, 'room_id'>>;
-  questionStateChanged?: SubscriptionResolver<Maybe<ResolversTypes['QuestionState']>, "questionStateChanged", ParentType, ContextType, RequireFields<SubscriptionQuestionStateChangedArgs, 'question_id'>>;
+  questionAnswered?: SubscriptionResolver<Maybe<ResolversTypes['QuestionAnsweredState']>, "questionAnswered", ParentType, ContextType, RequireFields<SubscriptionQuestionAnsweredArgs, 'room_id'>>;
+  questionUpvoteChanged?: SubscriptionResolver<Maybe<ResolversTypes['QuestionUpvoteState']>, "questionUpvoteChanged", ParentType, ContextType, RequireFields<SubscriptionQuestionUpvoteChangedArgs, 'question_id'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -794,7 +828,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createRoom?: Resolver<Maybe<ResolversTypes['CreateRoomResponse']>, ParentType, ContextType, RequireFields<MutationCreateRoomArgs, 'class_id' | 'name'>>;
   createClassroom?: Resolver<Maybe<ResolversTypes['CreateClassroomResponse']>, ParentType, ContextType, RequireFields<MutationCreateClassroomArgs, 'name' | 'subject' | 'teacher_id'>>;
   submitQuestion?: Resolver<Maybe<ResolversTypes['CreateQuestionResponse']>, ParentType, ContextType, RequireFields<MutationSubmitQuestionArgs, 'room_id' | 'student_id'>>;
-  answerQuestion?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAnswerQuestionArgs, 'id'>>;
+  answerQuestion?: Resolver<Maybe<ResolversTypes['AnswerQuestionResponse']>, ParentType, ContextType, RequireFields<MutationAnswerQuestionArgs, 'id' | 'room_id'>>;
   upvoteQuestion?: Resolver<Maybe<ResolversTypes['Upvotes']>, ParentType, ContextType, RequireFields<MutationUpvoteQuestionArgs, 'id'>>;
   updateRoomStatus?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationUpdateRoomStatusArgs, 'room_id' | 'room_status'>>;
   addStudentsToClassroom?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAddStudentsToClassroomArgs, 'class_id'>>;
@@ -816,7 +850,8 @@ export type Resolvers<ContextType = any> = {
   ClassroomsTaught?: ClassroomsTaughtResolvers<ContextType>;
   ClassroomsTaken?: ClassroomsTakenResolvers<ContextType>;
   Question?: QuestionResolvers<ContextType>;
-  QuestionState?: QuestionStateResolvers<ContextType>;
+  QuestionUpvoteState?: QuestionUpvoteStateResolvers<ContextType>;
+  QuestionAnsweredState?: QuestionAnsweredStateResolvers<ContextType>;
   Room?: RoomResolvers<ContextType>;
   Response?: ResponseResolvers<ContextType>;
   UserResponse?: UserResponseResolvers<ContextType>;
@@ -824,6 +859,7 @@ export type Resolvers<ContextType = any> = {
   CreateAccountResponse?: CreateAccountResponseResolvers<ContextType>;
   CreateClassroomResponse?: CreateClassroomResponseResolvers<ContextType>;
   CreateQuestionResponse?: CreateQuestionResponseResolvers<ContextType>;
+  AnswerQuestionResponse?: AnswerQuestionResponseResolvers<ContextType>;
   Upvotes?: UpvotesResolvers<ContextType>;
   EngagementHistory?: EngagementHistoryResolvers<ContextType>;
   EngagementAverage?: EngagementAverageResolvers<ContextType>;

@@ -1,7 +1,7 @@
 import { withFilter } from "apollo-server";
 import { IDataSource } from "..";
 import {
-    CreateQuestionResponse, MutationAnswerQuestionArgs, MutationSubmitQuestionArgs,
+    CreateQuestionResponse, AnswerQuestionResponse, MutationAnswerQuestionArgs, MutationSubmitQuestionArgs,
     MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Resolvers, Response, Upvotes
 } from "../generated/graphql";
 import pubsub, { QUESTION_ADDED, QUESTION_ANSWERED, QUESTION_UPVOTE_CHANGED } from "../subscriptions/pubsub";
@@ -17,11 +17,19 @@ const questionResolver: Resolvers = {
                 }
             )
         },
-        questionStateChanged: {
+        questionAnswered: {
             subscribe: withFilter(
-                () => pubsub.asyncIterator([QUESTION_ANSWERED, QUESTION_UPVOTE_CHANGED]),
+                () => pubsub.asyncIterator([QUESTION_ANSWERED]),
                 (payload, variables) => {
-                    return payload.questionStateChanged.id === variables.question_id;
+                    return payload.questionAnswered.room_id === variables.room_id;
+                }
+            )
+        },
+        questionUpvoteChanged: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator([QUESTION_UPVOTE_CHANGED]),
+                (payload, variables) => {
+                    return payload.questionUpvoteChanged.id === variables.question_id;
                 }
             )
         }
@@ -48,22 +56,21 @@ const questionResolver: Resolvers = {
             return res;
         },
         answerQuestion: async (_, args: MutationAnswerQuestionArgs, { dataSources }: { dataSources: IDataSource })
-        : Promise<Response> => {
+        : Promise<AnswerQuestionResponse> => {
             const res = await dataSources.db.questionsAPI().answerQuestion(args);
             pubsub.publish(QUESTION_ANSWERED, {
-                questionStateChanged: {
+                questionAnswered: {
                     id: args.id,
-                    deleted: res.success
+                    room_id: res.room_id
                 }
             });
-
             return res;
         },
         upvoteQuestion: async (_, args: MutationUpvoteQuestionArgs, { dataSources }: { dataSources: IDataSource })
         : Promise<Upvotes> => {
             const res = await dataSources.db.questionsAPI().upvoteQuestion(args);
             pubsub.publish(QUESTION_UPVOTE_CHANGED, {
-                questionStateChanged: {
+                questionUpvoteChanged: {
                     id: args.id,
                     upvotes: res.upvotes
                 }
