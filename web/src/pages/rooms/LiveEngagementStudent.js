@@ -1,78 +1,7 @@
 import { gql, useSubscription } from '@apollo/client'
+import { Progress } from 'antd'
 import React, { useMemo } from 'react'
-import ReactApexChart from 'react-apexcharts'
 import { useSelector } from 'react-redux'
-
-const CHART_OPTIONS = {
-  chart: {
-    height: 200,
-    type: 'radialBar',
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    radialBar: {
-      hollow: {
-        margin: 0,
-        size: '70%',
-        background: '#fff',
-        image: undefined,
-        imageOffsetX: 0,
-        imageOffsetY: 0,
-        position: 'front',
-        dropShadow: {
-          enabled: true,
-          top: 3,
-          left: 0,
-          blur: 4,
-          opacity: 0.24,
-        },
-      },
-      track: {
-        background: '#fff',
-        strokeWidth: '67%',
-        margin: 0, // margin is in pixels
-        dropShadow: {
-          enabled: true,
-          top: -3,
-          left: 0,
-          blur: 4,
-          opacity: 0.35,
-        },
-      },
-
-      dataLabels: {
-        show: true,
-        name: {
-          show: false,
-        },
-        value: {
-          formatter: val => `${val}%`,
-          color: '#111',
-          fontSize: '36px',
-          show: true,
-        },
-      },
-    },
-  },
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      type: 'horizontal',
-      shadeIntensity: 0.5,
-      gradientToColors: ['#ABE5A1'],
-      inverseColors: true,
-      opacityFrom: 1,
-      opacityTo: 1,
-      stops: [0, 100],
-    },
-  },
-  stroke: {
-    lineCap: 'round',
-  },
-}
 
 // engagement score subscription
 const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
@@ -123,15 +52,8 @@ const LiveEngagementStudent = () => {
 
   return (
     <div style={styles.graphContainer}>
-      <div id="chart">
-        <ReactApexChart
-          options={CHART_OPTIONS}
-          series={[engagementScore]}
-          type="radialBar"
-          height="200"
-        />
-      </div>
-      <h4 className="text-secondary">{engagementText}</h4>
+      <Progress className="mx-1" percent={engagementScore} format={percent => `${percent}%`} />
+      <h6 className="text-secondary m-2">{engagementText}</h6>
     </div>
   )
 }
