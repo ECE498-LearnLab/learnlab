@@ -83,6 +83,9 @@ const messages = {
   'createTag.form.name': 'Name',
   'createTag.form.color': 'Color',
   'statistics.title.EngagementStatistics': 'Engagement Statistics',
+  'room.title.questions': 'Questions',
+  'room.questions.button': 'Ask',
+  'room.questions.editor': 'Ask a question',
 }
 
 export default {

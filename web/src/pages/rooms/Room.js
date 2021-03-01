@@ -7,6 +7,7 @@ import { Card, CardBody, CardHeader } from 'reactstrap'
 import VideoChat from './VideoChat'
 import LiveEngagementStudent from './LiveEngagementStudent'
 import LiveEngagementInstructor from './LiveEngagementInstructor'
+import Questions from './Questions'
 
 const styles = {
   roomWrapper: {
@@ -29,6 +30,7 @@ const styles = {
     maxHeight: '50vh',
     minHeight: '50vh',
     marginBottom: '0px',
+    borderRadius: '0px',
   },
   videoWrapper: {
     maxWidth: '70vw',
@@ -72,7 +74,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   /* eslint-enable */
 
   return (
-    <Card style={styles.roomWrapper}>
+    <Card className="card-borderless" style={styles.roomWrapper}>
       <Helmet title={`Rooms | ${room.room_name ?? 'Classroom'}`} />
       {twilioRoom ? (
         <>
@@ -85,7 +87,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
             screenShareParticipant={screenShareParticipant}
             onLeaveRoomHandler={onLeaveRoomHandler}
           />
-          <Card style={styles.infoContainerWrapper}>
+          <Card className="card-borderless" style={styles.infoContainerWrapper}>
             <Card style={styles.infoWrapper}>
               <CardHeader className="card-header-borderless">
                 <h5 className="mb-0 mr-2">
@@ -102,17 +104,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
               </CardBody>
             </Card>
             <Card style={styles.infoWrapper}>
-              <CardHeader className="card-header-borderless">
-                <h5 className="mb-0 mr-2">
-                  <i className="fe fe-help-circle mr-2 font-size-18 text-muted" />
-                  Questions
-                </h5>
-              </CardHeader>
-              <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
-                <div style={{ width: '200px', height: '200px' }}>
-                  <canvas ref={canvasRef} width={200} height={200} />
-                </div>
-              </CardBody>
+              <Questions />
             </Card>
           </Card>
         </>

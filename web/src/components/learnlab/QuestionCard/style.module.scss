@@ -1,0 +1,28 @@
+@import 'components/mixins.scss';
+
+.actionIcon:hover {
+  color: #0866f3;
+}
+
+.actionIcon {
+  color: #597b97;
+}
+
+.actionIconLiked {
+  color: #0866f3;
+}
+
+// dark theme
+[data-kit-theme='dark'] {
+  .actionIcon:hover {
+    color: #0866f3;
+  }
+
+  .actionIcon {
+    color: #597b97;
+  }
+
+  .actionIconLiked {
+    color: #0866f3;
+  }
+}
