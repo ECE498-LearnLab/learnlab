@@ -86,6 +86,9 @@ const messages = {
   'room.title.questions': '问题',
   'room.questions.button': '询问',
   'room.questions.editor': '问一个问题',
+  'statistics.title.students': '学生',
+  'statistics.table.show': '展示',
+  'statistics.table.remove': '消除',
 }
 
 export default {

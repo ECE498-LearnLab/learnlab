@@ -87,6 +87,9 @@ const messages = {
   'room.title.questions': 'Questions',
   'room.questions.button': 'Demander',
   'room.questions.editor': 'Poser une question',
+  'statistics.title.students': 'Élèves',
+  'statistics.table.show': 'Montrer',
+  'statistics.table.remove': 'Supprimer',
 }
 
 export default {
