@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import ApexCharts from 'apexcharts'
 import ReactApexChart from 'react-apexcharts'
@@ -17,29 +17,6 @@ const EngagementGraph = ({ room_id }) => {
       }
     }
   `
-
-  const LatestEngagementScores = () => {
-    const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
-      variables: { room_id },
-    })
-    console.log(room_id)
-    useMemo(() => {
-      if (loading) {
-        return [0]
-      }
-      if (error) {
-        return [0]
-      }
-      if (data) {
-        setCurrScore(data.engagementAverageAdded.score)
-        return data.engagementAverageAdded
-      }
-      return [0]
-    }, [data, loading, error])
-
-    return <ReactApexChart options={options} series={series} type="line" height="350" />
-  }
-
   const appendData = useCallback(
     curr_data => {
       const time = parseInt(new Date().getTime() / 1000, 10)
@@ -74,12 +51,17 @@ const EngagementGraph = ({ room_id }) => {
   const options = {
     chart: {
       id: 'realtime',
+      height: 350,
+      type: 'line',
       animations: {
         enabled: true,
         easing: 'linear',
-        dynamicAnimation: {
+        animations: {
           enabled: true,
-          speed: 1000,
+          speed: 400,
+        },
+        toolbar: {
+          show: false,
         },
       },
       zoom: {
@@ -113,9 +95,19 @@ const EngagementGraph = ({ room_id }) => {
       },
     ],
     legend: {
-      show: true,
+      show: false,
     },
   }
+
+  const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
+    variables: { room_id },
+  })
+
+  useEffect(() => {
+    if (data) {
+      setCurrScore(data.engagementAverageAdded.score)
+    }
+  }, [data, loading, error])
 
   useEffect(() => {
     const engagementUpdateTimer = setInterval(() => updateData(), 400)
@@ -124,7 +116,7 @@ const EngagementGraph = ({ room_id }) => {
 
   return (
     <div id="chart">
-      <LatestEngagementScores />
+      <ReactApexChart options={options} series={series} type="line" />
     </div>
   )
 }

@@ -34,8 +34,6 @@ const LiveEngagementInstructor = () => {
   const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
     variables: { room_id: user.selectedRoom.id },
   })
-  console.log('HI', user.selectedRoom.id)
-
   const [engagementScore, engagementText] = useMemo(() => {
     if (loading) {
       return [0, 'Loading...']
