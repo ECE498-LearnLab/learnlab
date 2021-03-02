@@ -22,7 +22,7 @@ const EngagementGraph = ({ room_id }) => {
     const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
       variables: { room_id },
     })
-
+    console.log(room_id)
     useMemo(() => {
       if (loading) {
         return [0]
