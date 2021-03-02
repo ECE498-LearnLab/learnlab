@@ -81,6 +81,7 @@ export type Classroom = {
 
 export type ClassroomDetails = {
   __typename?: 'ClassroomDetails';
+  id: Scalars['ID'];
   classroom: Classroom;
   instructor?: Maybe<User>;
   students?: Maybe<Array<Maybe<User>>>;
@@ -671,6 +672,7 @@ export type ClassroomResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type ClassroomDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassroomDetails'] = ResolversParentTypes['ClassroomDetails']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   classroom?: Resolver<ResolversTypes['Classroom'], ParentType, ContextType>;
   instructor?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   students?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;

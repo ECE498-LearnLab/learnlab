@@ -90,6 +90,7 @@ query getClassroom($id: ID!) {
 
 query getClassroomDetails($class_id: ID!, $role: Role!) {
   classroomDetails(id: $class_id, role: $role) {
+    id
     instructor {
       first_name
       last_name

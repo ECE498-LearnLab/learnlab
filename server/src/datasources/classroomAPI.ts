@@ -39,6 +39,7 @@ export default (db: Knex) => {
                                      .where({class_id});
     
             return {
+                id: classInfo.id,
                 classroom: classInfo,
                 instructor: teacherInfo,
                 students

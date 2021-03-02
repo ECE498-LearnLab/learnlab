@@ -89,6 +89,12 @@ const messages = {
   'statistics.title.students': 'Students',
   'statistics.table.show': 'Show',
   'statistics.table.remove': 'Remove',
+  'classInfo.classroom.title': 'Classroom',
+  'classInfo.classroom.instructor': 'INSTRUCTOR',
+  'classInfo.classroom.started': 'Started',
+  'classInfo.classroom.students': 'Students',
+  'recentFiles.title.name': 'Recent Files',
+  'upcomingRooms.title.name': 'Upcoming Rooms',
 }
 
 export default {
