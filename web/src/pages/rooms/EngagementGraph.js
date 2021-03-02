@@ -6,34 +6,33 @@ import ReactApexChart from 'react-apexcharts'
 let graph_data = []
 let curr_score = 0
 
-const EngagementGraph = () => {
+const EngagementGraph = ({ room_id }) => {
   // engagement score subscription
-  const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
-    subscription onEngagementAdded($student_id: ID!) {
-      engagementStatAdded(student_id: $student_id) {
+  const ENGAGEMENT_AVERAGE_SUBSCRIPTION = gql`
+    subscription onEngagementAverageAdded($room_id: ID!) {
+      engagementAverageAdded(room_id: $room_id) {
         room_id
-        student_id
         score
-        classification
-        created_at
+        taken_at
       }
     }
   `
 
-  function LatestEngagementScores(student_id) {
-    const { data, loading } = useSubscription(ENGAGEMENT_SCORES_SUBSCRIPTION, {
-      variables: { student_id },
+  function LatestEngagementScores() {
+    const { data, loading } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
+      variables: { room_id },
     })
     if (!loading && data) {
-      curr_score = data.engagementStatAdded.score
-      return data.engagementStatAdded
+      curr_score = data.engagementAverageAdded.score
+      console.log(data.engagementAverageAdded.score)
+      return data.engagementAverageAdded
     }
   }
 
   function appendData(curr_data) {
     const time = parseInt(new Date().getTime() / 1000, 10)
     // TODO: remove inverted calculation after engagement backend is configured
-    const curr = curr_data > 50 ? 100 - curr_data : 100 - curr_data * 2
+    const curr = curr_data
     graph_data.push([time, curr])
     // prevents data array from getting too large
     if (graph_data.length > 100) resizeData()
@@ -111,8 +110,7 @@ const EngagementGraph = () => {
     return () => clearInterval(engagementUpdateTimer)
   }, [updateData])
 
-  // TODO: replace with student ID
-  LatestEngagementScores(1)
+  LatestEngagementScores()
   return (
     <div id="chart">
       <ReactApexChart options={options} series={series} type="line" height="350" />
