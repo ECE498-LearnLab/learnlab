@@ -23,7 +23,7 @@ const EngagementGraph = ({ room_id }) => {
       variables: { room_id },
     })
 
-    const [engagementAverage] = useMemo(() => {
+    useMemo(() => {
       if (loading) {
         return [0]
       }
@@ -34,9 +34,10 @@ const EngagementGraph = ({ room_id }) => {
         setCurrScore(data.engagementAverageAdded.score)
         return data.engagementAverageAdded
       }
+      return [0]
     }, [data, loading, error])
 
-    return engagementAverage
+    return <ReactApexChart options={options} series={series} type="line" height="350" />
   }
 
   const appendData = useCallback(
@@ -47,13 +48,13 @@ const EngagementGraph = ({ room_id }) => {
       // prevents data array from getting too large
       if (graphData.length > 100) resizeData()
     },
-    [setGraphData],
+    [setGraphData, graphData],
   )
 
   const resizeData = useCallback(() => {
     graphData.slice(graphData.length - 50, graphData.length)
     setGraphData(graphData)
-  }, [setGraphData])
+  }, [setGraphData, graphData])
 
   const updateData = useCallback(() => {
     appendData(currScore)
@@ -62,7 +63,7 @@ const EngagementGraph = ({ room_id }) => {
         data: graphData,
       },
     ])
-  })
+  }, [graphData, appendData, currScore])
 
   const series = [
     {
@@ -124,7 +125,6 @@ const EngagementGraph = ({ room_id }) => {
   return (
     <div id="chart">
       <LatestEngagementScores />
-      <ReactApexChart options={options} series={series} type="line" height="350" />
     </div>
   )
 }

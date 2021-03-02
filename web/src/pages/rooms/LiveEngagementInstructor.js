@@ -2,7 +2,7 @@ import { gql, useSubscription } from '@apollo/client'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { Progress } from 'antd'
-
+import EngagementPopover from './EngagementPopover'
 // engagement score subscription
 const ENGAGEMENT_AVERAGE_SUBSCRIPTION = gql`
   subscription onEngagementAverageAdded($room_id: ID!) {
@@ -51,6 +51,8 @@ const LiveEngagementInstructor = () => {
 
   return (
     <div style={styles.graphContainer}>
+      <div>View Engagement History</div>
+      <EngagementPopover room_id={user.selectedRoom.id} />
       <Progress className="mx-1" percent={engagementScore} format={percent => `${percent}%`} />
       <h6 className="text-secondary m-2">{engagementText}</h6>
     </div>
