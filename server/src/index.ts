@@ -17,11 +17,7 @@ interface ConnectionParams {
     authToken: string
 }
 
-const buildDataSource = () => {
-    return {
-        db: new LearnlabDB(dbConfig)
-    } as DataSources<IDataSource>;
-};
+const learnlabDB = new LearnlabDB(dbConfig);
 
 const uidFromValidToken = async (token: string) => {
     return await admin.auth().verifyIdToken(token).then((decodedToken) => {
@@ -69,7 +65,7 @@ const server = new ApolloServer({
 
         return { loggedIn: true };
     },
-    dataSources: () => buildDataSource()
+    dataSources: () => ({ db: learnlabDB} as DataSources<IDataSource>)
 });
 
 server.listen().then(({ url }) => {
