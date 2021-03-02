@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import ApexCharts from 'apexcharts'
 import ReactApexChart from 'react-apexcharts'
 
-let graph_data = []
-let curr_score = 0
-
 const EngagementGraph = ({ room_id }) => {
+  const [graphData, setGraphData] = useState([])
+  const [currScore, setCurrScore] = useState(0)
+
   // engagement score subscription
   const ENGAGEMENT_AVERAGE_SUBSCRIPTION = gql`
     subscription onEngagementAverageAdded($room_id: ID!) {
@@ -18,41 +18,56 @@ const EngagementGraph = ({ room_id }) => {
     }
   `
 
-  function LatestEngagementScores() {
-    const { data, loading } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
+  const LatestEngagementScores = () => {
+    const { data, loading, error } = useSubscription(ENGAGEMENT_AVERAGE_SUBSCRIPTION, {
       variables: { room_id },
     })
-    if (!loading && data) {
-      curr_score = data.engagementAverageAdded.score
-      return data.engagementAverageAdded
-    }
+
+    const [engagementAverage] = useMemo(() => {
+      if (loading) {
+        return [0]
+      }
+      if (error) {
+        return [0]
+      }
+      if (data) {
+        setCurrScore(data.engagementAverageAdded.score)
+        return data.engagementAverageAdded
+      }
+    }, [data, loading, error])
+
+    return engagementAverage
   }
 
-  function appendData(curr_data) {
-    const time = parseInt(new Date().getTime() / 1000, 10)
-    // TODO: remove inverted calculation after engagement backend is configured
-    graph_data.push([time, curr_data])
-    // prevents data array from getting too large
-    if (graph_data.length > 100) resizeData()
-  }
+  const appendData = useCallback(
+    curr_data => {
+      const time = parseInt(new Date().getTime() / 1000, 10)
+      graphData.push([time, curr_data])
+      setGraphData(graphData)
+      // prevents data array from getting too large
+      if (graphData.length > 100) resizeData()
+    },
+    [setGraphData],
+  )
 
-  function resizeData() {
-    graph_data = graph_data.slice(graph_data.length - 50, graph_data.length)
-  }
+  const resizeData = useCallback(() => {
+    graphData.slice(graphData.length - 50, graphData.length)
+    setGraphData(graphData)
+  }, [setGraphData])
 
-  function updateData() {
-    appendData(curr_score)
+  const updateData = useCallback(() => {
+    appendData(currScore)
     ApexCharts.exec('realtime', 'updateSeries', [
       {
-        data: graph_data,
+        data: graphData,
       },
     ])
-  }
+  })
 
   const series = [
     {
-      graph_data: graph_data.slice(),
-      data: graph_data,
+      graph_data: graphData.slice(),
+      data: graphData,
     },
   ]
   const options = {
@@ -63,11 +78,8 @@ const EngagementGraph = ({ room_id }) => {
         easing: 'linear',
         dynamicAnimation: {
           enabled: true,
-          speed: 400,
+          speed: 1000,
         },
-      },
-      toolbar: {
-        show: true,
       },
       zoom: {
         enabled: false,
@@ -93,7 +105,7 @@ const EngagementGraph = ({ room_id }) => {
     yaxis: [
       {
         title: {
-          text: 'engagement',
+          text: 'Percent engaged (%)',
         },
         max: 100,
         min: 0,
@@ -109,9 +121,9 @@ const EngagementGraph = ({ room_id }) => {
     return () => clearInterval(engagementUpdateTimer)
   }, [updateData])
 
-  LatestEngagementScores()
   return (
     <div id="chart">
+      <LatestEngagementScores />
       <ReactApexChart options={options} series={series} type="line" height="350" />
     </div>
   )
