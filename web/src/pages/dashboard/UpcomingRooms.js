@@ -69,7 +69,7 @@ const UpcomingRooms = () => {
       )
       const slicedList = filteredList.slice(
         0,
-        filteredList.length - 1 > NUM_ROOMS ? NUM_ROOMS : filteredList.length - 1,
+        filteredList.length > NUM_ROOMS ? NUM_ROOMS : filteredList.length,
       )
       return (
         <Card

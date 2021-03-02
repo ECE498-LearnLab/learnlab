@@ -95,6 +95,9 @@ const messages = {
   'classInfo.classroom.students': '学生',
   'recentFiles.title.name': '最近的文件',
   'upcomingRooms.title.name': '即将到来的房间',
+  'room.title.engagement': '订婚',
+  'room.student.alert': '确保您正在关注',
+  'room.student.info': '只有您的讲师可以观看您的视频。它不会被记录',
 }
 
 export default {

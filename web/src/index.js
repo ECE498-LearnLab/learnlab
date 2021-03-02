@@ -8,7 +8,9 @@ import { routerMiddleware } from 'connected-react-router'
 import { createHashHistory } from 'history'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { applyMiddleware, compose, createStore } from 'redux'
 import { persistReducer, persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -95,15 +97,17 @@ const persistor = persistStore(store)
 sagaMiddleware.run(sagas)
 
 ReactDOM.render(
-  <ApolloProvider client={apolloClient}>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Localization>
-          <Router history={history} />
-        </Localization>
-      </PersistGate>
-    </Provider>
-  </ApolloProvider>,
+  <ErrorBoundary FallbackComponent={<Redirect to="/auth/500" />}>
+    <ApolloProvider client={apolloClient}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Localization>
+            <Router history={history} />
+          </Localization>
+        </PersistGate>
+      </Provider>
+    </ApolloProvider>
+  </ErrorBoundary>,
   document.getElementById('root'),
 )
 

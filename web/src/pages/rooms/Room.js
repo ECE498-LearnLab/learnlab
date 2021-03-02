@@ -1,7 +1,9 @@
+import { message } from 'antd'
 import { addToBatch } from 'engagement/publishFramesToQueue'
 import useTwilioRoom from 'hooks/useTwilioRoom'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { Card, CardBody, CardHeader } from 'reactstrap'
 import LiveEngagementInstructor from './LiveEngagementInstructor'
@@ -47,13 +49,14 @@ const styles = {
 
 const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   const [frameCapture, setFrameCapture] = useState(null)
+  const [alertShown, setAlertShown] = useState(false)
   const user = useSelector(state => state.user)
   const [twilioRoom, participants, dominantSpeaker, screenShareParticipant] = useTwilioRoom({
     twilioRoomSid,
     token,
     setFrameCapture,
   })
-
+  const intl = useIntl()
   const canvasRef = useRef(null)
 
   const onGrabFrame = useCallback(() => {
@@ -66,10 +69,20 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
       .catch(error => console.log(error))
   }, [frameCapture, user.id, room.id])
 
+  const showAlertMessage = useCallback(() => {
+    if (!alertShown) {
+      setAlertShown(true)
+      message.info(`${intl.formatMessage({ id: 'room.student.info' })}`).then(() => {
+        setAlertShown(false)
+      })
+    }
+  }, [intl, alertShown, setAlertShown])
+
   // disabling because this useEffect should only run once when frameCapture gets defined
   /* eslint-disable */
   useEffect(() => {
     if (user.role !== 'INSTRUCTOR') {
+      showAlertMessage()
       const grabFrameTimer = setInterval(() => {
         if (frameCapture != null) {
           onGrabFrame()
@@ -99,7 +112,7 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
               <CardHeader className="card-header-borderless">
                 <h5 className="mb-0 mr-2">
                   <i className="fa fa-circle mr-2 font-size-18 text-red" />
-                  Live Engagement
+                  <FormattedMessage id="room.title.engagement" />
                 </h5>
               </CardHeader>
               <CardBody style={{ maxWidth: '30vw', minWidth: '30vw' }}>
@@ -119,8 +132,35 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
       <div style={{ position: 'absolute', top: 0, left: 0, visibility: 'hidden' }}>
         <canvas ref={canvasRef} width={200} height={200} />
       </div>
+      <HandleBrowserBackButton onLeaveRoomHandler={onLeaveRoomHandler} />
     </Card>
   )
+}
+
+const HandleBrowserBackButton = ({ onLeaveRoomHandler }) => {
+  const [isBackButtonClicked, setBackbuttonPress] = useState(false)
+  window.history.pushState(null, null, window.location.pathname)
+  useEffect(() => {
+    window.addEventListener('popstate', onBackButtonEvent)
+
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const onBackButtonEvent = e => {
+    e.preventDefault()
+    /* eslint-disable */
+    if (!isBackButtonClicked) {
+      if (window.confirm('Do you want to exit the room?')) {
+        setBackbuttonPress(true)
+        onLeaveRoomHandler()
+      }
+    }
+    /* eslint-enable */
+  }
+
+  return <div />
 }
 
 function drawCanvas(canvas, img) {
