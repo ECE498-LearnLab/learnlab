@@ -1,7 +1,8 @@
 import { gql, useSubscription } from '@apollo/client'
-import { Progress } from 'antd'
-import React, { useMemo } from 'react'
+import { Progress, message } from 'antd'
+import React, { useCallback, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import { useIntl } from 'react-intl'
 
 // engagement score subscription
 const ENGAGEMENT_SCORES_SUBSCRIPTION = gql`
@@ -33,9 +34,22 @@ const styles = {
 
 const LiveEngagementStudent = () => {
   const user = useSelector(state => state.user)
+  const [alertShown, setAlertShown] = useState(false)
+  const intl = useIntl()
   const { data, loading, error } = useSubscription(ENGAGEMENT_SCORES_SUBSCRIPTION, {
     variables: { student_id: user.id },
   })
+
+  const showAlertMessage = useCallback(() => {
+    if (!alertShown) {
+      setAlertShown(true)
+      message
+        .warning(`${intl.formatMessage({ id: 'room.student.alert' })}, ${user.first_name}`)
+        .then(() => {
+          setAlertShown(false)
+        })
+    }
+  }, [intl, user, alertShown, setAlertShown])
 
   const [engagementScore, engagementText] = useMemo(() => {
     if (loading) {
@@ -45,10 +59,14 @@ const LiveEngagementStudent = () => {
       return [0, 'Oops! Error.']
     }
     if (data) {
-      return [Number(data.engagementStatAdded.score), data.engagementStatAdded.classification]
+      const { classification } = data.engagementStatAdded
+      if (classification !== 'ENGAGED') {
+        showAlertMessage()
+      }
+      return [Number(data.engagementStatAdded.score), classification]
     }
     return [0, 'Oops! Error.']
-  }, [data, loading, error])
+  }, [showAlertMessage, data, loading, error])
 
   return (
     <div style={styles.graphContainer}>

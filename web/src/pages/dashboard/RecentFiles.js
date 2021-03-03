@@ -60,9 +60,7 @@ const RecentFiles = () => {
     if (data) {
       const filteredList = _.orderBy(data.filesForClassroom, 'created_at', 'desc').slice(
         0,
-        data.filesForClassroom.length - 1 > NUM_FILES
-          ? NUM_FILES
-          : data.filesForClassroom.length - 1,
+        data.filesForClassroom.length > NUM_FILES ? NUM_FILES : data.filesForClassroom.length,
       )
       return (
         <Card

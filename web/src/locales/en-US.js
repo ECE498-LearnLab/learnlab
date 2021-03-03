@@ -95,6 +95,10 @@ const messages = {
   'classInfo.classroom.students': 'Students',
   'recentFiles.title.name': 'Recent Files',
   'upcomingRooms.title.name': 'Upcoming Rooms',
+  'room.title.engagement': 'Live Engagement',
+  'room.student.alert': 'Make sure you are paying attention',
+  'room.student.info':
+    'Only your instructor will be able to view your video. It will not be recorded',
 }
 
 export default {

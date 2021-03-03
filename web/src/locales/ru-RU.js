@@ -95,6 +95,10 @@ const messages = {
   'classInfo.classroom.students': 'Студенты',
   'RecentFiles.title.name': 'Последние файлы',
   'upcomingRooms.title.name': 'Предстоящие комнаты',
+  'room.title.engagement': 'Взаимодействие в реальном времени',
+  'room.student.alert': 'Убедитесь, что вы обращаете внимание',
+  'room.student.info':
+    'Только ваш преподаватель сможет просматривать ваше видео. Это не будет записано',
 }
 
 export default {
