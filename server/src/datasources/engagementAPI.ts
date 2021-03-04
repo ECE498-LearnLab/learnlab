@@ -36,11 +36,13 @@ export default (db: Knex) => {
             return res;
         },
         getStudentAllEngagementHistory: async (student_id: string): Promise<EngagementHistory[]> => {
-            const res = await db.select('*').from('engagement_history').where({ student_id }) as EngagementHistory[];
+            const res = await db.select('*').from('engagement_history').where({ student_id })
+            .orderBy('created_at', 'asc') as EngagementHistory[];
             return res;
         },
         getRoomEngagementAverages: async (room_id: string): Promise<EngagementAverage[]> => {
-            const res = await db.select('*').from('engagement_average').where({ room_id }) as EngagementAverage[];
+            const res = await db.select('*').from('engagement_average').where({ room_id })
+            .orderBy('taken_at', 'asc') as EngagementAverage[];
             return res;
         },
         upsertEngagementCurrent: async (engagementInfo: MutationUpsertEngagementCurrentArgs): Promise<Response> => {
