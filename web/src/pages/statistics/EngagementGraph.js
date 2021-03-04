@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
+import SkeletonTable from './SkeletonTable'
 
 // add query to get user's name from id to be used as graph name
 
@@ -8,6 +9,7 @@ const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
   query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
     studentRoomEngagementHistory(room_id: $room_id, student_id: $student_id) {
       score
+      created_at
     }
   }
 `
@@ -16,6 +18,7 @@ const GET_ROOM_ENGAGEMENT_AVERAGE = gql`
   query getRoomEngagementAverages($room_id: ID!) {
     roomEngagementAverages(room_id: $room_id) {
       score
+      taken_at
     }
   }
 `
@@ -38,17 +41,36 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
   console.log('showRoomAverage', showRoomAverage)
   console.log('userid', userId)
 
-  // /* Queries */
-  const { data: studentRoomEngagement } = useQuery(GET_STUDENT_ENGAGEMENT_FOR_ROOM, {
-    variables: { room_id: roomId, student_id: userId },
-  })
-  const { data: roomEngagementAverage } = useQuery(GET_ROOM_ENGAGEMENT_AVERAGE, {
-    variables: { room_id: roomId },
+  /* Queries */
+  const { data: studentRoomEngagement, loading: studentEngagementLoading } = useQuery(
+    GET_STUDENT_ENGAGEMENT_FOR_ROOM,
+    {
+      variables: { room_id: roomId, student_id: userId },
+      // skip: userId === null || userId === undefined,
+    },
+  )
+  const { data: roomEngagementAverage, loading: roomEngagementLoading } = useQuery(
+    GET_ROOM_ENGAGEMENT_AVERAGE,
+    {
+      variables: { room_id: roomId },
+      // skip: room_id === null || room_id === undefined,
+    },
+  )
+
+  const { data: userData, loading: userDataLoading } = useQuery(GET_STUDENT_NAME, {
+    variables: { id: userId },
+    // skip: userId === null || userId === undefined,
   })
 
-  const { data: userData } = useQuery(GET_STUDENT_NAME, {
-    variables: { id: userId },
-  })
+  let dataLoading = true
+
+  console.log('query data and query loading')
+  console.log(studentRoomEngagement)
+  console.log(roomEngagementAverage)
+  console.log(userData)
+  console.log(studentEngagementLoading)
+  console.log(roomEngagementLoading)
+  console.log(userDataLoading)
 
   const studentDataList = []
   const roomDataList = []
@@ -71,6 +93,7 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
     // console.log("STUDENT DATA ARRAY", studentDataList)
     // console.log("ROOM DATA ARRAY", roomDataList)
     // console.log("STUDENTSSSS NAMEEEE", studentName)
+    dataLoading = false
   }
 
   // graph displays:
@@ -78,17 +101,19 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
   // room average + student if INSTRUCTOR and userId exists
   // student if STUDENT
   const series = []
-  if (userId || !showRoomAverage) {
-    series.push({
-      name: studentName || 'Student',
-      data: studentDataList,
-    })
-  }
-  if (showRoomAverage) {
-    series.push({
-      name: 'Room Average',
-      data: roomDataList,
-    })
+  if (!dataLoading) {
+    if (userId || !showRoomAverage) {
+      series.push({
+        name: studentName || 'Student',
+        data: studentDataList,
+      })
+    }
+    if (showRoomAverage) {
+      series.push({
+        name: 'Room Average',
+        data: roomDataList,
+      })
+    }
   }
 
   const options = {
@@ -139,7 +164,11 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
   return (
     <div className="card">
       <div className="p-3">
-        <ReactApexChart options={options} series={series} type="line" height="350" />
+        {dataLoading ? (
+          <SkeletonTable />
+        ) : (
+          <ReactApexChart options={options} series={series} type="line" height="350" />
+        )}
       </div>
     </div>
   )
