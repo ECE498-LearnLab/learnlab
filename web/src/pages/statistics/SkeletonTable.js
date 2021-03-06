@@ -23,14 +23,6 @@ const columns = [
     },
   },
   {
-    title: 'USER ID',
-    key: 'id',
-    className: 'bg-transparent',
-    render: () => {
-      return <Skeleton.Input style={{ width: 90 }} active />
-    },
-  },
-  {
     title: 'EMAIL',
     dataIndex: 'email',
     key: 'email',
@@ -49,10 +41,10 @@ const columns = [
 ]
 
 const data = [
-  { key: 1, id: 1, first_name: '', last_name: '', email: '' },
-  { key: 2, id: 2, first_name: '', last_name: '', email: '' },
-  { key: 3, id: 3, first_name: '', last_name: '', email: '' },
-  { key: 4, id: 4, first_name: '', last_name: '', email: '' },
+  { key: 1, first_name: '', last_name: '', email: '' },
+  { key: 2, first_name: '', last_name: '', email: '' },
+  { key: 3, first_name: '', last_name: '', email: '' },
+  { key: 4, first_name: '', last_name: '', email: '' },
 ]
 
 const SkeletonTable = () => {
