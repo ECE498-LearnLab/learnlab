@@ -6,7 +6,7 @@ const Footer = () => {
     <div className={style.footer}>
       <div className={style.footerInner}>
         <a href="" target="_blank" rel="noopener noreferrer" className={style.logo}>
-          Learn Lab
+          LearnLab
           <span />
         </a>
         <br />
