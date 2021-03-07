@@ -66,7 +66,7 @@ const Layout = ({ user, children, location: { pathname, search } }) => {
 
   return (
     <Fragment>
-      <Helmet titleTemplate="Learn Lab | %s" title="" />
+      <Helmet titleTemplate="LearnLab | %s" title="" />
       {BootstrappedLayout()}
     </Fragment>
   )
