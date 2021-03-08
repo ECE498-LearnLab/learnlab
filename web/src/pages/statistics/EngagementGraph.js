@@ -1,9 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
+import { useSelector } from 'react-redux'
 import SkeletonTable from './SkeletonTable'
-
-// add query to get user's name from id to be used as graph name
 
 const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
   query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
@@ -34,32 +33,35 @@ const GET_STUDENT_NAME = gql`
 `
 
 const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
-  // can hardcode the selected roomId and userId for now since roomId and userId selection is not finished
   roomId = 1
-  userId = 1
   console.log('roomID', roomId)
   console.log('showRoomAverage', showRoomAverage)
+
+  const currentUser = useSelector(state => state.user)
+  let studentName = showRoomAverage ? null : currentUser.first_name
+  userId = showRoomAverage ? userId : currentUser.id
   console.log('userid', userId)
+  console.log('STUDENTSSSS NAMEEEE', studentName)
 
   /* Queries */
   const { data: studentRoomEngagement, loading: studentEngagementLoading } = useQuery(
     GET_STUDENT_ENGAGEMENT_FOR_ROOM,
     {
       variables: { room_id: roomId, student_id: userId },
-      // skip: userId === null || userId === undefined,
+      skip: userId === null || userId === undefined || roomId === null || roomId === undefined,
     },
   )
   const { data: roomEngagementAverage, loading: roomEngagementLoading } = useQuery(
     GET_ROOM_ENGAGEMENT_AVERAGE,
     {
       variables: { room_id: roomId },
-      // skip: room_id === null || room_id === undefined,
+      skip: roomId === null || roomId === undefined,
     },
   )
 
   const { data: userData, loading: userDataLoading } = useQuery(GET_STUDENT_NAME, {
     variables: { id: userId },
-    // skip: userId === null || userId === undefined,
+    skip: userId === null || userId === undefined || studentName !== null,
   })
 
   let dataLoading = true
@@ -73,42 +75,55 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
   console.log(userDataLoading)
 
   const studentDataList = []
+  const studentTimestamp = []
   const roomDataList = []
-  let studentName = null
+  const roomTimestamp = []
 
-  if (studentRoomEngagement && roomEngagementAverage && userData) {
-    const studentData = studentRoomEngagement.studentRoomEngagementHistory
-    const roomData = roomEngagementAverage.roomEngagementAverages
-    const studentLength = studentData.length
-    const roomLength = roomData.length
+  if (userData) {
     studentName = userData.user.user.first_name
+  }
+
+  if (studentRoomEngagement || roomEngagementAverage) {
+    const studentData = studentRoomEngagement
+      ? studentRoomEngagement.studentRoomEngagementHistory
+      : null
+    const roomData = roomEngagementAverage ? roomEngagementAverage.roomEngagementAverages : null
+
+    const studentLength = studentData ? studentData.length : 0
+    const roomLength = roomData ? roomData.length : 0
 
     for (let i = 0; i < studentLength; i += 1) {
       studentDataList.push(studentData[i].score)
+      studentTimestamp.push(new Date(studentData[i].created_at).toLocaleTimeString())
     }
 
     for (let i = 0; i < roomLength; i += 1) {
       roomDataList.push(roomData[i].score)
+      roomTimestamp.push(roomData[i].taken_at)
     }
-    // console.log("STUDENT DATA ARRAY", studentDataList)
-    // console.log("ROOM DATA ARRAY", roomDataList)
-    // console.log("STUDENTSSSS NAMEEEE", studentName)
+    console.log('STUDENT DATA ARRAY', studentDataList)
+    console.log('STUDENT TIMESTAMPP', studentTimestamp)
+    console.log('ROOM DATA ARRAY', roomDataList)
+    console.log('ROOM TIMESTAMPP', roomTimestamp)
+    console.log('STUDENTSSSS NAMEEEE', studentName)
     dataLoading = false
   }
 
   // graph displays:
-  // room average if INSTRUCTOR
-  // room average + student if INSTRUCTOR and userId exists
-  // student if STUDENT
+  // room average data if INSTRUCTOR
+  // room average data + student data if INSTRUCTOR and choose userId
+  // student's own data  if STUDENT
   const series = []
   if (!dataLoading) {
     if (userId || !showRoomAverage) {
+      console.log('PUSHING STUDENT DATA')
       series.push({
-        name: studentName || 'Student',
+        name: studentName || '',
         data: studentDataList,
       })
     }
     if (showRoomAverage) {
+      console.log('PUSHING ROOM DATA')
       series.push({
         name: 'Room Average',
         data: roomDataList,
@@ -125,6 +140,7 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       zoom: {
         enabled: false,
       },
+      fontFamily: 'Mukta, sans-serif',
     },
     dataLabels: {
       enabled: false,
@@ -135,7 +151,7 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       dashArray: [0, 8, 5],
     },
     title: {
-      text: '[Room name] Engagement',
+      text: 'Room Engagement',
       align: 'left',
     },
     markers: {
@@ -143,9 +159,10 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
     },
     xaxis: {
       title: {
-        text: 'What do we want the x axis numbers to be',
+        text: 'Timestamp',
       },
-      // categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      type: 'String',
+      categories: studentTimestamp,
     },
     yaxis: [
       {
@@ -158,6 +175,9 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
     ],
     legend: {
       show: true,
+      showForSingleSeries: true,
+      showForNullSeries: true,
+      showForZeroSeries: true,
     },
   }
 

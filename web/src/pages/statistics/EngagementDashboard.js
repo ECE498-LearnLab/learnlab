@@ -11,38 +11,37 @@ import EngagementGraph from './EngagementGraph'
 import SkeletonTable from './SkeletonTable'
 import style from './style.module.scss'
 
-const GET_ROOMS_FOR_CLASSROOM = gql`
-  query getRoomsForClassroom($class_id: ID!, $user_id: ID!, $room_states: [RoomState]) {
-    roomsForClassroom(class_id: $class_id, user_id: $user_id, room_states: $room_states) {
-      id
-      room_uuid
-      room_name
-      start_time
-      end_time
-      room_status
-    }
-  }
-`
-
-const GET_PARTICIPANTS_FOR_ROOM = gql`
-  query getParticipantsForRoom($room_id: ID!) {
-    participants(room_id: $room_id) {
-      id
-      first_name
-      last_name
-      email
-    }
-  }
-`
-
-const EngagementDashboard = ({ selectedClassId }) => {
+const EngagementDashboard = () => {
+  const selectedClassId = useSelector(state => state.selectedClass.classId)
   const currentUser = useSelector(state => state.user)
   const { Option } = Select
   const [roomId, setRoomId] = useState(null)
   const [selectedRoomId, setSelectedRoomId] = useState(null)
-  const [selectedUser, setSelectedUser] = useState(
-    currentUser.role === 'STUDENT' ? currentUser : null,
-  )
+  const [selectedUser, setSelectedUser] = useState(null)
+
+  const GET_ROOMS_FOR_CLASSROOM = gql`
+    query getRoomsForClassroom($class_id: ID!, $user_id: ID!, $room_states: [RoomState]) {
+      roomsForClassroom(class_id: $class_id, user_id: $user_id, room_states: $room_states) {
+        id
+        room_uuid
+        room_name
+        start_time
+        end_time
+        room_status
+      }
+    }
+  `
+
+  const GET_PARTICIPANTS_FOR_ROOM = gql`
+    query getParticipantsForRoom($room_id: ID!) {
+      participants(room_id: $room_id) {
+        id
+        first_name
+        last_name
+        email
+      }
+    }
+  `
 
   const onGetRoomsSuccess = useCallback(
     res => {
@@ -70,52 +69,35 @@ const EngagementDashboard = ({ selectedClassId }) => {
     onCompleted: onGetRoomsSuccess,
   })
 
-  const {
-    data: participantsData,
-    loading: participantsDataLoading,
-    error: participantsDataError,
-    refetch,
-  } = useQuery(GET_PARTICIPANTS_FOR_ROOM, {
-    variables: {
-      room_id: selectedRoomId,
+  const { data: participantsData, loading: particpantsDataLoading, refetch } = useQuery(
+    GET_PARTICIPANTS_FOR_ROOM,
+    {
+      variables: {
+        room_id: selectedRoomId,
+      },
+      skip: selectedRoomId === null || selectedRoomId === undefined,
     },
-    skip: currentUser.role === 'STUDENT' || !selectedRoomId,
-  })
-
-  const participants = useMemo(() => {
-    if (participantsDataLoading || participantsDataError) {
-      return []
-    }
-
-    if (participantsData) {
-      return participantsData
-        ? participantsData.participants.map(_user => {
-            return { ..._user, key: _user.id }
-          })
-        : []
-    }
-
-    return []
-  }, [participantsData, participantsDataLoading, participantsDataError])
+  )
+  console.log(particpantsDataLoading)
+  const participants = participantsData
+    ? participantsData.participants.map(_user => {
+        return { ..._user, key: _user.id }
+      })
+    : []
 
   const updateRoomId = useCallback(
     value => {
-      if (roomId !== value) {
-        setRoomId(value)
-      }
+      setRoomId(value)
     },
-    [roomId, setRoomId],
+    [setRoomId],
   )
 
   const updateSelectedtRoomId = useCallback(() => {
     if (roomId && roomId !== selectedRoomId) {
       setSelectedRoomId(roomId)
-      if (currentUser.role !== 'STUDENT') {
-        refetch()
-        setSelectedUser(null)
-      }
+      refetch()
     }
-  }, [roomId, selectedRoomId, setSelectedRoomId, currentUser, setSelectedUser, refetch])
+  }, [roomId, selectedRoomId, setSelectedRoomId, refetch])
 
   const onChangeSelectedUser = useCallback(
     user => {
@@ -155,6 +137,16 @@ const EngagementDashboard = ({ selectedClassId }) => {
       sortDirections: ['descend', 'ascend'],
     },
     {
+      title: 'ID',
+      key: 'id',
+      className: 'bg-transparent',
+      render: record => {
+        return <div>{record.id}</div>
+      },
+      sorter: (a, b) => a.id - b.id,
+      sortDirections: ['descend', 'ascend'],
+    },
+    {
       title: 'EMAIL',
       dataIndex: 'email',
       key: 'email',
@@ -186,10 +178,13 @@ const EngagementDashboard = ({ selectedClassId }) => {
   ]
 
   const roomOptions = useMemo(() => {
-    if (classroomDataLoading || classroomDataError) {
+    if (classroomDataLoading) {
       return []
     }
-    if (classroomData?.roomsForClassroom) {
+    if (classroomDataError) {
+      return []
+    }
+    if (classroomData) {
       return classroomData.roomsForClassroom.map(room => {
         return (
           <Option key={room.room_name} value={room.id} label={room.room_name}>
@@ -200,16 +195,6 @@ const EngagementDashboard = ({ selectedClassId }) => {
     }
     return []
   }, [classroomData, classroomDataLoading, classroomDataError])
-
-  const engagementGraph = useMemo(() => {
-    return (
-      <EngagementGraph
-        roomId={selectedRoomId}
-        showRoomAverage={currentUser.role === 'INSTRUCTOR'}
-        userId={selectedUser ? selectedUser.id : null}
-      />
-    )
-  }, [selectedRoomId, currentUser, selectedUser])
 
   return (
     <div>
@@ -229,9 +214,9 @@ const EngagementDashboard = ({ selectedClassId }) => {
               showArrow={false}
               optionFilterProp="label"
               placeholder={
-                selectedRoomId
-                  ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)
-                      ?.room_name || 'Select a room'
+                selectedRoomId && classroomData.roomsForClassroom
+                  ? classroomData.roomsForClassroom.find(rooms => rooms.id === selectedRoomId)
+                      .room_name
                   : 'Select a room'
               }
               loading={classroomDataLoading}
@@ -250,29 +235,27 @@ const EngagementDashboard = ({ selectedClassId }) => {
       {selectedRoomId && (
         <div className="cui__utils__heading">
           <strong>
-            {classroomData?.roomsForClassroom?.find(data => data.id === selectedRoomId)
+            {classroomData?.roomsForClassroom?.filter(data => data.id === selectedRoomId)[0]
               ?.room_name || null}
           </strong>
         </div>
       )}
-      {engagementGraph}
-      {currentUser.role === 'INSTRUCTOR' &&
-        (classroomDataLoading || participantsDataLoading ? (
-          <div>
-            <div className="cui__utils__heading">
-              <strong>
-                <FormattedMessage id="statistics.title.students" />
-              </strong>
-            </div>
-            <SkeletonTable />
+      <EngagementGraph
+        roomId={selectedRoomId}
+        showRoomAverage={currentUser.role === 'INSTRUCTOR'}
+        userId={selectedUser ? selectedUser.id : null}
+      />
+      {currentUser.role === 'INSTRUCTOR' && (
+        <div>
+          <div className="cui__utils__heading">
+            <strong>
+              <FormattedMessage id="statistics.title.students" />
+            </strong>
           </div>
-        ) : (
-          <div>
-            <div className="cui__utils__heading">
-              <strong>
-                <FormattedMessage id="statistics.title.students" />
-              </strong>
-            </div>
+
+          {classroomDataLoading || particpantsDataLoading ? (
+            <SkeletonTable />
+          ) : (
             <Table
               className={style.table}
               columns={columns}
@@ -282,8 +265,9 @@ const EngagementDashboard = ({ selectedClassId }) => {
               ellipsis={true}
               scroll={participants.length > 4 ? { y: 275 } : false}
             />
-          </div>
-        ))}
+          )}
+        </div>
+      )}
     </div>
   )
 }
