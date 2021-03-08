@@ -1,8 +1,10 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 
 const Terms = () => {
   return (
     <div>
+      <Helmet title="Terms of Service" />
       <h2>Terms of Service</h2>
       <p>These Terms of Service govern your use of the website provided by LearnLab. </p>
       <p>
