@@ -25,6 +25,7 @@ const EngagementGraph = ({ room_id }) => {
       // prevents data array from getting too large
       if (graphData.length > 100) resizeData()
     },
+    // eslint-disable-next-line
     [setGraphData, graphData],
   )
 
