@@ -2,7 +2,8 @@ import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { useSelector } from 'react-redux'
-import SkeletonTable from './SkeletonTable'
+// import SkeletonTable from './SkeletonTable'
+import Skeleton from 'antd'
 
 const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
   query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
@@ -151,15 +152,25 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       dashArray: [0, 8, 5],
     },
     title: {
-      text: 'Room Engagement',
+      text: 'PERCENT ENGAGED OVER TIME',
       align: 'left',
+      style: {
+        fontSize: '18px',
+        fontWeight: 550,
+        fontFamily: 'Mukta, sans-serif',
+      },
     },
     markers: {
       size: 0,
     },
     xaxis: {
       title: {
-        text: 'Timestamp',
+        text: 'TIMESTAMP',
+        style: {
+          fontSize: '14px',
+          fontWeight: 500,
+          fontFamily: 'Mukta, sans-serif',
+        },
       },
       type: 'String',
       categories: studentTimestamp,
@@ -167,7 +178,12 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
     yaxis: [
       {
         title: {
-          text: '% Engaged',
+          text: '% ENGAGED',
+          style: {
+            fontSize: '14px',
+            fontWeight: 500,
+            fontFamily: 'Mukta, sans-serif',
+          },
         },
         max: 100,
         min: 0,
@@ -178,14 +194,21 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       showForSingleSeries: true,
       showForNullSeries: true,
       showForZeroSeries: true,
+      position: 'bottom',
+      horizontalAlign: 'center',
+      fontFamily: 'Mukta, sans-serif',
+      fontSize: '14px',
+      onItemClick: {
+        toggleDataSeries: true,
+      },
     },
   }
 
   return (
     <div className="card">
-      <div className="p-3">
+      <div className="p-3" height="350">
         {dataLoading ? (
-          <SkeletonTable />
+          <Skeleton.Input style={{ height: 350 }} active />
         ) : (
           <ReactApexChart options={options} series={series} type="line" height="350" />
         )}
