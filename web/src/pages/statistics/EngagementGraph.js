@@ -2,7 +2,6 @@ import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { useSelector } from 'react-redux'
-// import SkeletonTable from './SkeletonTable'
 import Skeleton from 'antd'
 
 const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
@@ -34,51 +33,30 @@ const GET_STUDENT_NAME = gql`
 `
 
 const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
-  roomId = 1
-  console.log('roomID', roomId)
-  console.log('showRoomAverage', showRoomAverage)
-
   const currentUser = useSelector(state => state.user)
   let studentName = showRoomAverage ? null : currentUser.first_name
   userId = showRoomAverage ? userId : currentUser.id
-  console.log('userid', userId)
-  console.log('STUDENTSSSS NAMEEEE', studentName)
-
-  /* Queries */
-  const { data: studentRoomEngagement, loading: studentEngagementLoading } = useQuery(
-    GET_STUDENT_ENGAGEMENT_FOR_ROOM,
-    {
-      variables: { room_id: roomId, student_id: userId },
-      skip: userId === null || userId === undefined || roomId === null || roomId === undefined,
-    },
-  )
-  const { data: roomEngagementAverage, loading: roomEngagementLoading } = useQuery(
-    GET_ROOM_ENGAGEMENT_AVERAGE,
-    {
-      variables: { room_id: roomId },
-      skip: roomId === null || roomId === undefined,
-    },
-  )
-
-  const { data: userData, loading: userDataLoading } = useQuery(GET_STUDENT_NAME, {
-    variables: { id: userId },
-    skip: userId === null || userId === undefined || studentName !== null,
-  })
-
   let dataLoading = true
-
-  console.log('query data and query loading')
-  console.log(studentRoomEngagement)
-  console.log(roomEngagementAverage)
-  console.log(userData)
-  console.log(studentEngagementLoading)
-  console.log(roomEngagementLoading)
-  console.log(userDataLoading)
-
   const studentDataList = []
   const studentTimestamp = []
   const roomDataList = []
   const roomTimestamp = []
+
+  /* Queries */
+  const { data: studentRoomEngagement } = useQuery(GET_STUDENT_ENGAGEMENT_FOR_ROOM, {
+    variables: { room_id: roomId, student_id: userId },
+    skip: userId === null || userId === undefined || roomId === null || roomId === undefined,
+  })
+
+  const { data: roomEngagementAverage } = useQuery(GET_ROOM_ENGAGEMENT_AVERAGE, {
+    variables: { room_id: roomId },
+    skip: roomId === null || roomId === undefined,
+  })
+
+  const { data: userData } = useQuery(GET_STUDENT_NAME, {
+    variables: { id: userId },
+    skip: userId === null || userId === undefined || studentName !== null,
+  })
 
   if (userData) {
     studentName = userData.user.user.first_name
@@ -102,11 +80,11 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       roomDataList.push(roomData[i].score)
       roomTimestamp.push(roomData[i].taken_at)
     }
-    console.log('STUDENT DATA ARRAY', studentDataList)
-    console.log('STUDENT TIMESTAMPP', studentTimestamp)
-    console.log('ROOM DATA ARRAY', roomDataList)
-    console.log('ROOM TIMESTAMPP', roomTimestamp)
-    console.log('STUDENTSSSS NAMEEEE', studentName)
+    // console.log('STUDENT DATA ARRAY', studentDataList)
+    // console.log('STUDENT TIMESTAMPP', studentTimestamp)
+    // console.log('ROOM DATA ARRAY', roomDataList)
+    // console.log('ROOM TIMESTAMPP', roomTimestamp)
+    // console.log('STUDENTSSSS NAMEEEE', studentName)
     dataLoading = false
   }
 
@@ -117,14 +95,12 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
   const series = []
   if (!dataLoading) {
     if (userId || !showRoomAverage) {
-      console.log('PUSHING STUDENT DATA')
       series.push({
         name: studentName || '',
         data: studentDataList,
       })
     }
     if (showRoomAverage) {
-      console.log('PUSHING ROOM DATA')
       series.push({
         name: 'Room Average',
         data: roomDataList,
