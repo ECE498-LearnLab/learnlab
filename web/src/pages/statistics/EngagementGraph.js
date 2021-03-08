@@ -184,7 +184,7 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
     <div className="card">
       <div className="p-3" height="350">
         {dataLoading ? (
-          <Skeleton.Input style={{ height: 350 }} active />
+          <Skeleton.Input style={{ height: 350 }} active="true" />
         ) : (
           <ReactApexChart options={options} series={series} type="line" height="350" />
         )}
