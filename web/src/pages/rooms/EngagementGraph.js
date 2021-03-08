@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react'
 import { gql, useSubscription } from '@apollo/client'
 import ApexCharts from 'apexcharts'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 const EngagementGraph = ({ room_id }) => {
@@ -25,7 +25,7 @@ const EngagementGraph = ({ room_id }) => {
       // prevents data array from getting too large
       if (graphData.length > 100) resizeData()
     },
-    [setGraphData, graphData],
+    [setGraphData, graphData, resizeData],
   )
 
   const resizeData = useCallback(() => {

@@ -68,31 +68,11 @@ const AuthLayout = ({
               className={`${style.footerNav} list-unstyled d-flex mb-0 flex-wrap justify-content-center`}
             >
               <li>
-                <a href="#" onClick={e => e.preventDefault()}>
-                  Terms of Use
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={e => e.preventDefault()}>
-                  Compliance
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={e => e.preventDefault()}>
-                  Support
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={e => e.preventDefault()}>
-                  Contacts
-                </a>
+                <Link to="/terms">Terms of Service</Link>
               </li>
             </ul>
             <div className="text-center">
-              Copyright © 2017-2020 Mdtk Soft |{' '}
-              <a href="https://www.mediatec.org/privacy" target="_blank" rel="noopener noreferrer">
-                Privacy Policy
-              </a>
+              Copyright © 2021 LearnLab | <Link to="/privacy">Privacy Policy</Link>
             </div>
           </div>
         </div>

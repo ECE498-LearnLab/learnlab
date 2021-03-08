@@ -44,6 +44,16 @@ const routes = [
     exact: true,
   },
   {
+    path: '/privacy',
+    Component: lazy(() => import('pages/auth/privacy')),
+    exact: true,
+  },
+  {
+    path: '/terms',
+    Component: lazy(() => import('pages/auth/terms')),
+    exact: true,
+  },
+  {
     path: '/auth/forgot-password',
     Component: lazy(() => import('pages/auth/forgot-password')),
     exact: true,

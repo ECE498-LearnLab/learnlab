@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import style from './style.module.scss'
 
 const Footer = () => {
@@ -11,10 +12,7 @@ const Footer = () => {
         </a>
         <br />
         <p className="mb-0">
-          Copyright © 2020|{' '}
-          <a href="https://www.mediatec.org/privacy" target="_blank" rel="noopener noreferrer">
-            Privacy Policy
-          </a>
+          Copyright © 2020| <Link to="/privacy">Privacy Policy</Link>
         </p>
       </div>
     </div>

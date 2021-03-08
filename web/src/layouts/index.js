@@ -40,7 +40,11 @@ const Layout = ({ user, children, location: { pathname, search } }) => {
     ) {
       return 'public'
     }
-    if (/^\/auth(?=\/|$)/i.test(pathname)) {
+    if (
+      /^\/auth(?=\/|$)/i.test(pathname) ||
+      /^\/terms(?=\/|$)/i.test(pathname) ||
+      /^\/privacy(?=\/|$)/i.test(pathname)
+    ) {
       return 'auth'
     }
     return 'main'
@@ -56,7 +60,7 @@ const Layout = ({ user, children, location: { pathname, search } }) => {
     if (isUserLoading && !isUserAuthorized && !isAuthLayout) {
       return null
     }
-    // redirect to login page if current is not login page and user not authorized
+    // redirect to login page if current is not login page and user not authorized and not privacy or terms page
     if (!isAuthLayout && !isUserAuthorized) {
       return <Redirect to="/auth/login" />
     }

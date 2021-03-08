@@ -29,13 +29,7 @@ const Register = ({ dispatch, user }) => {
           </span>
           <div>
             <span className="mr-1">By signing up, you agree to the</span>
-            <a href="#" onClick={e => e.preventDefault()} className="kit__utils__link">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" onClick={e => e.preventDefault()} className="kit__utils__link">
-              Privacy Policy
-            </a>
+            <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
           </div>
         </div>
         <Form
