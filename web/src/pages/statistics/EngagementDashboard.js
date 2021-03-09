@@ -1,13 +1,13 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { gql, useQuery } from '@apollo/client'
+import { Select, Table } from 'antd'
+import UserAvatar from 'components/learnlab/UserAvatar'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { FormattedMessage } from 'react-intl'
-import { Table, Select } from 'antd'
-import UserAvatar from 'components/learnlab/UserAvatar'
-import { Button } from 'reactstrap'
 import { useSelector } from 'react-redux'
-import EngagementGraph from './EngagementGraph'
+import { Button } from 'reactstrap'
+import EngagementGraph, { EmptyEngagementGraph, SkeletonEngagementGraph } from './EngagementGraph'
 import SkeletonTable from './SkeletonTable'
 import style from './style.module.scss'
 
@@ -187,7 +187,7 @@ const EngagementDashboard = ({ selectedClassId }) => {
 
   const roomOptions = useMemo(() => {
     if (classroomDataLoading || classroomDataError) {
-      return []
+      return <SkeletonEngagementGraph />
     }
     if (classroomData?.roomsForClassroom) {
       return classroomData.roomsForClassroom.map(room => {
@@ -201,28 +201,26 @@ const EngagementDashboard = ({ selectedClassId }) => {
     return []
   }, [classroomData, classroomDataLoading, classroomDataError])
 
-  const roomName = selectedRoomId
-    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.room_name || ''
-    : ''
-  const roomStartTime = selectedRoomId
-    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.start_time || ''
-    : ''
-  const roomEndTime = selectedRoomId
-    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.end_time || ''
-    : ''
-
   const engagementGraph = useMemo(() => {
+    if (classroomDataLoading) {
+      return <SkeletonEngagementGraph />
+    }
+    if (classroomData?.roomsForClassroom.length === 0 || classroomDataError) {
+      return <EmptyEngagementGraph />
+    }
+    if (
+      (selectedRoomId === undefined || selectedRoomId === null || selectedRoomId === '') &&
+      classroomData?.roomsForClassroom.length > 0
+    ) {
+      return <SkeletonEngagementGraph />
+    }
     return (
       <EngagementGraph
-        roomId={selectedRoomId}
-        showRoomAverage={currentUser.role === 'INSTRUCTOR'}
-        userId={selectedUser ? selectedUser.id : null}
-        roomName={roomName}
-        roomStartTime={roomStartTime}
-        roomEndTime={roomEndTime}
+        room={classroomData.roomsForClassroom?.find(room => room.id === selectedRoomId)}
+        user={selectedUser}
       />
     )
-  }, [selectedRoomId, currentUser.role, selectedUser, roomName, roomStartTime, roomEndTime])
+  }, [classroomData, classroomDataLoading, classroomDataError, selectedRoomId, selectedUser])
 
   return (
     <div>
@@ -260,14 +258,6 @@ const EngagementDashboard = ({ selectedClassId }) => {
           </div>
         </div>
       </div>
-      {selectedRoomId && (
-        <div className="cui__utils__heading">
-          <strong>
-            {classroomData?.roomsForClassroom?.find(data => data.id === selectedRoomId)
-              ?.room_name || null}
-          </strong>
-        </div>
-      )}
       {engagementGraph}
       {currentUser.role === 'INSTRUCTOR' &&
         (classroomDataLoading || participantsDataLoading ? (
