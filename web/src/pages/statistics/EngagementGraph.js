@@ -1,8 +1,57 @@
 import { gql, useQuery } from '@apollo/client'
-import React from 'react'
+import { Empty, Skeleton } from 'antd'
+import _ from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { useSelector } from 'react-redux'
-import Skeleton from 'antd'
+
+const OPTIONS = {
+  chart: {
+    id: 'engagement-graph',
+    type: 'area',
+    height: 350,
+    zoom: {
+      autoScaleYaxis: true,
+    },
+    fontFamily: 'Mukta, sans-serif',
+  },
+  colors: ['#02A0FC', '#34B53A'],
+  stroke: {
+    curve: 'smooth',
+    width: [5, 3],
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  markers: {
+    size: 0,
+  },
+  yaxis: [
+    {
+      title: {
+        text: 'Engagement Score',
+      },
+      max: 100,
+      min: 0,
+    },
+  ],
+  tooltip: {
+    x: {
+      format: 'dd MMM yyyy HH:mm:ss',
+    },
+  },
+  legend: {
+    show: true,
+    showForSingleSeries: true,
+    showForNullSeries: true,
+    showForZeroSeries: true,
+    position: 'bottom',
+    horizontalAlign: 'center',
+    onItemClick: {
+      toggleDataSeries: true,
+    },
+  },
+}
 
 const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
   query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
@@ -22,179 +71,155 @@ const GET_ROOM_ENGAGEMENT_AVERAGE = gql`
   }
 `
 
-const GET_STUDENT_NAME = gql`
-  query getUser($id: ID!) {
-    user(id: $id) {
-      user {
-        first_name
-      }
-    }
-  }
-`
-
-const EngagementGraph = ({
-  roomId,
-  showRoomAverage,
-  userId,
-  roomName,
-  roomStartTime,
-  roomEndTime,
-}) => {
+const EngagementGraph = ({ user, room }) => {
   const currentUser = useSelector(state => state.user)
-  let studentName = showRoomAverage ? null : currentUser.first_name
-  userId = showRoomAverage ? userId : currentUser.id
-  let dataLoading = true
-  const studentDataList = []
-  const roomDataList = []
+  const [roomSeries, setRoomSeries] = useState(null)
+  const [studentSeries, setStudentSeries] = useState(null)
 
   /* Queries */
-  const { data: studentRoomEngagement } = useQuery(GET_STUDENT_ENGAGEMENT_FOR_ROOM, {
-    variables: { room_id: roomId, student_id: userId },
-    skip: userId === null || userId === undefined || roomId === null || roomId === undefined,
-  })
+  const { data: roomEngagementAverage, loading: roomLoading, error: roomError } = useQuery(
+    GET_ROOM_ENGAGEMENT_AVERAGE,
+    {
+      variables: { room_id: room.id },
+      skip: currentUser.role === 'STUDENT',
+    },
+  )
 
-  const { data: roomEngagementAverage } = useQuery(GET_ROOM_ENGAGEMENT_AVERAGE, {
-    variables: { room_id: roomId },
-    skip: roomId === null || roomId === undefined,
-  })
+  const { data: studentRoomEngagement, loading: studentLoading, error: studentError } = useQuery(
+    GET_STUDENT_ENGAGEMENT_FOR_ROOM,
+    {
+      skip: user === null || user === undefined,
+      variables: { room_id: room.id, student_id: user?.id },
+    },
+  )
 
-  const { data: userData } = useQuery(GET_STUDENT_NAME, {
-    variables: { id: userId },
-    skip: userId === null || userId === undefined || studentName !== null,
-  })
-
-  if (userData) {
-    studentName = userData.user.user.first_name
-  }
-
-  if (studentRoomEngagement || roomEngagementAverage) {
-    const studentData = studentRoomEngagement
-      ? studentRoomEngagement.studentRoomEngagementHistory
-      : null
-    const roomData = roomEngagementAverage ? roomEngagementAverage.roomEngagementAverages : null
-
-    const studentLength = studentData ? studentData.length : 0
-    const roomLength = roomData ? roomData.length : 0
-
-    for (let i = 0; i < studentLength; i += 1) {
-      studentDataList.push(studentData[i].score)
-    }
-
-    for (let i = 0; i < roomLength; i += 1) {
-      roomDataList.push(roomData[i].score)
-    }
-
-    dataLoading = false
-  }
-
-  // graph displays:
-  // room average data if INSTRUCTOR
-  // room average data + student data if INSTRUCTOR and choose userId
-  // student's own data  if STUDENT
-  const series = []
-  if (!dataLoading) {
-    if (userId || !showRoomAverage) {
-      series.push({
-        name: studentName || '',
-        data: studentDataList,
-      })
-    }
-    if (showRoomAverage) {
-      series.push({
+  useEffect(() => {
+    if (roomEngagementAverage) {
+      setRoomSeries({
         name: 'Room Average',
-        data: roomDataList,
+        data: roomEngagementAverage.roomEngagementAverages.map(x => [x.taken_at, x.score]),
       })
     }
-  }
+  }, [setRoomSeries, roomEngagementAverage])
 
-  const options = {
-    chart: {
-      id: 'line',
-      toolbar: {
-        show: true,
-      },
-      fontFamily: 'Mukta, sans-serif',
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      width: [5, 7, 5],
-      curve: 'smooth',
-      dashArray: [0, 8, 5],
-    },
-    title: {
-      text: `${roomName} Engagement`,
-      align: 'left',
-      style: {
-        fontSize: '18px',
-        fontWeight: 550,
-        fontFamily: 'Mukta, sans-serif',
-      },
-    },
-    markers: {
-      size: 0,
-    },
-    xaxis: {
+  useEffect(() => {
+    if (user === null) {
+      setStudentSeries(null)
+    }
+    if (studentRoomEngagement) {
+      const orderedData = _.orderBy(
+        studentRoomEngagement.studentRoomEngagementHistory,
+        'created_at',
+        'asc',
+      )
+      setStudentSeries({
+        name: `${user.first_name} ${user.last_name}`,
+        data: orderedData.map(x => [x.created_at, x.score]),
+      })
+    }
+    // eslint-disable-next-line
+  }, [user, setStudentSeries, studentRoomEngagement])
+
+  const engagementGraph = useMemo(() => {
+    if (roomLoading && studentLoading) {
+      return <SkeletonEngagementGraph />
+    }
+    if (roomError && studentError) {
+      return <EmptyEngagementGraph />
+    }
+    if (roomSeries === null && studentSeries === null) {
+      return <SkeletonEngagementGraph />
+    }
+    if (roomSeries !== null && roomSeries.data.length === 0) {
+      return <EmptyEngagementGraph />
+    }
+    if (roomSeries === null && studentSeries !== null && studentSeries.data.length === 0) {
+      return <EmptyEngagementGraph />
+    }
+
+    // eslint-disable-next-line no-nested-ternary
+    const graphTitle =
+      currentUser.role === 'STUDENT'
+        ? 'Your Engagement'
+        : user !== null
+        ? `${user.first_name} ${user.last_name}'s Engagement`
+        : `${room.room_name} Room's Engagement`
+    const options = {
       title: {
-        text: 'TIMESTAMP',
+        text: graphTitle,
+        align: 'left',
         style: {
-          fontSize: '14px',
-          fontWeight: 500,
-          fontFamily: 'Mukta, sans-serif',
+          fontSize: '18px',
+          fontWeight: 550,
         },
       },
-      type: 'datetime',
-      tickAmount: 10,
-      min: roomStartTime,
-      max: roomEndTime,
-      labels: {
-        formatter(val) {
-          return new Intl.DateTimeFormat('default', {
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-          }).format(val)
-        },
-      },
-    },
-    yaxis: [
-      {
+      xaxis: {
         title: {
-          text: '% ENGAGED',
-          style: {
-            fontSize: '14px',
-            fontWeight: 500,
-            fontFamily: 'Mukta, sans-serif',
+          text: 'Time',
+        },
+        type: 'datetime',
+        min: new Date(
+          roomSeries !== null ? roomSeries.data[0][0] : studentSeries.data[0][0],
+        ).getTime(),
+        max: new Date(
+          roomSeries !== null
+            ? roomSeries.data[roomSeries.data.length - 1][0]
+            : studentSeries.data[studentSeries.data.length - 1][0],
+        ).getTime(),
+        tickAmount: 6,
+        labels: {
+          formatter(val) {
+            return new Intl.DateTimeFormat('default', {
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+            }).format(val)
           },
         },
-        max: 100,
-        min: 0,
       },
-    ],
-    legend: {
-      show: true,
-      showForSingleSeries: true,
-      showForNullSeries: true,
-      showForZeroSeries: true,
-      position: 'bottom',
-      horizontalAlign: 'center',
-      fontFamily: 'Mukta, sans-serif',
-      fontSize: '14px',
-      onItemClick: {
-        toggleDataSeries: true,
-      },
-    },
-  }
+      ...OPTIONS,
+    }
+    const series = []
+    if (roomSeries !== null) series.push(roomSeries)
+    if (studentSeries !== null) series.push(studentSeries)
+
+    return <ReactApexChart options={options} series={series} type="line" height="350" />
+  }, [
+    currentUser.role,
+    user,
+    room.room_name,
+    roomSeries,
+    studentSeries,
+    studentLoading,
+    roomLoading,
+    studentError,
+    roomError,
+  ])
 
   return (
     <div className="card">
       <div className="p-3" height="350">
-        {dataLoading ? (
-          <Skeleton.Input style={{ height: 350 }} active="true" />
-        ) : (
-          <ReactApexChart options={options} series={series} type="line" height="350" />
-        )}
+        {engagementGraph}
+      </div>
+    </div>
+  )
+}
+
+export const SkeletonEngagementGraph = () => {
+  return (
+    <div className="card">
+      <div className="p-3" height="350">
+        <Skeleton />
+      </div>
+    </div>
+  )
+}
+
+export const EmptyEngagementGraph = () => {
+  return (
+    <div className="card">
+      <div className="p-3" height="350">
+        <Empty />
       </div>
     </div>
   )

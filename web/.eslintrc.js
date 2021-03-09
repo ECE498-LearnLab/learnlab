@@ -38,6 +38,7 @@ module.exports = {
     "no-console": 0,
     "react/no-multi-comp": 0,
     "import/prefer-default-export": 0,
+    "no-nested-ternary" : 0,
     // "no-unused-vars": 0
     "semi": [ "error", "never" ],
     'camelcase': 'off',
