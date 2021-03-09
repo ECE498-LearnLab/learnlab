@@ -32,15 +32,20 @@ const GET_STUDENT_NAME = gql`
   }
 `
 
-const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
+const EngagementGraph = ({
+  roomId,
+  showRoomAverage,
+  userId,
+  roomName,
+  roomStartTime,
+  roomEndTime,
+}) => {
   const currentUser = useSelector(state => state.user)
   let studentName = showRoomAverage ? null : currentUser.first_name
   userId = showRoomAverage ? userId : currentUser.id
   let dataLoading = true
   const studentDataList = []
-  const studentTimestamp = []
   const roomDataList = []
-  const roomTimestamp = []
 
   /* Queries */
   const { data: studentRoomEngagement } = useQuery(GET_STUDENT_ENGAGEMENT_FOR_ROOM, {
@@ -73,18 +78,12 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
 
     for (let i = 0; i < studentLength; i += 1) {
       studentDataList.push(studentData[i].score)
-      studentTimestamp.push(new Date(studentData[i].created_at).toLocaleTimeString())
     }
 
     for (let i = 0; i < roomLength; i += 1) {
       roomDataList.push(roomData[i].score)
-      roomTimestamp.push(roomData[i].taken_at)
     }
-    // console.log('STUDENT DATA ARRAY', studentDataList)
-    // console.log('STUDENT TIMESTAMPP', studentTimestamp)
-    // console.log('ROOM DATA ARRAY', roomDataList)
-    // console.log('ROOM TIMESTAMPP', roomTimestamp)
-    // console.log('STUDENTSSSS NAMEEEE', studentName)
+
     dataLoading = false
   }
 
@@ -114,9 +113,6 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       toolbar: {
         show: true,
       },
-      zoom: {
-        enabled: false,
-      },
       fontFamily: 'Mukta, sans-serif',
     },
     dataLabels: {
@@ -128,7 +124,7 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
       dashArray: [0, 8, 5],
     },
     title: {
-      text: 'PERCENT ENGAGED OVER TIME',
+      text: `${roomName} Engagement`,
       align: 'left',
       style: {
         fontSize: '18px',
@@ -148,8 +144,19 @@ const EngagementGraph = ({ roomId, showRoomAverage, userId }) => {
           fontFamily: 'Mukta, sans-serif',
         },
       },
-      type: 'String',
-      categories: studentTimestamp,
+      type: 'datetime',
+      tickAmount: 10,
+      min: roomStartTime,
+      max: roomEndTime,
+      labels: {
+        formatter(val) {
+          return new Intl.DateTimeFormat('default', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          }).format(val)
+        },
+      },
     },
     yaxis: [
       {
