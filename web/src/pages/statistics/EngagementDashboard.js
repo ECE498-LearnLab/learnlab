@@ -201,15 +201,28 @@ const EngagementDashboard = ({ selectedClassId }) => {
     return []
   }, [classroomData, classroomDataLoading, classroomDataError])
 
+  const roomName = selectedRoomId
+    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.room_name || ''
+    : ''
+  const roomStartTime = selectedRoomId
+    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.start_time || ''
+    : ''
+  const roomEndTime = selectedRoomId
+    ? classroomData?.roomsForClassroom?.find(rooms => rooms.id === selectedRoomId)?.end_time || ''
+    : ''
+
   const engagementGraph = useMemo(() => {
     return (
       <EngagementGraph
         roomId={selectedRoomId}
         showRoomAverage={currentUser.role === 'INSTRUCTOR'}
         userId={selectedUser ? selectedUser.id : null}
+        roomName={roomName}
+        roomStartTime={roomStartTime}
+        roomEndTime={roomEndTime}
       />
     )
-  }, [selectedRoomId, currentUser, selectedUser])
+  }, [selectedRoomId, currentUser.role, selectedUser, roomName, roomStartTime, roomEndTime])
 
   return (
     <div>

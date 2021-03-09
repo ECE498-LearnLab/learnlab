@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Popover, Button } from 'antd'
 import { LineChartOutlined } from '@ant-design/icons'
-import EngagementGraph from './EngagementGraph'
+import EngagementGraph from './LiveEngagementGraph'
 
 const EngagementPopover = ({ room_id }) => {
   const [isPopoverVisible, setIsPopoverVisible] = useState(false)

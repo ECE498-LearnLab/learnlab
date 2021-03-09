@@ -1,17 +1,111 @@
+import { gql, useQuery } from '@apollo/client'
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
+import { useSelector } from 'react-redux'
+import Skeleton from 'antd'
 
-const EngagementGraph = () => {
-  const series = [
-    {
-      name: 'John',
-      data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10],
-    },
-    {
-      name: 'Room Average',
-      data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35],
-    },
-  ]
+const GET_STUDENT_ENGAGEMENT_FOR_ROOM = gql`
+  query getStudentRoomEngagementHistory($room_id: ID!, $student_id: ID!) {
+    studentRoomEngagementHistory(room_id: $room_id, student_id: $student_id) {
+      score
+      created_at
+    }
+  }
+`
+
+const GET_ROOM_ENGAGEMENT_AVERAGE = gql`
+  query getRoomEngagementAverages($room_id: ID!) {
+    roomEngagementAverages(room_id: $room_id) {
+      score
+      taken_at
+    }
+  }
+`
+
+const GET_STUDENT_NAME = gql`
+  query getUser($id: ID!) {
+    user(id: $id) {
+      user {
+        first_name
+      }
+    }
+  }
+`
+
+const EngagementGraph = ({
+  roomId,
+  showRoomAverage,
+  userId,
+  roomName,
+  roomStartTime,
+  roomEndTime,
+}) => {
+  const currentUser = useSelector(state => state.user)
+  let studentName = showRoomAverage ? null : currentUser.first_name
+  userId = showRoomAverage ? userId : currentUser.id
+  let dataLoading = true
+  const studentDataList = []
+  const roomDataList = []
+
+  /* Queries */
+  const { data: studentRoomEngagement } = useQuery(GET_STUDENT_ENGAGEMENT_FOR_ROOM, {
+    variables: { room_id: roomId, student_id: userId },
+    skip: userId === null || userId === undefined || roomId === null || roomId === undefined,
+  })
+
+  const { data: roomEngagementAverage } = useQuery(GET_ROOM_ENGAGEMENT_AVERAGE, {
+    variables: { room_id: roomId },
+    skip: roomId === null || roomId === undefined,
+  })
+
+  const { data: userData } = useQuery(GET_STUDENT_NAME, {
+    variables: { id: userId },
+    skip: userId === null || userId === undefined || studentName !== null,
+  })
+
+  if (userData) {
+    studentName = userData.user.user.first_name
+  }
+
+  if (studentRoomEngagement || roomEngagementAverage) {
+    const studentData = studentRoomEngagement
+      ? studentRoomEngagement.studentRoomEngagementHistory
+      : null
+    const roomData = roomEngagementAverage ? roomEngagementAverage.roomEngagementAverages : null
+
+    const studentLength = studentData ? studentData.length : 0
+    const roomLength = roomData ? roomData.length : 0
+
+    for (let i = 0; i < studentLength; i += 1) {
+      studentDataList.push(studentData[i].score)
+    }
+
+    for (let i = 0; i < roomLength; i += 1) {
+      roomDataList.push(roomData[i].score)
+    }
+
+    dataLoading = false
+  }
+
+  // graph displays:
+  // room average data if INSTRUCTOR
+  // room average data + student data if INSTRUCTOR and choose userId
+  // student's own data  if STUDENT
+  const series = []
+  if (!dataLoading) {
+    if (userId || !showRoomAverage) {
+      series.push({
+        name: studentName || '',
+        data: studentDataList,
+      })
+    }
+    if (showRoomAverage) {
+      series.push({
+        name: 'Room Average',
+        data: roomDataList,
+      })
+    }
+  }
 
   const options = {
     chart: {
@@ -19,9 +113,7 @@ const EngagementGraph = () => {
       toolbar: {
         show: true,
       },
-      zoom: {
-        enabled: false,
-      },
+      fontFamily: 'Mukta, sans-serif',
     },
     dataLabels: {
       enabled: false,
@@ -32,19 +124,49 @@ const EngagementGraph = () => {
       dashArray: [0, 8, 5],
     },
     title: {
-      text: "John's Engagement",
+      text: `${roomName} Engagement`,
       align: 'left',
+      style: {
+        fontSize: '18px',
+        fontWeight: 550,
+        fontFamily: 'Mukta, sans-serif',
+      },
     },
     markers: {
       size: 0,
     },
     xaxis: {
-      categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      title: {
+        text: 'TIMESTAMP',
+        style: {
+          fontSize: '14px',
+          fontWeight: 500,
+          fontFamily: 'Mukta, sans-serif',
+        },
+      },
+      type: 'datetime',
+      tickAmount: 10,
+      min: roomStartTime,
+      max: roomEndTime,
+      labels: {
+        formatter(val) {
+          return new Intl.DateTimeFormat('default', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          }).format(val)
+        },
+      },
     },
     yaxis: [
       {
         title: {
-          text: 'engagement',
+          text: '% ENGAGED',
+          style: {
+            fontSize: '14px',
+            fontWeight: 500,
+            fontFamily: 'Mukta, sans-serif',
+          },
         },
         max: 100,
         min: 0,
@@ -52,13 +174,27 @@ const EngagementGraph = () => {
     ],
     legend: {
       show: true,
+      showForSingleSeries: true,
+      showForNullSeries: true,
+      showForZeroSeries: true,
+      position: 'bottom',
+      horizontalAlign: 'center',
+      fontFamily: 'Mukta, sans-serif',
+      fontSize: '14px',
+      onItemClick: {
+        toggleDataSeries: true,
+      },
     },
   }
 
   return (
     <div className="card">
-      <div className="p-3">
-        <ReactApexChart options={options} series={series} type="line" height="350" />
+      <div className="p-3" height="350">
+        {dataLoading ? (
+          <Skeleton.Input style={{ height: 350 }} active="true" />
+        ) : (
+          <ReactApexChart options={options} series={series} type="line" height="350" />
+        )}
       </div>
     </div>
   )
