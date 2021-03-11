@@ -57,6 +57,7 @@ const writeAverage = async (room_id, stats) => {
     });
 };
 
+
 const timeout = (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };
