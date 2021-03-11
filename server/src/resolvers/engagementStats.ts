@@ -12,6 +12,12 @@ import {
 } from "../generated/graphql";
 import pubsub, { ENGAGEMENT_AVERAGE_ADDED, ENGAGEMENT_STAT_ADDED } from '../subscriptions/pubsub';
 
+/**
+ * Engagement saturation counter for students; accounts for anomalies (just no face found for now) in data
+ */
+ const SATURATION_THRESHOLD = 3;
+ export const engagementSaturation = {};
+
 const engagementStatsResolver: Resolvers = {
     Subscription: {
         engagementStatAdded: {
@@ -52,6 +58,22 @@ const engagementStatsResolver: Resolvers = {
         upsertEngagementCurrent: async (_, args: MutationUpsertEngagementCurrentArgs,
             { dataSources }: { dataSources: IDataSource })
             : Promise<Response> => {
+            const {student_id, score, room_id} = args;
+            
+            if (!(student_id in engagementSaturation)) {
+                engagementSaturation[student_id] = 0;
+            }
+
+            if (score === 0 && engagementSaturation[student_id] < SATURATION_THRESHOLD) {
+                engagementSaturation[student_id] += 1;
+                return {
+                    success: true,
+                    message: `SKIPPED engagement stat with (room, student): (${room_id}, ${student_id})`
+                };
+            } else if (score > 0 && engagementSaturation[student_id] > 0) {
+                engagementSaturation[student_id] = 0;
+            }
+
             pubsub.publish(ENGAGEMENT_STAT_ADDED, { engagementStatAdded: args });
             return await dataSources.db.engagementAPI().upsertEngagementCurrent(args);
         }
