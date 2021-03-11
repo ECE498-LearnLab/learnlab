@@ -166,12 +166,12 @@ class GazeDetector:
 
         rules: List[Rule] = [  # in order of precedence
             Rule('angle == -1.0 and magnitude == -1.0', 0.0, "NOT ENGAGED", 0),
-            Rule('magnitude <= 12.0 or 0 < angle <= 10', 0.95, "ENGAGED", 10),
-            Rule('magnitude < 20.0', 0.95, "ENGAGED", 9),
-            Rule('magnitude <= 30.0', 0.60, "ENGAGED",8),
-            Rule('magnitude <= 50.0', 0.65, "ENGAGED", 7),
-            Rule('10 < angle < 50', 0.70, "SOMEWHAT ENGAGED", 6),
-            Rule('50 < magnitude <= 70', 0.65, "SOMEWHAT ENGAGED", 5),
+            Rule('magnitude <= 30.0 or 0 < angle <= 15', 0.95, "ENGAGED", 10),
+            Rule('magnitude <= 40.0', 0.95, "ENGAGED", 9),
+            Rule('magnitude <= 50.0', 0.60, "ENGAGED",8),
+            Rule('magnitude <= 60.0', 0.65, "ENGAGED", 7),
+            Rule('15 < angle < 50', 0.70, "SOMEWHAT ENGAGED", 6),
+            Rule('60 < magnitude <= 70', 0.65, "SOMEWHAT ENGAGED", 5),
             Rule('70 < magnitude <= 120', 0.70, "NOT ENGAGED", 4),
             Rule('120 < magnitude < 360', 0.70, "NOT ENGAGED", 3),
             Rule('magnitude > 60.0', 0.70, "NOT ENGAGED", 2),
