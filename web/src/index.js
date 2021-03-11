@@ -28,10 +28,10 @@ import * as serviceWorker from './serviceWorker'
 
 // apollo client set up
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://learnlab-server.herokuapp.com/graphql',
 })
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://learnlab-server.herokuapp.com/graphql`,
   options: {
     reconnect: true,
     connectionParams: () => ({
@@ -40,7 +40,7 @@ const wsLink = new WebSocketLink({
   },
 })
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://learnlab-server.herokuapp.com/graphql',
 })
 
 const requestLink = split(
