@@ -1,4 +1,4 @@
-const useLocalDb = true;
+const useLocalDb = false;
 const connectionConfig = useLocalDb
     ? {        
         host: 'db',
@@ -8,10 +8,10 @@ const connectionConfig = useLocalDb
         database: 'learnlab_local'
     }
     : {
-        host: 'learnlab-database-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
-        user: 'root',
-        password: '<PWD>',
-        database: 'learnlab_1'
+        host: 'learnlab-1.csosestc6lcm.ca-central-1.rds.amazonaws.com',
+        user: 'postgres',
+        password: 'postgres',
+        database: 'learnlab'
 };
 
 module.exports = {
