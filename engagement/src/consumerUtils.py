@@ -30,7 +30,7 @@ def img_to_base64_str(img):
     return "data:image/png;base64," + base64.b64encode(img_byte).decode()
 
 def send_to_graphql(logger, studentID, roomID, token, score, classification):
-    ENDPOINT = "http://server:4000/"
+    ENDPOINT = "http://learnlab-server.herokuapp.com/"
     #logger.info("sending via graphql")
     try:
         auth = "Bearer " + token
