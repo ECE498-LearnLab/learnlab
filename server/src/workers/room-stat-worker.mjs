@@ -26,17 +26,14 @@ async function computeRoomStatAvgs (room_id) {
 const readRoomStatsNow = async (room_id) => {
     const now = new Date();
     const then = new Date(now.getTime() - AVERAGING_INTERVAL);
-    return await db.select(['score', 'updated_at'])
+    return await db.select(['score', 'updated_at', 'student_id'])
                     .from('engagement_current')
                     .where({ room_id })
-                    .andWhereBetween('updated_at', [
-                        then,
-                        now
-                    ]);
+                    .andWhere('updated_at', '>=', then);
 };
 
 const writeAverage = async (room_id, stats) => {
-    const avgScore = stats.reduce((sum, n) => (sum + n.score), 0) / stats.length;
+    const avgScore = Math.round(stats.reduce((sum, n) => (sum + n.score), 0) / stats.length);
     const avgTimestamp = new Date((stats.map((d) => new Date(d.updated_at).getTime())
                             .reduce((sum, d) => (sum + d)) / stats.length));
 

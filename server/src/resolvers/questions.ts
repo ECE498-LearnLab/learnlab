@@ -2,7 +2,7 @@ import { withFilter } from "apollo-server";
 import { IDataSource } from "..";
 import {
     CreateQuestionResponse, AnswerQuestionResponse, MutationAnswerQuestionArgs, MutationSubmitQuestionArgs,
-    MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Resolvers, Response, Upvotes
+    MutationUpvoteQuestionArgs, QueryQuestionsArgs, Question, Resolvers, Upvotes
 } from "../generated/graphql";
 import pubsub, { QUESTION_ADDED, QUESTION_ANSWERED, QUESTION_UPVOTE_CHANGED } from "../subscriptions/pubsub";
 
