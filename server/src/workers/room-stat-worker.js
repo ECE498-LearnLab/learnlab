@@ -1,6 +1,9 @@
-import Knex from 'knex';
-import workerpool from 'workerpool';
-import dbConfig from '../datasources/dbConfig.js';
+// import workerpool from 'workerpool';
+// import Knex from 'knex';
+
+const workerpool = require('workerpool');
+const Knex = require('knex');
+const dbConfig = require('../datasources/dbConfig.js');
 
 
 const db = Knex(dbConfig);
