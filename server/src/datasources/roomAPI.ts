@@ -161,7 +161,7 @@ export default (db: Knex) => {
                             }
                         }
                     })
-                    .timeout(1000*60*10) // 10-min
+                    .timeout(1000*60*60) // 60-min
                     .then(() => {
                         // no use for the result, since this worker either times out or gets cancelled
                     })
