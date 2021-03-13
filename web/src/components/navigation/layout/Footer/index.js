@@ -12,7 +12,7 @@ const Footer = () => {
         </a>
         <br />
         <p className="mb-0">
-          Copyright © 2020| <Link to="/privacy">Privacy Policy</Link>
+          Copyright © 2021| <Link to="/privacy">Privacy Policy</Link>
         </p>
       </div>
     </div>

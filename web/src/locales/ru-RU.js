@@ -93,7 +93,7 @@ const messages = {
   'classInfo.classroom.instructor': 'ИНСТРУКТОР',
   'classInfo.classroom.started': 'Начато',
   'classInfo.classroom.students': 'Студенты',
-  'RecentFiles.title.name': 'Последние файлы',
+  'recentFiles.title.name': 'Последние файлы',
   'upcomingRooms.title.name': 'Предстоящие комнаты',
   'room.title.engagement': 'Взаимодействие в реальном времени',
   'room.student.alert': 'Убедитесь, что вы обращаете внимание',
