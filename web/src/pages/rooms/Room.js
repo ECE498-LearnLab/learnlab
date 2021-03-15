@@ -60,13 +60,15 @@ const Room = ({ room, twilioRoomSid, token, onLeaveRoomHandler }) => {
   const canvasRef = useRef(null)
 
   const onGrabFrame = useCallback(() => {
-    frameCapture
-      .grabFrame()
-      .then(imageBitmap => {
-        const base64String = drawCanvas(canvasRef.current, imageBitmap)
-        addToBatch(base64String, user.id, room.id)
-      })
-      .catch(error => console.log(error))
+    if (frameCapture.track.readyState === 'live') {
+      frameCapture
+        .grabFrame()
+        .then(imageBitmap => {
+          const base64String = drawCanvas(canvasRef.current, imageBitmap)
+          addToBatch(base64String, user.id, room.id)
+        })
+        .catch(error => console.log(error))
+    }
   }, [frameCapture, user.id, room.id])
 
   const showAlertMessage = useCallback(() => {
