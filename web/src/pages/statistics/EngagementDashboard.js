@@ -192,7 +192,7 @@ const EngagementDashboard = ({ selectedClassId }) => {
     if (classroomData?.roomsForClassroom) {
       return classroomData.roomsForClassroom.map(room => {
         return (
-          <Option key={room.room_name} value={room.id} label={room.room_name}>
+          <Option key={room.room_uuid} value={room.id} label={room.room_name}>
             {room.room_name}
           </Option>
         )
@@ -235,7 +235,7 @@ const EngagementDashboard = ({ selectedClassId }) => {
           <div className="mr-3">
             <Select
               style={{ width: 200 }}
-              listHeight={100}
+              listHeight={200}
               showSearch
               showArrow={false}
               optionFilterProp="label"
