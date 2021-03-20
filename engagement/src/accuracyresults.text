@@ -1,0 +1,9 @@
+engagement_1  | INFO:__main__:                  precision    recall  f1-score   support
+engagement_1  | 
+engagement_1  |          ENGAGED       0.83      0.71      0.77         7
+engagement_1  | SOMEWHAT ENGAGED       0.50      1.00      0.67         3
+engagement_1  |      NOT ENGAGED       1.00      0.75      0.86         8
+engagement_1  | 
+engagement_1  |         accuracy                           0.78        18
+engagement_1  |        macro avg       0.78      0.82      0.76        18
+engagement_1  |     weighted avg       0.85      0.78      0.79        18

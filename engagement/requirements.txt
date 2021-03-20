@@ -1,3 +1,5 @@
 pika==1.1.0
 graphqlclient~=0.2.4
 futures
+scipy
+sklearn
